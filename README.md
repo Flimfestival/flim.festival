@@ -74,9 +74,14 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
 ### Ligar o formulário ao Supabase (uma vez só)
 
 1. Crie um projeto no Supabase.
-2. No painel do projeto, abra o **SQL Editor**, cole todo o conteúdo de
-   `supabase/migrations/20261005120000_criar_inscricoes.sql` e clique em **Run**.
-   Se usar a CLI do Supabase, `supabase db push` faz o mesmo.
+2. No painel do projeto, abra o **SQL Editor** e rode, nesta ordem, cada arquivo de
+   `supabase/migrations/` (cole o conteúdo e clique em **Run**):
+   1. `20261005120000_criar_inscricoes.sql`: tabelas, vagas e função de inscrição.
+   2. `20261005130000_permissoes_servidor.sql`: libera para a chave secreta só o que o site usa.
+      Projetos novos do Supabase não liberam tabelas automaticamente; sem este passo, o site não lê
+      as vagas nem grava inscrições.
+
+   Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
    `drop table if exists public.inscricoes;` (isso apaga as inscrições de teste que existirem).
 3. Em **Project Settings > API Keys**, copie a **URL do projeto** e uma **Secret key**
