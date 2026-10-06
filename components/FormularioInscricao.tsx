@@ -218,7 +218,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               </option>
               {escolas.map((escola) => (
                 <option key={escola.nome} value={escola.nome}>
-                  {escola.nome}
+                  {escola.rotulo ?? escola.nome}
                 </option>
               ))}
               <option value={OUTRA_ESCOLA}>Outra escola</option>

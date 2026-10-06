@@ -4,7 +4,8 @@ const desenvolvimento = process.env.NODE_ENV === "development";
 
 // Política de conteúdo: o site só carrega scripts, estilos, imagens e fontes de si mesmo.
 // O Next.js usa scripts e estilos embutidos na página, por isso o 'unsafe-inline'.
-// No computador, o modo de desenvolvimento também precisa de 'unsafe-eval' e não usa HTTPS.
+// No modo de desenvolvimento, também precisa de 'unsafe-eval'. A troca automática para HTTPS só vale
+// na Vercel: no computador o site roda em http://localhost, e o Safari quebraria a página.
 const politicaDeConteudo = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${desenvolvimento ? " 'unsafe-eval'" : ""}`,
@@ -16,7 +17,7 @@ const politicaDeConteudo = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  ...(desenvolvimento ? [] : ["upgrade-insecure-requests"]),
+  ...(process.env.VERCEL === "1" ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const cabecalhosDeSeguranca = [

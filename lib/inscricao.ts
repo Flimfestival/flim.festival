@@ -24,11 +24,14 @@ const fundamental = anosEscolares.filter((ano) => ano.nome.includes("Fundamental
 const medio = anosEscolares.filter((ano) => ano.nome.includes("Médio")).map((ano) => ano.nome);
 const anosIniciais = fundamental.slice(0, 5);
 
+const anosFinais = fundamental.slice(5);
+
 // Escolas da lista do formulário, em ordem alfabética, e os anos que cada uma oferece.
-// As etapas das escolas municipais seguem o Censo Escolar 2025 (Inep), consultado no QEdu.
+// Os anos seguem o Censo Escolar 2025 (Inep), consultado no QEdu; o Ensino Médio do CERB começou
+// em 2026, informado pela organização. `rotulo` é o texto da lista quando difere do nome gravado.
 // Sem `anos`, a escola aceita todos os anos. Para incluir uma escola, acrescente aqui.
 // Quem estuda fora da lista escolhe "Outra escola" e digita o nome.
-export const escolas: { nome: string; etapas?: string; anos?: string[] }[] = [
+export const escolas: { nome: string; rotulo?: string; etapas?: string; anos?: string[] }[] = [
   {
     nome: "Centro Educacional Padre Carlos",
     etapas: "do 1º ao 5º ano do Ensino Fundamental",
@@ -36,8 +39,8 @@ export const escolas: { nome: string; etapas?: string; anos?: string[] }[] = [
   },
   {
     nome: "Centro Educacional Profª Agá Fernandes (CEPAF)",
-    etapas: "Ensino Fundamental",
-    anos: fundamental,
+    etapas: "do 1º ao 5º ano do Ensino Fundamental",
+    anos: anosIniciais,
   },
   { nome: "Centro Educacional Profª Aninha Leite", etapas: "Ensino Fundamental", anos: fundamental },
   {
@@ -47,11 +50,21 @@ export const escolas: { nome: string; etapas?: string; anos?: string[] }[] = [
   },
   {
     nome: "CERB",
+    rotulo: "CERB (Centro Educacional Raimunda Barreto)",
     etapas: "do 6º ano do Ensino Fundamental ao 3º ano do Ensino Médio",
-    anos: [...fundamental.slice(5), ...medio],
+    anos: [...anosFinais, ...medio],
   },
-  { nome: "CERBA", etapas: "Ensino Fundamental", anos: fundamental },
-  { nome: "Colégio Efetivo" },
+  {
+    nome: "CERBA",
+    rotulo: "CERBA (Centro Educacional Profª Rita Baliza Alves)",
+    etapas: "do 1º ao 5º ano do Ensino Fundamental",
+    anos: anosIniciais,
+  },
+  {
+    nome: "Colégio Efetivo",
+    etapas: "do 1º ao 5º ano do Ensino Fundamental",
+    anos: anosIniciais,
+  },
   {
     nome: "Escola Estadual Almino Afonso",
     etapas: "Ensino Fundamental e Médio",
@@ -59,10 +72,14 @@ export const escolas: { nome: string; etapas?: string; anos?: string[] }[] = [
   },
   {
     nome: "Escola Estadual Antônio João de Queiroz",
-    etapas: "Ensino Fundamental e Médio",
-    anos: [...fundamental, ...medio],
+    etapas: "do 6º ano do Ensino Fundamental ao 3º ano do Ensino Médio",
+    anos: [...anosFinais, ...medio],
   },
-  { nome: "Escola Estadual Joaquim Inácio (E.E.J.I.)", etapas: "Ensino Médio", anos: medio },
+  {
+    nome: "Escola Estadual Doutor Joaquim Inácio (E.E.J.I.)",
+    etapas: "Ensino Médio",
+    anos: medio,
+  },
 ];
 export const OUTRA_ESCOLA = "outra";
 

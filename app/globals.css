@@ -61,6 +61,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 /* Botões */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font: inherit; font-weight: 700; cursor: pointer;
+  /* Sem o estilo padrão do navegador (no iPhone, botões ganhavam fundo azul). */
+  -webkit-appearance: none; appearance: none; background: transparent;
   padding: 15px 28px; border-radius: 12px; border: 2px solid transparent;
   transition: background .2s, color .2s, border-color .2s, transform .2s;
 }
@@ -228,6 +230,10 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .inscricao-info { margin-bottom: 40px; }
 .inscricao-info .facts { margin: 28px 0; }
 
+/* No Safari do iPhone, o texto escondido dentro de uma caixa de seleção longa ainda conta para a
+   largura da página e cria rolagem lateral. O corte fica na área com margem, para o contorno de foco
+   dos campos continuar visível. "hidden" vale para navegadores antigos; "clip" para os atuais. */
+.form-card, .portaria-conteudo { overflow-x: hidden; overflow-x: clip; }
 .form-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 40px; box-shadow: 0 16px 40px rgba(11, 51, 102, .06); }
 .form-card > .dica { margin-bottom: 28px; }
 .form-grupo { border: 0; padding: 0; margin: 0 0 32px; min-width: 0; }
