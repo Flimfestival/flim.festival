@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { dentroDoLimite } from "@/lib/limite";
 import { abrirSessao, fecharSessao, senhaCorreta, sessaoValida } from "@/lib/portaria";
 import { atividadesInscricao } from "@/lib/programacao";
 import { clienteSupabase } from "@/lib/supabase";
@@ -25,6 +26,9 @@ export type DadosAtividade = {
 type Falha = { erro: string };
 
 export async function entrar(_estadoAnterior: Falha | null, formData: FormData): Promise<Falha> {
+  if (!(await dentroDoLimite("portaria"))) {
+    return { erro: "Muitas tentativas de entrada desta conexão. Aguarde 15 minutos e tente de novo." };
+  }
   if (!senhaCorreta(String(formData.get("senha") ?? ""))) {
     // A espera torna inviável testar muitas senhas em sequência.
     await new Promise((resolver) => setTimeout(resolver, 1500));

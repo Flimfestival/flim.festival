@@ -30,7 +30,7 @@ export const dias: Dia[] = [
     itens: [
       { horario: "16h", titulo: "Início da programação de abertura" },
       { horario: "17h", titulo: "Teatro Lusíadas", detalhes: ["Inês de Castro: A Rainha Morta."] },
-      { horario: "17h15", titulo: "Apresentação musical", detalhes: ["Banda de música."] },
+      { horario: "17h15", titulo: "Apresentação musical", detalhes: ["Banda de Música Nair Austero Soares."] },
       { horario: "17h30", titulo: "Palestra com Bráulio Bessa", comInscricao: true },
     ],
     notas: ["Inscrição gratuita para 600 pessoas. Contribuição: 2 kg de alimentos."],
@@ -39,7 +39,7 @@ export const dias: Dia[] = [
     id: "dia-12",
     data: "Sábado, 12 de dezembro",
     titulo: "Painéis Culturais Almino Afonso",
-    local: "Casa de Cultura",
+    local: "Casa de Cultura e Coreto",
     itens: [
       { horario: "9h", titulo: "Escola de Música Eliseu Ventania (EMEV)", detalhes: ["Apresentação de 15 minutos."] },
       {
@@ -48,11 +48,11 @@ export const dias: Dia[] = [
         detalhes: ["Academia de Letras de Martins (ALAM)."],
         comInscricao: true,
       },
-      { horario: "11h10", titulo: "Apresentação cultural", detalhes: ["Luís Gonzaga (CEPAF), 15 minutos."] },
+      { horario: "11h10", titulo: "Apresentação cultural", detalhes: ["Luiz Gonzaga (CEPAF), 15 minutos."] },
       {
         horario: "11h30",
         titulo: "2º painel: Educação, oportunidade e evolução",
-        detalhes: ["Genisa Raulino (Evolução)."],
+        detalhes: ["Genisa Raulino."],
         comInscricao: true,
       },
       { horario: "14h", titulo: "Apresentação musical", detalhes: ["Clícia, violino."] },
@@ -62,7 +62,7 @@ export const dias: Dia[] = [
         detalhes: ["Marilene Paiva."],
         comInscricao: true,
       },
-      { horario: "15h30", titulo: "Apresentação cultural", detalhes: ["Xaxado (Dário), 15 minutos."] },
+      { horario: "15h30", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
       {
         horario: "15h45",
         titulo: "4º painel: Povo, natureza e poesia",
@@ -83,22 +83,21 @@ export const dias: Dia[] = [
       {
         horario: "20h",
         titulo: "Sarau Poético Cosme Lemos",
-        detalhes: [
-          "Com o poeta Antônio Francisco, no Coreto.",
-          "Programação da noite: restaurante literário e Forró do Severo.",
-        ],
+        detalhes: ["Com o poeta Antônio Francisco e restaurante literário, no Coreto."],
       },
+      { horario: "Após o sarau", titulo: "Forró do Severo", detalhes: ["No Coreto."] },
     ],
     notas: [
       "Público previsto: 110 pessoas por painel.",
-      "Feira Literária Fátima Baliza: na Casa de Cultura durante todo o dia, ao mesmo tempo que os painéis, com contação de histórias das 9h às 16h.",
+      "Feira Literária Fátima Baliza: na Casa de Cultura durante todo o dia, ao mesmo tempo que os painéis, com a exposição dos desenhos e contação de histórias das 9h às 16h.",
+      "As Oficinas Literárias Eliseu Ventania acontecem no mesmo dia, no Colégio Estadual Almino Afonso (veja abaixo).",
     ],
   },
   {
     id: "dia-13",
     data: "Domingo, 13 de dezembro",
     titulo: "Cortejo e concurso de redação",
-    local: "Colégio Estadual Almino Afonso",
+    local: "Da Igreja do Rosário ao Colégio Estadual Almino Afonso",
     itens: [
       {
         horario: "8h",
@@ -117,34 +116,35 @@ export const categoriasRedacao = [
   { participantes: "1º ao 3º ano do Ensino Médio", genero: "Dissertação argumentativa (modelo ENEM)" },
 ];
 
-export const oficinas = {
+export const oficinas: {
+  titulo: string;
+  local: string;
+  data: string;
+  itens: { horario: string; titulo: string; responsaveis: string; publico?: string }[];
+  nota: string;
+} = {
   titulo: "Oficinas Literárias Eliseu Ventania",
   local: "Colégio Estadual Almino Afonso",
-  data: "Data a definir",
+  data: "Sábado, 12 de dezembro",
   itens: [
-    { horario: "9h", titulo: "Redação: Dissertar, da ideia ao texto", responsaveis: "Profa. Hélia", publico: "A definir" },
+    { horario: "9h", titulo: "Redação: Dissertar, da ideia ao texto", responsaveis: "Professor Lucas Vinícius" },
     {
       horario: "10h30",
       titulo: "Estratégias de leitura e contação de histórias",
-      responsaveis: "BALE (UERN)",
+      responsaveis: "Programa de Extensão Biblioteca Ambulante e Literatura nas Escolas (BALE), UERN",
       publico: "Professores e mediadores",
     },
-    {
-      horario: "14h",
-      titulo: "Poesia",
-      responsaveis: "Robson Renato e Manoel Cavalcante (poeta e escritor)",
-      publico: "A definir",
-    },
-    { horario: "15h30", titulo: "Desenho criativo", responsaveis: "A definir", publico: "Crianças atípicas" },
+    { horario: "14h", titulo: "Poesia", responsaveis: "Manoel Cavalcante" },
+    { horario: "15h30", titulo: "Desenho criativo", responsaveis: "Carlos Careca", publico: "Crianças atípicas" },
   ],
-  nota: "BALE (UERN): Programa de Extensão Biblioteca Ambulante e Literatura nas Escolas.",
+  nota: "As oficinas acontecem ao mesmo tempo que os painéis da Casa de Cultura.",
 };
 
 export const concursoDesenho = {
   publico: "Estudantes do 1º ao 3º ano do Ensino Fundamental.",
   premio: "Kit Faber-Castell. O desenho vencedor vai para a capa de um livro, e outros 20 desenhos selecionados, para as páginas internas.",
   exposicao: "Na Feira Literária Fátima Baliza, na Casa de Cultura.",
-  quando: "Realização com data e horário a definir. Premiação em 12 de dezembro, às 16h.",
+  quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 16h.",
 };
 
 export type AtividadeInscricao = {
@@ -154,6 +154,20 @@ export type AtividadeInscricao = {
   quando: string;
   detalhe?: string;
 };
+
+// Atividades que acontecem no mesmo horário (sábado, 12/12): as oficinas no Colégio Estadual Almino
+// Afonso começam junto com os painéis da Casa de Cultura. O estudante pode escolher só uma de cada par.
+// A mesma lista existe no banco (tabela `atividades_simultaneas`); ao mudar aqui, mude lá também.
+export const horariosSimultaneos: [string, string][] = [
+  ["oficina-redacao", "painel-1"],
+  ["oficina-poesia", "painel-3"],
+  ["oficina-desenho", "painel-4"],
+];
+
+// Atividades que acontecem no mesmo horário que a atividade informada.
+export function simultaneas(id: string) {
+  return horariosSimultaneos.flatMap(([a, b]) => (a === id ? [b] : b === id ? [a] : []));
+}
 
 // Atividades que pedem inscrição. O `id` é o valor gravado no banco; não altere depois de abrir as inscrições.
 export const atividadesInscricao: AtividadeInscricao[] = [
@@ -199,37 +213,37 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     quando: "17h30",
   },
   {
+    id: "oficina-redacao",
+    grupo: "Sábado, 12 de dezembro · Oficinas no Colégio Estadual Almino Afonso",
+    titulo: "Oficina de redação: Dissertar, da ideia ao texto",
+    quando: "9h",
+    detalhe: "Professor Lucas Vinícius",
+  },
+  {
+    id: "oficina-poesia",
+    grupo: "Sábado, 12 de dezembro · Oficinas no Colégio Estadual Almino Afonso",
+    titulo: "Oficina de poesia",
+    quando: "14h",
+    detalhe: "Manoel Cavalcante",
+  },
+  {
+    id: "oficina-desenho",
+    grupo: "Sábado, 12 de dezembro · Oficinas no Colégio Estadual Almino Afonso",
+    titulo: "Oficina de desenho criativo",
+    quando: "15h30",
+    detalhe: "Carlos Careca · para crianças atípicas",
+  },
+  {
     id: "concurso-redacao",
     grupo: "Domingo, 13 de dezembro · Colégio Estadual Almino Afonso",
     titulo: "Concurso de redação",
     quando: "9h",
   },
   {
-    id: "oficina-redacao",
-    grupo: "Oficinas Literárias Eliseu Ventania · data a definir",
-    titulo: "Oficina de redação: Dissertar, da ideia ao texto",
-    quando: "9h",
-    detalhe: "Profa. Hélia",
-  },
-  {
-    id: "oficina-poesia",
-    grupo: "Oficinas Literárias Eliseu Ventania · data a definir",
-    titulo: "Oficina de poesia",
-    quando: "14h",
-    detalhe: "Robson Renato e Manoel Cavalcante",
-  },
-  {
-    id: "oficina-desenho",
-    grupo: "Oficinas Literárias Eliseu Ventania · data a definir",
-    titulo: "Oficina de desenho criativo",
-    quando: "15h30",
-    detalhe: "Voltada a crianças atípicas",
-  },
-  {
     id: "concurso-desenho",
     grupo: "Concurso de desenho",
     titulo: "Concurso de desenho",
-    quando: "Data a definir",
+    quando: "Nas escolas, em data combinada com a organização",
     detalhe: "Premiação em 12 de dezembro, às 16h.",
   },
 ];

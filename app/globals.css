@@ -288,6 +288,16 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .comprovante-orientacao p + p { margin-top: 6px; }
 .consentimento { font-size: .95rem; }
 
+/* Termo de consentimento: texto completo numa caixa com rolagem, antes do aceite */
+.termo-titulo { margin: 0 0 10px; font-size: 1.15rem; }
+.termo {
+  max-height: 320px; overflow-y: auto; margin-bottom: 14px; padding: 16px 18px;
+  border: 1.5px solid var(--line); border-radius: 12px; background: #fcfbfa; font-size: .92rem;
+}
+.termo h4 { margin: 14px 0 6px; font-size: .95rem; color: var(--blue); }
+.termo p { margin: 0 0 8px; }
+.termo-registro { margin: 10px 0 0; font-size: .85rem; color: var(--muted); }
+
 .form-alerta {
   margin-bottom: 24px; padding: 14px 18px; border-radius: 12px;
   background: #fdecea; border: 1px solid #f4b8ad; color: #8a1600; font-weight: 600;

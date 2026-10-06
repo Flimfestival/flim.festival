@@ -2,7 +2,7 @@
  * Campos e regras do formulário de inscrição de estudantes.
  * Usado pela página /inscricao (no navegador) e pela ação que grava os dados (no servidor).
  */
-import { atividadesInscricao } from "./programacao";
+import { atividadesInscricao, horariosSimultaneos } from "./programacao";
 
 // Ano escolar e, quando houver, a categoria do concurso de redação correspondente.
 export const anosEscolares: { nome: string; categoriaRedacao?: string }[] = [
@@ -123,6 +123,9 @@ export type Campo =
   | "deficiencia"
   | "qualDeficiencia"
   | "atividades"
+  | "responsavelNome"
+  | "responsavelCpf"
+  | "responsavelContato"
   | "consentimento";
 
 export type Valores = {
@@ -136,6 +139,10 @@ export type Valores = {
   deficiencia: string;
   qualDeficiencia: string;
   atividades: string[];
+  // Responsável legal, exigido quando o participante tem menos de 18 anos.
+  responsavelNome: string;
+  responsavelCpf: string;
+  responsavelContato: string;
   consentimento: boolean;
 };
 
@@ -147,7 +154,8 @@ export type VagasRestantes = Record<string, number | null>;
 export type EstadoInscricao =
   | { status: "inicial" }
   | { status: "erro"; mensagem: string; erros: Erros; valores: Valores; esgotadas?: string[] }
-  | { status: "enviada"; valores: Valores };
+  // `acrescentadas`: atividades somadas a uma inscrição que já existia; `repetidas`: já estavam nela.
+  | { status: "enviada"; valores: Valores; acrescentadas: string[]; repetidas: string[] };
 
 export function lerValores(formData: FormData): Valores {
   const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
@@ -162,12 +170,15 @@ export function lerValores(formData: FormData): Valores {
     deficiencia: texto("deficiencia"),
     qualDeficiencia: texto("qualDeficiencia"),
     atividades: formData.getAll("atividades").map(String),
+    responsavelNome: texto("responsavelNome"),
+    responsavelCpf: texto("responsavelCpf"),
+    responsavelContato: texto("responsavelContato"),
     consentimento: formData.get("consentimento") === "sim",
   };
 }
 
 // Idade em anos completos na data de hoje, no fuso de Martins/RN. Null se a data for inválida.
-function idade(dataNascimento: string) {
+export function idade(dataNascimento: string) {
   const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dataNascimento);
   if (!partes) return null;
   const [ano, mes, dia] = partes.slice(1).map(Number);
@@ -185,6 +196,20 @@ function idade(dataNascimento: string) {
 
 export function validar(valores: Valores): Erros {
   const erros: Erros = {};
+
+  // Textos livres não podem começar com =, +, - ou @: na planilha exportada do Supabase eles virariam
+  // fórmulas (injeção de fórmula). Nenhum nome ou descrição de verdade começa assim.
+  const textosLivres: [Campo, string][] = [
+    ["nome", valores.nome],
+    ["escola", valores.escolaOutra ? valores.escola : ""],
+    ["qualDeficiencia", valores.qualDeficiencia],
+    ["responsavelNome", valores.responsavelNome],
+  ];
+  for (const [campo, texto] of textosLivres) {
+    if (/^[=+\-@\t\r]/.test(texto)) {
+      erros[campo] = "Comece com uma letra ou número.";
+    }
+  }
 
   if (valores.nome.length < 3 || valores.nome.length > 120) {
     erros.nome = "Informe o nome completo do estudante.";
@@ -229,10 +254,53 @@ export function validar(valores: Valores): Erros {
         .map((id) => `${tituloAtividade(id)}: ${restricoesPorAno[id].aviso.replace(/^P/, "p")}`)
         .join(" ");
     }
+    const conflitos = horariosSimultaneos.filter(
+      ([a, b]) => valores.atividades.includes(a) && valores.atividades.includes(b),
+    );
+    if (!erros.atividades && conflitos.length > 0) {
+      erros.atividades = conflitos
+        .map(([a, b]) => `${tituloAtividade(a)} e ${tituloAtividade(b)} acontecem no mesmo horário.`)
+        .concat("Escolha uma atividade de cada horário.")
+        .join(" ");
+    }
+  }
+  if (anos !== null && anos < 18) {
+    if (valores.responsavelNome.length < 3 || valores.responsavelNome.length > 120) {
+      erros.responsavelNome = "Informe o nome completo do responsável legal.";
+    }
+    if (!cpfValido(valores.responsavelCpf)) {
+      erros.responsavelCpf = "Informe um CPF válido, com 11 números.";
+    }
+    if (!contatoValido(valores.responsavelContato)) {
+      erros.responsavelContato = "Informe um telefone com DDD ou um e-mail do responsável.";
+    }
   }
   if (!valores.consentimento) {
-    erros.consentimento = "Para concluir, é preciso autorizar o uso dos dados da inscrição.";
+    erros.consentimento = "Para concluir, é preciso aceitar o termo de consentimento.";
   }
 
   return erros;
+}
+
+// Confere os dois dígitos verificadores do CPF (aceita com ou sem pontos e traço).
+export function cpfValido(cpf: string) {
+  const digitos = cpf.replace(/\D/g, "");
+  if (digitos.length !== 11 || /^(\d)\1{10}$/.test(digitos)) return false;
+  const verificador = (quantidade: number) => {
+    let soma = 0;
+    for (let i = 0; i < quantidade; i++) soma += Number(digitos[i]) * (quantidade + 1 - i);
+    const resto = (soma * 10) % 11;
+    return resto === 10 ? 0 : resto;
+  };
+  return verificador(9) === Number(digitos[9]) && verificador(10) === Number(digitos[10]);
+}
+
+// Telefone com DDD (10 a 13 números) ou e-mail.
+function contatoValido(contato: string) {
+  if (contato.length > 120) return false;
+  if (contato.includes("@")) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contato);
+  // Telefone: só números, espaços, parênteses, ponto, traço e "+" no início.
+  if (!/^\+?[\d\s().-]+$/.test(contato)) return false;
+  const digitos = contato.replace(/\D/g, "");
+  return digitos.length >= 10 && digitos.length <= 13;
 }

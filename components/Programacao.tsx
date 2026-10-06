@@ -1,4 +1,35 @@
+import { Fragment } from "react";
 import { categoriasRedacao, concursoDesenho, dias, oficinas } from "@/lib/programacao";
+
+// As oficinas acontecem no sábado (12/12), ao mesmo tempo que os painéis: aparecem logo depois desse dia.
+const DIA_DAS_OFICINAS = "dia-12";
+
+function Oficinas() {
+  return (
+    <article id="oficinas" className="dia">
+      <header className="dia-cabecalho">
+        <p className="dia-data">{oficinas.data}</p>
+        <h2>{oficinas.titulo}</h2>
+        <p className="dia-local">{oficinas.local}</p>
+      </header>
+      <ol className="agenda">
+        {oficinas.itens.map((oficina) => (
+          <li key={oficina.titulo}>
+            <span className="agenda-hora">{oficina.horario}</span>
+            <div>
+              <h3>{oficina.titulo}</h3>
+              <p>Responsáveis: {oficina.responsaveis}</p>
+              {oficina.publico && <p>Público: {oficina.publico}</p>}
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div className="dia-notas">
+        <p>{oficinas.nota}</p>
+      </div>
+    </article>
+  );
+}
 
 export default function Programacao() {
   return (
@@ -15,90 +46,70 @@ export default function Programacao() {
 
         <nav className="dias-nav" aria-label="Partes da programação">
           {dias.map((dia) => (
-            <a key={dia.id} href={`#${dia.id}`}>
-              {dia.data.split(", ")[1]}
-            </a>
+            <Fragment key={dia.id}>
+              <a href={`#${dia.id}`}>{dia.data.split(", ")[1]}</a>
+              {dia.id === DIA_DAS_OFICINAS && <a href="#oficinas">Oficinas</a>}
+            </Fragment>
           ))}
-          <a href="#oficinas">Oficinas</a>
           <a href="#concurso-desenho">Concurso de desenho</a>
         </nav>
 
         {dias.map((dia) => (
-          <article key={dia.id} id={dia.id} className="dia">
-            <header className="dia-cabecalho">
-              <p className="dia-data">{dia.data}</p>
-              <h2>{dia.titulo}</h2>
-              <p className="dia-local">{dia.local}</p>
-            </header>
-            <ol className="agenda">
-              {dia.itens.map((item) => (
-                <li key={item.horario + item.titulo}>
-                  <span className="agenda-hora">{item.horario}</span>
-                  <div>
-                    <h3>
-                      {item.titulo}
-                      {item.comInscricao && <span className="selo-inscricao">Com inscrição</span>}
-                    </h3>
-                    {item.detalhes?.map((detalhe) => (
-                      <p key={detalhe}>{detalhe}</p>
-                    ))}
-                  </div>
-                </li>
-              ))}
-            </ol>
-            {dia.notas && (
-              <div className="dia-notas">
-                {dia.notas.map((nota) => (
-                  <p key={nota}>{nota}</p>
+          <Fragment key={dia.id}>
+            <article id={dia.id} className="dia">
+              <header className="dia-cabecalho">
+                <p className="dia-data">{dia.data}</p>
+                <h2>{dia.titulo}</h2>
+                <p className="dia-local">{dia.local}</p>
+              </header>
+              <ol className="agenda">
+                {dia.itens.map((item) => (
+                  <li key={item.horario + item.titulo}>
+                    <span className="agenda-hora">{item.horario}</span>
+                    <div>
+                      <h3>
+                        {item.titulo}
+                        {item.comInscricao && <span className="selo-inscricao">Com inscrição</span>}
+                      </h3>
+                      {item.detalhes?.map((detalhe) => (
+                        <p key={detalhe}>{detalhe}</p>
+                      ))}
+                    </div>
+                  </li>
                 ))}
-              </div>
-            )}
-            {dia.id === "dia-13" && (
-              <div className="tabela-rolagem">
-                <table className="tabela">
-                  <caption>Categorias do concurso de redação</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Participantes</th>
-                      <th scope="col">Gênero textual</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {categoriasRedacao.map((categoria) => (
-                      <tr key={categoria.participantes}>
-                        <td>{categoria.participantes}</td>
-                        <td>{categoria.genero}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </article>
-        ))}
-
-        <article id="oficinas" className="dia">
-          <header className="dia-cabecalho">
-            <p className="dia-data">{oficinas.data}</p>
-            <h2>{oficinas.titulo}</h2>
-            <p className="dia-local">{oficinas.local}</p>
-          </header>
-          <ol className="agenda">
-            {oficinas.itens.map((oficina) => (
-              <li key={oficina.titulo}>
-                <span className="agenda-hora">{oficina.horario}</span>
-                <div>
-                  <h3>{oficina.titulo}</h3>
-                  <p>Responsáveis: {oficina.responsaveis}</p>
-                  <p>Público: {oficina.publico}</p>
+              </ol>
+              {dia.notas && (
+                <div className="dia-notas">
+                  {dia.notas.map((nota) => (
+                    <p key={nota}>{nota}</p>
+                  ))}
                 </div>
-              </li>
-            ))}
-          </ol>
-          <div className="dia-notas">
-            <p>{oficinas.nota}</p>
-          </div>
-        </article>
+              )}
+              {dia.id === "dia-13" && (
+                <div className="tabela-rolagem">
+                  <table className="tabela">
+                    <caption>Categorias do concurso de redação</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Participantes</th>
+                        <th scope="col">Gênero textual</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {categoriasRedacao.map((categoria) => (
+                        <tr key={categoria.participantes}>
+                          <td>{categoria.participantes}</td>
+                          <td>{categoria.genero}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </article>
+            {dia.id === DIA_DAS_OFICINAS && <Oficinas />}
+          </Fragment>
+        ))}
 
         <article id="concurso-desenho" className="dia">
           <header className="dia-cabecalho">

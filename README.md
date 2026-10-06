@@ -42,8 +42,20 @@ banco de dados no [Supabase](https://supabase.com), que também controla as vaga
 
 O formulário pede: nome completo, data de nascimento, e-mail (opcional), escola, ano escolar, se o
 estudante possui alguma deficiência (com um campo opcional para detalhar o apoio necessário), as
-atividades escolhidas e a autorização de uso dos dados (LGPD), dada pelo próprio estudante maior de
-18 anos ou pelo responsável legal.
+atividades escolhidas e o aceite do termo de consentimento.
+
+### Termo de consentimento
+
+O formulário mostra o **Termo de Consentimento, Participação e Autorização de Uso de Imagem e Voz**
+completo, numa caixa com rolagem, antes da caixinha de aceite. O texto fica em `lib/termo.ts`.
+
+- Quando a data de nascimento indica **menos de 18 anos**, o formulário passa a exigir nome, CPF e
+  telefone ou e-mail do **responsável legal**, que é quem aceita o termo. O CPF é conferido pelos
+  dígitos verificadores.
+- Cada inscrição guarda a **versão do termo** aceita e a **data e hora do aceite** (registro
+  eletrônico do consentimento). A visão `painel_inscricoes` mostra esses dados e o responsável.
+- **Ao mudar o texto do termo, mude também `TERMO_VERSAO`** em `lib/termo.ts`, para saber qual versão
+  cada pessoa aceitou.
 
 ### Vagas
 
@@ -71,6 +83,14 @@ da atividade (deixe vazio para não ter limite). Vale na hora, sem publicar o si
 O formulário desativa o concurso que o ano escolhido não pode fazer, e o servidor confere de novo
 ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
 
+### Atividades no mesmo horário
+
+No sábado, 12/12, as oficinas começam junto com os painéis: oficina de redação e 1º painel, oficina
+de poesia e 3º painel, oficina de desenho criativo e 4º painel. O estudante escolhe só uma de cada
+par: ao marcar uma, o formulário desativa a outra. O banco confere de novo, inclusive quando o
+estudante volta depois para acrescentar uma atividade. Os pares ficam em `lib/programacao.ts`
+(`horariosSimultaneos`) e na tabela `atividades_simultaneas` do Supabase; ao mudar, mude nos dois.
+
 ### Ligar o formulário ao Supabase (uma vez só)
 
 1. Crie um projeto no Supabase.
@@ -85,6 +105,13 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
    4. `20261005150000_bloquear_inscricao_repetida.sql`: recusa uma segunda inscrição do mesmo
       estudante (mesmo nome e data de nascimento).
    5. `20261006120000_presencas_portaria.sql`: presenças registradas no painel da portaria.
+   6. `20261006130000_inscricao_por_atividade.sql`: repetição bloqueada por atividade (veja abaixo)
+      e a visão `possiveis_repetidas`.
+   7. `20261006140000_programacao_atualizada.sql`: dia, horário e local das atividades conforme a
+      programação completa de 2026.
+   8. `20261006150000_termo_e_horarios.sql`: dados do responsável legal, registro do aceite do
+      termo de consentimento e atividades no mesmo horário.
+   9. `20261006160000_limite_de_envios.sql`: limite de tentativas por conexão (veja "Segurança").
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
@@ -125,8 +152,18 @@ consulta, com colunas em português e horário de Brasília:
 Dá para filtrar, ordenar e exportar para CSV, que abre no Excel ou no Google Planilhas. A tabela
 `inscricoes` guarda os dados originais; a coluna `atividades` tem os códigos (por exemplo `painel-1`).
 
-Cada estudante pode ter uma inscrição só (mesmo nome e data de nascimento). Para mudar as atividades
-de alguém, edite a linha em **Table Editor > inscricoes** ou apague-a para a pessoa se inscrever de novo.
+Cada estudante tem uma inscrição só. É considerado o mesmo estudante apenas quando coincidem, ao
+mesmo tempo, o nome completo (ignorando só acentos, maiúsculas e pontuação), a data de nascimento e a
+escola. Nomes parecidos nunca são juntados. Se o mesmo estudante se inscrever de novo:
+
+- as atividades novas são acrescentadas à inscrição que já existe, com a conferência de vagas;
+- as atividades repetidas são ignoradas, com um aviso;
+- os dados da primeira inscrição (ano, e-mail) são mantidos.
+
+A visão `possiveis_repetidas` lista pares que podem ser do mesmo estudante escrito de outro jeito
+(mesma data de nascimento e mesmo primeiro nome, ou mesmo nome com data diferente). Nada é bloqueado
+automaticamente, porque gêmeos aparecem ali também: a comissão revisa e, se for o caso, junta as
+atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 
 ### Sem o Supabase configurado
 
@@ -224,7 +261,15 @@ senha encerra todas as sessões abertas. Troque depois do festival.
   de si mesmo), bloqueio de exibição dentro de outros sites e restrições de câmera, microfone e
   localização.
 - O formulário valida tudo no servidor, tem um campo invisível contra robôs, e o banco confere
-  vagas, inscrições repetidas e permissões.
+  vagas, inscrições repetidas, horários simultâneos e permissões.
+- Limite de tentativas por conexão (`lib/limite.ts` e tabela `limites_envio`): 45 inscrições a cada
+  10 minutos, folgado para uma escola inscrever uma turma, e 10 tentativas de senha a cada
+  15 minutos na portaria. A conexão é guardada só como código embaralhado, apagado depois de 1 dia.
+- Textos livres (nomes, escola, descrição de deficiência) não podem começar com `=`, `+`, `-` ou `@`,
+  para não virarem fórmulas na planilha exportada do Supabase. O telefone aceita só números e
+  pontuação.
+- O CPF do responsável fica guardado no Supabase, acessível só pelo painel do projeto e pelo
+  servidor do site. Limite o acesso ao painel do Supabase às pessoas da comissão.
 
 ## Publicação
 

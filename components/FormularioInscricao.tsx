@@ -8,7 +8,9 @@ import {
   anosDaEscola,
   categoriaRedacao,
   escolas,
+  idade,
   OUTRA_ESCOLA,
+  tituloAtividade,
   podeParticipar,
   restricoesPorAno,
   type Campo,
@@ -16,7 +18,8 @@ import {
   type EstadoInscricao,
   type VagasRestantes,
 } from "@/lib/inscricao";
-import { atividadesInscricao } from "@/lib/programacao";
+import { atividadesInscricao, simultaneas } from "@/lib/programacao";
+import { termo } from "@/lib/termo";
 
 const estadoInicial: EstadoInscricao = { status: "inicial" };
 
@@ -39,6 +42,15 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   const [anoEscolar, setAnoEscolar] = useState("");
   const [deficiencia, setDeficiencia] = useState("");
   const [escolaOpcao, setEscolaOpcao] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  // Atividades marcadas agora, para desativar as que acontecem no mesmo horário.
+  const [marcadas, setMarcadas] = useState<string[]>([]);
+  // Depois de um envio com erro, o formulário volta com as atividades que foram enviadas.
+  const [estadoVisto, setEstadoVisto] = useState(estado);
+  if (estado !== estadoVisto) {
+    setEstadoVisto(estado);
+    setMarcadas(estado.status === "erro" ? estado.valores.atividades : []);
+  }
   const alerta = useRef<HTMLDivElement>(null);
   const confirmacao = useRef<HTMLHeadingElement>(null);
 
@@ -58,9 +70,25 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         <h2 ref={confirmacao} tabIndex={-1}>
           Inscrição confirmada
         </h2>
-        <p>
-          A inscrição de <strong>{inscricao.nome}</strong> no FLIM foi registrada.
-        </p>
+        {estado.acrescentadas.length > 0 ? (
+          <div className="comprovante-orientacao">
+            <p>
+              <strong>{inscricao.nome}</strong> já tinha inscrição no FLIM. Acrescentamos:{" "}
+              {estado.acrescentadas.map(tituloAtividade).join("; ")}.
+            </p>
+            {estado.repetidas.length > 0 && (
+              <p>Já tinha inscrição em: {estado.repetidas.map(tituloAtividade).join("; ")}.</p>
+            )}
+            <p>
+              Os dados de ano escolar e e-mail são os da primeira inscrição. Se esta inscrição não é
+              deste estudante, escreva para {evento.emailContato}.
+            </p>
+          </div>
+        ) : (
+          <p>
+            A inscrição de <strong>{inscricao.nome}</strong> no FLIM foi registrada.
+          </p>
+        )}
         <dl className="comprovante-dados">
           <div>
             <dt>Estudante</dt>
@@ -78,6 +106,12 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
             <dt>Ano escolar</dt>
             <dd>{inscricao.anoEscolar}</dd>
           </div>
+          {inscricao.responsavelNome && (
+            <div>
+              <dt>Responsável legal</dt>
+              <dd>{inscricao.responsavelNome}</dd>
+            </div>
+          )}
         </dl>
         <h3>Atividades</h3>
         <ul className="comprovante-atividades">
@@ -99,6 +133,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
           {inscricao.atividades.includes("concurso-redacao") && categoria && (
             <p>Concurso de redação: categoria {categoria}.</p>
           )}
+          <p>Termo de consentimento, participação e uso de imagem e voz: aceito.</p>
         </div>
         {inscricao.email && (
           <p>
@@ -127,6 +162,8 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   const descricao = (campo: Campo, dica?: string) =>
     [dica, erros[campo] ? `erro-${campo}` : undefined].filter(Boolean).join(" ") || undefined;
   const categoria = categoriaRedacao(anoEscolar);
+  const anosParticipante = idade(dataNascimento || valores?.dataNascimento || "");
+  const menorDeIdade = anosParticipante !== null && anosParticipante < 18;
   const escolaEscolhida = escolas.find((escola) => escola.nome === escolaOpcao);
   const anosPermitidos = anosDaEscola(escolaOpcao);
 
@@ -168,6 +205,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               required
               min="1900-01-01"
               defaultValue={valores?.dataNascimento}
+              onChange={(evento) => setDataNascimento(evento.target.value)}
               aria-invalid={Boolean(erros.dataNascimento)}
               aria-describedby={descricao("dataNascimento")}
             />
@@ -252,7 +290,12 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               name="anoEscolar"
               required
               defaultValue={anosPermitidos.includes(anoEscolar) ? anoEscolar : (valores?.anoEscolar ?? "")}
-              onChange={(evento) => setAnoEscolar(evento.target.value)}
+              onChange={(evento) => {
+                const ano = evento.target.value;
+                setAnoEscolar(ano);
+                // Desmarca as atividades que o novo ano escolar não pode fazer.
+                setMarcadas((atuais) => atuais.filter((id) => podeParticipar(id, ano)));
+              }}
               aria-invalid={Boolean(erros.anoEscolar)}
               aria-describedby={descricao("anoEscolar")}
             >
@@ -284,6 +327,10 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
 
       <fieldset className="form-grupo" aria-describedby={descricao("deficiencia")}>
         <legend>Possui alguma deficiência?</legend>
+        <p className="dica">
+          Essa informação é usada só para garantir acessibilidade e apoio nas atividades, como prevê o
+          termo de consentimento.
+        </p>
         <div className="opcoes">
           {[
             { valor: "sim", rotulo: "Sim" },
@@ -336,7 +383,10 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                 const restantes = vagas?.[atividade.id];
                 const esgotada = restantes === 0 || esgotadasAgora.includes(atividade.id);
                 const foraDoAno = !podeParticipar(atividade.id, anoEscolar);
-                const bloqueada = esgotada || foraDoAno;
+                const mesmoHorario = marcadas.includes(atividade.id)
+                  ? []
+                  : simultaneas(atividade.id).filter((id) => marcadas.includes(id));
+                const bloqueada = esgotada || foraDoAno || mesmoHorario.length > 0;
                 return (
                   // A `key` muda quando a atividade fica indisponível, para ela voltar desmarcada.
                   <label
@@ -348,7 +398,13 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                       name="atividades"
                       value={atividade.id}
                       disabled={bloqueada}
-                      defaultChecked={!bloqueada && valores?.atividades.includes(atividade.id)}
+                      defaultChecked={!bloqueada && marcadas.includes(atividade.id)}
+                      onChange={(evento) => {
+                        const { checked } = evento.target;
+                        setMarcadas((atuais) =>
+                          checked ? [...atuais, atividade.id] : atuais.filter((id) => id !== atividade.id),
+                        );
+                      }}
                     />
                     <span>
                       <strong>{atividade.titulo}</strong>
@@ -362,6 +418,12 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                       {restricoesPorAno[atividade.id] && (
                         <small className={foraDoAno ? "aviso-ano bloqueio" : "aviso-ano"}>
                           {restricoesPorAno[atividade.id].aviso}
+                        </small>
+                      )}
+                      {mesmoHorario.length > 0 && (
+                        <small className="aviso-ano bloqueio">
+                          No mesmo horário de: {mesmoHorario.map(tituloAtividade).join("; ")}. Para
+                          escolher esta, desmarque a outra.
                         </small>
                       )}
                       {esgotada ? (
@@ -383,7 +445,82 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         <MensagemErro campo="atividades" erros={erros} />
       </fieldset>
 
+      {menorDeIdade && (
+        <fieldset className="form-grupo">
+          <legend>Responsável legal</legend>
+          <p className="dica">
+            O participante tem menos de 18 anos: o termo abaixo deve ser aceito pelo pai, mãe ou
+            responsável legal.
+          </p>
+          <div className="campos">
+            <div className="campo campo-largo">
+              <label htmlFor="responsavelNome">Nome completo do responsável legal</label>
+              <input
+                id="responsavelNome"
+                name="responsavelNome"
+                type="text"
+                autoComplete="off"
+                required
+                minLength={3}
+                maxLength={120}
+                defaultValue={valores?.responsavelNome}
+                aria-invalid={Boolean(erros.responsavelNome)}
+                aria-describedby={descricao("responsavelNome")}
+              />
+              <MensagemErro campo="responsavelNome" erros={erros} />
+            </div>
+            <div className="campo">
+              <label htmlFor="responsavelCpf">CPF do responsável legal</label>
+              <input
+                id="responsavelCpf"
+                name="responsavelCpf"
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                required
+                maxLength={14}
+                placeholder="000.000.000-00"
+                defaultValue={valores?.responsavelCpf}
+                aria-invalid={Boolean(erros.responsavelCpf)}
+                aria-describedby={descricao("responsavelCpf")}
+              />
+              <MensagemErro campo="responsavelCpf" erros={erros} />
+            </div>
+            <div className="campo">
+              <label htmlFor="responsavelContato">Telefone ou e-mail do responsável</label>
+              <input
+                id="responsavelContato"
+                name="responsavelContato"
+                type="text"
+                autoComplete="off"
+                required
+                maxLength={120}
+                defaultValue={valores?.responsavelContato}
+                aria-invalid={Boolean(erros.responsavelContato)}
+                aria-describedby={descricao("responsavelContato")}
+              />
+              <MensagemErro campo="responsavelContato" erros={erros} />
+            </div>
+          </div>
+        </fieldset>
+      )}
+
       <div className="form-grupo">
+        <h3 id="titulo-termo" className="termo-titulo">
+          {termo.titulo}
+        </h3>
+        {/* Caixa com rolagem; focável para quem usa teclado conseguir rolar o texto. */}
+        <div className="termo" role="region" aria-labelledby="titulo-termo" tabIndex={0}>
+          <p>{termo.abertura}</p>
+          {termo.secoes.map((secao) => (
+            <section key={secao.titulo}>
+              <h4>{secao.titulo}</h4>
+              {secao.paragrafos.map((paragrafo) => (
+                <p key={paragrafo}>{paragrafo}</p>
+              ))}
+            </section>
+          ))}
+        </div>
         <label className="opcao consentimento">
           <input
             type="checkbox"
@@ -394,13 +531,10 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
             aria-invalid={Boolean(erros.consentimento)}
             aria-describedby={descricao("consentimento")}
           />
-          <span>
-            Declaro que sou o estudante, maior de 18 anos, ou o responsável legal por ele, e autorizo
-            a organização do FLIM a usar estes dados, inclusive a informação sobre deficiência,
-            somente para a inscrição, a organização das atividades e a acessibilidade.
-          </span>
+          <span>{termo.declaracao}</span>
         </label>
         <MensagemErro campo="consentimento" erros={erros} />
+        <p className="termo-registro">{termo.registro}</p>
       </div>
 
       {/* Armadilha para robôs: fica fora da tela e pessoas não preenchem. */}
