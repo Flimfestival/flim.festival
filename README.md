@@ -222,7 +222,9 @@ atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 ## Imagens
 
 A identidade visual (logo, marca e faixa de azulejos) foi extraída do arquivo oficial do logo e está em
-`public/assets/` (`logo.svg`, `logo-marca.svg`, `azulejos.svg`). O ícone da aba do navegador é `app/icon.svg`.
+`public/assets/` (`logo.svg`, `logo-marca.svg`, `azulejos.svg`). Os ícones da aba usam a marca "FLIM" (com o traço um pouco mais grosso, para ficar legível em
+16 px): `app/icon.svg`, `app/favicon.ico` (navegadores antigos) e `app/apple-icon.png` (tela de
+início do iPhone).
 
 As fotos ficam em `public/fotos/` e são cadastradas em `lib/fotos.ts`, junto com os créditos exibidos no rodapé:
 
