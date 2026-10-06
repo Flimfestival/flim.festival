@@ -137,7 +137,7 @@ export const oficinas: {
     { horario: "14h", titulo: "Poesia", responsaveis: "Manoel Cavalcante" },
     { horario: "15h30", titulo: "Desenho criativo", responsaveis: "Carlos Careca", publico: "Crianças atípicas" },
   ],
-  nota: "As oficinas acontecem ao mesmo tempo que os painéis da Casa de Cultura.",
+  nota: "Cada oficina tem 25 vagas. As oficinas acontecem ao mesmo tempo que os painéis da Casa de Cultura.",
 };
 
 // O concurso de desenho não tem inscrição pelo site: as inscrições são feitas em papel.

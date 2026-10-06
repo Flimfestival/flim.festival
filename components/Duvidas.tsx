@@ -9,7 +9,7 @@ const perguntas = [
   {
     pergunta: "As vagas são limitadas?",
     resposta:
-      "Sim. A abertura tem 600 vagas, e cada painel na Casa de Cultura tem 110. As vagas são preenchidas por ordem de inscrição, e o formulário mostra quantas ainda restam.",
+      "Sim. A abertura tem 600 vagas, cada painel na Casa de Cultura tem 110 e cada oficina tem 25. As vagas são preenchidas por ordem de inscrição, e o formulário mostra quantas ainda restam.",
   },
   {
     pergunta: "Haverá certificado de participação?",

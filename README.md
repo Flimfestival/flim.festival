@@ -63,6 +63,7 @@ completo, numa caixa com rolagem, antes da caixinha de aceite. O texto fica em `
 | --------------------------------- | ---------- |
 | Abertura (11/12, Mirante do Canto) | 600       |
 | Cada um dos 4 painéis (12/12)     | 110        |
+| Cada uma das 3 oficinas (12/12)   | 25         |
 | Demais atividades                 | Sem limite |
 
 Os números seguem o cronograma da organização; as atividades sem número no cronograma ficam sem
@@ -119,6 +120,8 @@ estudante volta depois para acrescentar uma atividade. Os pares ficam em `lib/pr
    8. `20261006150000_termo_e_horarios.sql`: dados do responsável legal, registro do aceite do
       termo de consentimento e atividades no mesmo horário.
    9. `20261006160000_limite_de_envios.sql`: limite de tentativas por conexão (veja "Segurança").
+   10. `20261006170000_remover_concurso_desenho.sql`: tira o concurso de desenho da lista (inscrição em papel).
+   11. `20261006180000_vagas_oficinas.sql`: 25 vagas em cada oficina.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
