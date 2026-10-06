@@ -77,7 +77,7 @@ da atividade (deixe vazio para não ter limite). Vale na hora, sem publicar o si
 
 ### Regras por ano escolar
 
-- Concurso de redação: do 4º ano do Ensino Fundamental ao 3º ano do Ensino Médio. A categoria
+- Concurso de redação: do 4º ano do Ensino Fundamental à 3ª série do Nível Médio. A categoria
   (conto, crônica ou dissertação) aparece no formulário conforme o ano escolhido.
 - Oficina de desenho criativo: exclusiva para crianças atípicas. Só fica disponível depois de marcar
   a caixa "criança atípica" no formulário.

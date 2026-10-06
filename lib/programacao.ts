@@ -113,7 +113,7 @@ export const dias: Dia[] = [
 export const categoriasRedacao = [
   { participantes: "4º e 5º ano", genero: "Conto" },
   { participantes: "6º ao 9º ano", genero: "Crônica" },
-  { participantes: "1º ao 3º ano do Ensino Médio", genero: "Dissertação argumentativa (modelo ENEM)" },
+  { participantes: "1ª à 3ª série do Nível Médio", genero: "Dissertação argumentativa (modelo ENEM)" },
 ];
 
 export const oficinas: {

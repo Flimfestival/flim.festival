@@ -311,7 +311,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               <option value="" disabled>
                 Selecione
               </option>
-              {["Ensino Fundamental", "Ensino Médio"].map((etapa) => {
+              {["Ensino Fundamental", "Nível Médio"].map((etapa) => {
                 const anos = anosPermitidos.filter((ano) => ano.endsWith(etapa));
                 return (
                   anos.length > 0 && (
@@ -327,7 +327,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               })}
             </select>
             {escolaEscolhida?.etapas && (
-              <p className="dica">Anos oferecidos pela escola: {escolaEscolhida.etapas}.</p>
+              <p className="dica">Etapas oferecidas pela escola: {escolaEscolhida.etapas}.</p>
             )}
             <MensagemErro campo="anoEscolar" erros={erros} />
           </div>

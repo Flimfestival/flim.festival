@@ -15,9 +15,9 @@ export const anosEscolares: { nome: string; categoriaRedacao?: string }[] = [
   { nome: "7º ano do Ensino Fundamental", categoriaRedacao: "Crônica" },
   { nome: "8º ano do Ensino Fundamental", categoriaRedacao: "Crônica" },
   { nome: "9º ano do Ensino Fundamental", categoriaRedacao: "Crônica" },
-  { nome: "1º ano do Ensino Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
-  { nome: "2º ano do Ensino Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
-  { nome: "3º ano do Ensino Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
+  { nome: "1ª série do Nível Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
+  { nome: "2ª série do Nível Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
+  { nome: "3ª série do Nível Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
 ];
 
 const fundamental = anosEscolares.filter((ano) => ano.nome.includes("Fundamental")).map((ano) => ano.nome);
@@ -27,7 +27,7 @@ const anosIniciais = fundamental.slice(0, 5);
 const anosFinais = fundamental.slice(5);
 
 // Escolas da lista do formulário, em ordem alfabética, e os anos que cada uma oferece.
-// Os anos seguem o Censo Escolar 2025 (Inep), consultado no QEdu; o Ensino Médio do CERB começou
+// Os anos seguem o Censo Escolar 2025 (Inep), consultado no QEdu; o Nível Médio do CERB começou
 // em 2026, informado pela organização. `rotulo` é o texto da lista quando difere do nome gravado.
 // Sem `anos`, a escola aceita todos os anos. Para incluir uma escola, acrescente aqui.
 // Quem estuda fora da lista escolhe "Outra escola" e digita o nome.
@@ -51,7 +51,7 @@ export const escolas: { nome: string; rotulo?: string; etapas?: string; anos?: s
   {
     nome: "CERB",
     rotulo: "CERB (Centro Educacional Raimunda Barreto)",
-    etapas: "do 6º ano do Ensino Fundamental ao 3º ano do Ensino Médio",
+    etapas: "do 6º ano do Ensino Fundamental à 3ª série do Nível Médio",
     anos: [...anosFinais, ...medio],
   },
   {
@@ -67,17 +67,17 @@ export const escolas: { nome: string; rotulo?: string; etapas?: string; anos?: s
   },
   {
     nome: "Escola Estadual Almino Afonso",
-    etapas: "Ensino Fundamental e Médio",
+    etapas: "Ensino Fundamental e Nível Médio",
     anos: [...fundamental, ...medio],
   },
   {
     nome: "Escola Estadual Antônio João de Queiroz",
-    etapas: "do 6º ano do Ensino Fundamental ao 3º ano do Ensino Médio",
+    etapas: "do 6º ano do Ensino Fundamental à 3ª série do Nível Médio",
     anos: [...anosFinais, ...medio],
   },
   {
     nome: "Escola Estadual Doutor Joaquim Inácio (E.E.J.I.)",
-    etapas: "Ensino Médio",
+    etapas: "Nível Médio",
     anos: medio,
   },
 ];
@@ -96,7 +96,7 @@ export function categoriaRedacao(anoEscolar: string) {
 export const restricoesPorAno: Record<string, { anos: string[]; aviso: string }> = {
   "concurso-redacao": {
     anos: anosEscolares.filter((ano) => ano.categoriaRedacao).map((ano) => ano.nome),
-    aviso: "Para estudantes do 4º ano do Ensino Fundamental ao 3º ano do Ensino Médio.",
+    aviso: "Para estudantes do 4º ano do Ensino Fundamental à 3ª série do Nível Médio.",
   },
 };
 
