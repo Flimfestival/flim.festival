@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { fotos } from "@/lib/fotos";
 import { categoriasRedacao, concursoDesenho, dias, oficinas } from "@/lib/programacao";
 
 export default function Programacao() {
@@ -126,15 +124,6 @@ export default function Programacao() {
             </div>
           </dl>
         </article>
-
-        <figure className="foto-larga programacao-foto">
-          <Image
-            src={fotos.rodaDeLeitura}
-            alt="Público sentado em cadeiras à sombra de uma árvore, em uma atividade ao ar livre"
-            sizes="(max-width: 1180px) 100vw, 1132px"
-            placeholder="blur"
-          />
-        </figure>
       </div>
     </section>
   );

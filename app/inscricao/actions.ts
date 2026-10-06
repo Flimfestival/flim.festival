@@ -15,12 +15,7 @@ export async function enviarInscricao(
   formData: FormData,
 ): Promise<EstadoInscricao> {
   const valores = lerValores(formData);
-  const enviada: EstadoInscricao = {
-    status: "enviada",
-    nome: valores.nome.split(" ")[0],
-    email: valores.email,
-    atividades: valores.atividades,
-  };
+  const enviada: EstadoInscricao = { status: "enviada", valores };
 
   // Campo invisível para pessoas. Se vier preenchido, foi um robô: responde como sucesso e descarta.
   if (String(formData.get("campo_extra") ?? "") !== "") {
@@ -32,9 +27,9 @@ export async function enviarInscricao(
     return { status: "erro", mensagem: "Confira os campos destacados abaixo.", erros, valores };
   }
 
-  let esgotadas: string[];
+  let resultado: Resultado;
   try {
-    esgotadas = await salvar(valores);
+    resultado = await salvar(valores);
   } catch (erro) {
     console.error("Falha ao gravar inscrição:", erro);
     return {
@@ -45,6 +40,18 @@ export async function enviarInscricao(
     };
   }
 
+  if (resultado === "repetida") {
+    return {
+      status: "erro",
+      mensagem: "Este estudante já tem inscrição no FLIM.",
+      erros: {
+        nome: `Já existe uma inscrição com este nome e esta data de nascimento. Para mudar as atividades, escreva para ${evento.emailContato}.`,
+      },
+      valores,
+    };
+  }
+
+  const esgotadas = resultado;
   if (esgotadas.length > 0) {
     const nomes = esgotadas.map(tituloAtividade).join("; ");
     return {
@@ -61,9 +68,12 @@ export async function enviarInscricao(
   return enviada;
 }
 
-// Grava a inscrição pela função `registrar_inscricao` do Supabase, que confere as vagas
-// e grava numa única operação. Retorna as atividades esgotadas (lista vazia se gravou).
-async function salvar(valores: Valores): Promise<string[]> {
+// Lista das atividades esgotadas (vazia se gravou) ou "repetida" se o estudante já tem inscrição.
+type Resultado = string[] | "repetida";
+
+// Grava a inscrição pela função `registrar_inscricao` do Supabase, que confere vagas e
+// inscrições repetidas e grava numa única operação.
+async function salvar(valores: Valores): Promise<Resultado> {
   const parametros = {
     p_nome: valores.nome,
     p_escola: valores.escola,
@@ -88,6 +98,8 @@ async function salvar(valores: Valores): Promise<string[]> {
   }
 
   const { data, error } = await supabase.rpc("registrar_inscricao", parametros);
+  // 23505: a função recusou porque o estudante já tem inscrição.
+  if (error?.code === "23505") return "repetida";
   if (error) {
     throw new Error(`Supabase recusou a inscrição: ${error.message}`);
   }

@@ -4,11 +4,6 @@
  */
 import { atividadesInscricao } from "./programacao";
 
-// Escolas que aparecem na lista do formulário. Para incluir outra, acrescente o nome aqui.
-// Quem estuda em uma escola fora da lista escolhe "Outra escola" e digita o nome.
-export const escolas = ["CERBA", "CERB", "Escola Estadual Almino Afonso"];
-export const OUTRA_ESCOLA = "outra";
-
 // Ano escolar e, quando houver, a categoria do concurso de redação correspondente.
 export const anosEscolares: { nome: string; categoriaRedacao?: string }[] = [
   { nome: "1º ano do Ensino Fundamental" },
@@ -24,6 +19,57 @@ export const anosEscolares: { nome: string; categoriaRedacao?: string }[] = [
   { nome: "2º ano do Ensino Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
   { nome: "3º ano do Ensino Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
 ];
+
+const fundamental = anosEscolares.filter((ano) => ano.nome.includes("Fundamental")).map((ano) => ano.nome);
+const medio = anosEscolares.filter((ano) => ano.nome.includes("Médio")).map((ano) => ano.nome);
+const anosIniciais = fundamental.slice(0, 5);
+
+// Escolas da lista do formulário, em ordem alfabética, e os anos que cada uma oferece.
+// As etapas das escolas municipais seguem o Censo Escolar 2025 (Inep), consultado no QEdu.
+// Sem `anos`, a escola aceita todos os anos. Para incluir uma escola, acrescente aqui.
+// Quem estuda fora da lista escolhe "Outra escola" e digita o nome.
+export const escolas: { nome: string; etapas?: string; anos?: string[] }[] = [
+  {
+    nome: "Centro Educacional Padre Carlos",
+    etapas: "do 1º ao 5º ano do Ensino Fundamental",
+    anos: anosIniciais,
+  },
+  {
+    nome: "Centro Educacional Profª Agá Fernandes (CEPAF)",
+    etapas: "Ensino Fundamental",
+    anos: fundamental,
+  },
+  { nome: "Centro Educacional Profª Aninha Leite", etapas: "Ensino Fundamental", anos: fundamental },
+  {
+    nome: "Centro Educacional Professor João Onofre",
+    etapas: "do 1º ao 5º ano do Ensino Fundamental",
+    anos: anosIniciais,
+  },
+  {
+    nome: "CERB",
+    etapas: "do 6º ano do Ensino Fundamental ao 3º ano do Ensino Médio",
+    anos: [...fundamental.slice(5), ...medio],
+  },
+  { nome: "CERBA", etapas: "Ensino Fundamental", anos: fundamental },
+  { nome: "Colégio Efetivo" },
+  {
+    nome: "Escola Estadual Almino Afonso",
+    etapas: "Ensino Fundamental e Médio",
+    anos: [...fundamental, ...medio],
+  },
+  {
+    nome: "Escola Estadual Antônio João de Queiroz",
+    etapas: "Ensino Fundamental e Médio",
+    anos: [...fundamental, ...medio],
+  },
+  { nome: "Escola Estadual Joaquim Inácio (E.E.J.I.)", etapas: "Ensino Médio", anos: medio },
+];
+export const OUTRA_ESCOLA = "outra";
+
+// Anos que podem ser escolhidos para a escola; para "Outra escola" ou nenhuma, todos.
+export function anosDaEscola(escola: string) {
+  return escolas.find((item) => item.nome === escola)?.anos ?? anosEscolares.map((ano) => ano.nome);
+}
 
 export function categoriaRedacao(anoEscolar: string) {
   return anosEscolares.find((ano) => ano.nome === anoEscolar)?.categoriaRedacao;
@@ -84,7 +130,7 @@ export type VagasRestantes = Record<string, number | null>;
 export type EstadoInscricao =
   | { status: "inicial" }
   | { status: "erro"; mensagem: string; erros: Erros; valores: Valores; esgotadas?: string[] }
-  | { status: "enviada"; nome: string; email: string; atividades: string[] };
+  | { status: "enviada"; valores: Valores };
 
 export function lerValores(formData: FormData): Valores {
   const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
@@ -140,11 +186,13 @@ export function validar(valores: Valores): Erros {
     if (valores.escola.length < 2 || valores.escola.length > 160) {
       erros.escola = "Digite o nome da escola.";
     }
-  } else if (!escolas.includes(valores.escola)) {
+  } else if (!escolas.some((escola) => escola.nome === valores.escola)) {
     erros.escola = "Escolha a escola.";
   }
   if (!anosEscolares.some((ano) => ano.nome === valores.anoEscolar)) {
     erros.anoEscolar = "Escolha o ano escolar.";
+  } else if (!erros.escola && !anosDaEscola(valores.escola).includes(valores.anoEscolar)) {
+    erros.anoEscolar = `Esta escola não oferece o ${valores.anoEscolar}. Confira a escola e o ano escolar.`;
   }
   if (valores.deficiencia !== "sim" && valores.deficiencia !== "nao") {
     erros.deficiencia = "Responda se o estudante possui alguma deficiência.";

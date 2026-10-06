@@ -3,14 +3,14 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { enviarInscricao } from "@/app/inscricao/actions";
+import { evento } from "@/lib/evento";
 import {
-  anosEscolares,
+  anosDaEscola,
   categoriaRedacao,
   escolas,
   OUTRA_ESCOLA,
   podeParticipar,
   restricoesPorAno,
-  tituloAtividade,
   type Campo,
   type Erros,
   type EstadoInscricao,
@@ -49,29 +49,75 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   }, [estado]);
 
   if (estado.status === "enviada") {
+    const inscricao = estado.valores;
+    const escolhidas = atividadesInscricao.filter((atividade) => inscricao.atividades.includes(atividade.id));
+    const categoria = categoriaRedacao(inscricao.anoEscolar);
     return (
-      <div className="form-card confirmacao">
+      <div className="form-card confirmacao comprovante">
+        <p className="eyebrow eyebrow-green">Comprovante de inscrição</p>
         <h2 ref={confirmacao} tabIndex={-1}>
-          Inscrição enviada
+          Inscrição confirmada
         </h2>
-        <p>Obrigado, {estado.nome}! Recebemos a inscrição no FLIM nas seguintes atividades:</p>
-        <ul className="lista-confirmacao">
-          {estado.atividades.map((id) => (
-            <li key={id}>{tituloAtividade(id)}</li>
+        <p>
+          A inscrição de <strong>{inscricao.nome}</strong> no FLIM foi registrada.
+        </p>
+        <dl className="comprovante-dados">
+          <div>
+            <dt>Estudante</dt>
+            <dd>{inscricao.nome}</dd>
+          </div>
+          <div>
+            <dt>Nascimento</dt>
+            <dd>{inscricao.dataNascimento.split("-").reverse().join("/")}</dd>
+          </div>
+          <div>
+            <dt>Escola</dt>
+            <dd>{inscricao.escola}</dd>
+          </div>
+          <div>
+            <dt>Ano escolar</dt>
+            <dd>{inscricao.anoEscolar}</dd>
+          </div>
+        </dl>
+        <h3>Atividades</h3>
+        <ul className="comprovante-atividades">
+          {escolhidas.map((atividade) => (
+            <li key={atividade.id}>
+              <strong>{atividade.titulo}</strong>
+              <span>
+                {atividade.grupo} · {atividade.quando}
+              </span>
+            </li>
           ))}
         </ul>
-        {estado.email && (
+        <div className="comprovante-orientacao">
           <p>
-            As orientações serão enviadas para <strong>{estado.email}</strong>.
+            <strong>Na entrada de cada atividade, diga o nome completo do estudante à comissão.</strong> Não
+            é preciso imprimir este comprovante, mas vale guardar.
+          </p>
+          {inscricao.atividades.includes("abertura") && <p>Na abertura, leve 2 kg de alimentos.</p>}
+          {inscricao.atividades.includes("concurso-redacao") && categoria && (
+            <p>Concurso de redação: categoria {categoria}.</p>
+          )}
+        </div>
+        {inscricao.email && (
+          <p>
+            E-mail informado: <strong>{inscricao.email}</strong>
           </p>
         )}
+        <p>
+          Dúvidas: <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>
+        </p>
         <div className="actions">
-          <Link href="/" className="btn btn-primary">
-            Voltar para o site
-          </Link>
+          <button type="button" className="btn btn-primary" onClick={() => window.print()}>
+            Salvar ou imprimir
+          </button>
           <button type="button" className="btn btn-outline" onClick={aoRecomecar}>
             Fazer outra inscrição
           </button>
+          <Link href="/" className="btn btn-outline">
+            Voltar para o site
+          </Link>
         </div>
       </div>
     );
@@ -81,6 +127,8 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   const descricao = (campo: Campo, dica?: string) =>
     [dica, erros[campo] ? `erro-${campo}` : undefined].filter(Boolean).join(" ") || undefined;
   const categoria = categoriaRedacao(anoEscolar);
+  const escolaEscolhida = escolas.find((escola) => escola.nome === escolaOpcao);
+  const anosPermitidos = anosDaEscola(escolaOpcao);
 
   return (
     <form action={acao} className="form-card">
@@ -156,7 +204,12 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               name="escola"
               required
               defaultValue={valores ? (valores.escolaOutra ? OUTRA_ESCOLA : valores.escola) : ""}
-              onChange={(evento) => setEscolaOpcao(evento.target.value)}
+              onChange={(evento) => {
+                const escola = evento.target.value;
+                setEscolaOpcao(escola);
+                // Se a nova escola não oferece o ano já escolhido, o ano volta a "Selecione".
+                if (anoEscolar && !anosDaEscola(escola).includes(anoEscolar)) setAnoEscolar("");
+              }}
               aria-invalid={Boolean(erros.escola)}
               aria-describedby={descricao("escola")}
             >
@@ -164,8 +217,8 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                 Selecione
               </option>
               {escolas.map((escola) => (
-                <option key={escola} value={escola}>
-                  {escola}
+                <option key={escola.nome} value={escola.nome}>
+                  {escola.nome}
                 </option>
               ))}
               <option value={OUTRA_ESCOLA}>Outra escola</option>
@@ -191,14 +244,14 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
           )}
           <div className="campo campo-largo">
             <label htmlFor="anoEscolar">Ano escolar</label>
-            {/* O React só aplica o valor padrão de um select ao montá-lo; a `key` o recria com o
-                valor enviado, para o campo não voltar a "Selecione" depois de um erro. */}
+            {/* O React só aplica o valor padrão de um select ao montá-lo; a `key` o recria quando a
+                escola muda ou depois de um erro, já com o ano certo. */}
             <select
-              key={valores?.anoEscolar ?? "vazio"}
+              key={`${escolaOpcao}-${valores?.anoEscolar ?? "vazio"}`}
               id="anoEscolar"
               name="anoEscolar"
               required
-              defaultValue={valores?.anoEscolar ?? ""}
+              defaultValue={anosPermitidos.includes(anoEscolar) ? anoEscolar : (valores?.anoEscolar ?? "")}
               onChange={(evento) => setAnoEscolar(evento.target.value)}
               aria-invalid={Boolean(erros.anoEscolar)}
               aria-describedby={descricao("anoEscolar")}
@@ -206,12 +259,24 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               <option value="" disabled>
                 Selecione
               </option>
-              {anosEscolares.map((ano) => (
-                <option key={ano.nome} value={ano.nome}>
-                  {ano.nome}
-                </option>
-              ))}
+              {["Ensino Fundamental", "Ensino Médio"].map((etapa) => {
+                const anos = anosPermitidos.filter((ano) => ano.endsWith(etapa));
+                return (
+                  anos.length > 0 && (
+                    <optgroup key={etapa} label={etapa}>
+                      {anos.map((ano) => (
+                        <option key={ano} value={ano}>
+                          {ano}
+                        </option>
+                      ))}
+                    </optgroup>
+                  )
+                );
+              })}
             </select>
+            {escolaEscolhida?.etapas && (
+              <p className="dica">Anos oferecidos pela escola: {escolaEscolhida.etapas}.</p>
+            )}
             <MensagemErro campo="anoEscolar" erros={erros} />
           </div>
         </div>

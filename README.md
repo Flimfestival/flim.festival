@@ -80,6 +80,11 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
    2. `20261005130000_permissoes_servidor.sql`: libera para a chave secreta só o que o site usa.
       Projetos novos do Supabase não liberam tabelas automaticamente; sem este passo, o site não lê
       as vagas nem grava inscrições.
+   3. `20261005140000_visoes_para_organizacao.sql`: visões para acompanhar as inscrições (veja
+      "Ver as inscrições").
+   4. `20261005150000_bloquear_inscricao_repetida.sql`: recusa uma segunda inscrição do mesmo
+      estudante (mesmo nome e data de nascimento).
+   5. `20261006120000_presencas_portaria.sql`: presenças registradas no painel da portaria.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
@@ -107,9 +112,21 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
 
 ### Ver as inscrições
 
-No painel do Supabase, abra **Table Editor > inscricoes**. Dá para filtrar, ordenar pela data
-(`criado_em`) e exportar para CSV, que abre no Excel ou no Google Planilhas. A coluna `atividades`
-guarda os códigos das atividades (por exemplo `painel-1`); os nomes ficam na tabela `atividades`.
+No painel do Supabase, abra o **Table Editor**. Além das tabelas, há quatro visões prontas para
+consulta, com colunas em português e horário de Brasília:
+
+| Visão                 | O que mostra                                                          |
+| --------------------- | --------------------------------------------------------------------- |
+| `painel_inscricoes`   | Uma linha por estudante, com idade, escola, ano e atividades pelo nome |
+| `lista_por_atividade` | Uma linha por estudante em cada atividade, com a hora da entrada; filtre a coluna "Atividade" para a lista de presença |
+| `resumo_vagas`        | Vagas, inscritos, vagas restantes, ocupação e presentes de cada atividade |
+| `resumo_escolas`      | Quantos estudantes cada escola inscreveu                             |
+
+Dá para filtrar, ordenar e exportar para CSV, que abre no Excel ou no Google Planilhas. A tabela
+`inscricoes` guarda os dados originais; a coluna `atividades` tem os códigos (por exemplo `painel-1`).
+
+Cada estudante pode ter uma inscrição só (mesmo nome e data de nascimento). Para mudar as atividades
+de alguém, edite a linha em **Table Editor > inscricoes** ou apague-a para a pessoa se inscrever de novo.
 
 ### Sem o Supabase configurado
 
@@ -123,8 +140,9 @@ guarda os códigos das atividades (por exemplo `painel-1`); os nomes ficam na ta
 - As atividades do formulário ficam em `lib/programacao.ts` (`atividadesInscricao`). O `id` de cada
   uma precisa existir também na tabela `atividades` do Supabase. Para incluir uma atividade nova,
   acrescente nos dois lugares; não mude o `id` de uma atividade que já recebeu inscrições.
-- A lista de escolas do formulário fica em `lib/inscricao.ts` (`escolas`). Quem estuda em outra
-  escola escolhe "Outra escola" e digita o nome. Para incluir uma escola, acrescente o nome na lista.
+- A lista de escolas do formulário fica em `lib/inscricao.ts` (`escolas`), com os anos que cada uma
+  oferece: ao escolher a escola, o campo de ano mostra só esses anos. Quem estuda em outra escola
+  escolhe "Outra escola" e digita o nome. Para incluir uma escola, acrescente na lista.
 - Os anos escolares e as regras de validação ficam em `lib/inscricao.ts`, o formulário em
   `components/FormularioInscricao.tsx` e a gravação em `app/inscricao/actions.ts`.
 - Um campo novo também precisa de uma coluna nova na tabela e de um parâmetro novo na função
@@ -164,10 +182,49 @@ As fotos ficam em `public/fotos/` e são cadastradas em `lib/fotos.ts`, junto co
 | Foto                  | Onde aparece | Origem   |
 | --------------------- | ------------ | -------- |
 | `criancas-lendo.jpg`  | O festival   | Unsplash |
-| `roda-de-leitura.jpg` | Programação  | Unsplash |
 
 Para trocar uma foto, substitua o arquivo mantendo o mesmo nome e atualize o crédito em `lib/fotos.ts`.
 As fotos são recortadas e otimizadas automaticamente pelo Next.js.
+
+## Portaria
+
+O endereço `/portaria` (por exemplo `https://flim-festival.vercel.app/portaria`) é o painel da
+comissão para a entrada das atividades. Não aparece no menu nem nos buscadores.
+
+1. Entre com a senha da comissão. A sessão vale por 12 horas naquele aparelho.
+2. Escolha a atividade e digite parte do nome do estudante (acentos e maiúsculas não importam).
+3. Cada resultado mostra escola, ano escolar e data de nascimento, para diferenciar nomes iguais:
+   - **verde**: inscrição nesta atividade, com o botão **Registrar entrada**;
+   - **azul**: entrada já registrada, com a hora e a opção **Desfazer**;
+   - **amarelo**: inscrição em outra atividade;
+   - **vermelho**: nenhum inscrito com esse nome. O painel informa se ainda há vagas, para o estudante
+     se inscrever pelo site.
+4. Os contadores mostram inscritos, presentes e vagas restantes, e se atualizam a cada minuto.
+
+Uma mesma entrada nunca é registrada duas vezes, nem com dois celulares ao mesmo tempo.
+Sem internet no local, use a visão `lista_por_atividade` impressa como reserva.
+
+**Senha:** fica na variável `SENHA_PORTARIA` (no `.env.local` e na Vercel, em **Settings >
+Environment Variables**), com pelo menos 12 caracteres; sem ela o painel fica desativado. Trocar a
+senha encerra todas as sessões abertas. Troque depois do festival.
+
+## SEO e compartilhamento
+
+- Cada página tem título, descrição e endereço canônico próprios (`lib/site.ts`).
+- `app/sitemap.ts` e `app/robots.ts` geram o `sitemap.xml` e o `robots.txt` para os buscadores.
+- A página inicial tem os dados do evento no formato do Google (`components/DadosEstruturados.tsx`):
+  datas, local e convidados. As datas ficam em `lib/evento.ts` (`inicio` e `fim`).
+- `app/opengraph-image.png` é a imagem que aparece ao compartilhar o link (WhatsApp, redes sociais).
+  Se a data ou o texto mudarem, ela precisa ser refeita.
+- O endereço do site vem da Vercel automaticamente; com um domínio próprio, nada precisa mudar.
+
+## Segurança
+
+- `next.config.ts` envia cabeçalhos de segurança: política de conteúdo (o site só carrega arquivos
+  de si mesmo), bloqueio de exibição dentro de outros sites e restrições de câmera, microfone e
+  localização.
+- O formulário valida tudo no servidor, tem um campo invisível contra robôs, e o banco confere
+  vagas, inscrições repetidas e permissões.
 
 ## Publicação
 

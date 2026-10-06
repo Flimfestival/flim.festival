@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { fotos } from "@/lib/fotos";
 
 const eixos = [
@@ -37,11 +36,6 @@ export default function Sobre() {
             </li>
           ))}
         </ul>
-        <div className="secao-acao">
-          <Link href="/programacao" className="btn btn-outline">
-            Ver a programação
-          </Link>
-        </div>
       </div>
     </section>
   );

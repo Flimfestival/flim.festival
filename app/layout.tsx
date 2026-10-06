@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
+import { nomeSite, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -7,17 +8,24 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
+// Padrão de todas as páginas; cada página completa com título, descrição e endereço próprios.
 export const metadata: Metadata = {
-  title: "FLIM · Festival Literário de Martins",
-  description:
-    "Festival Literário de Martins (RN): um encontro dedicado à leitura, à escrita e à formação de leitores. Faça sua inscrição.",
-  openGraph: {
-    title: "FLIM · Festival Literário de Martins",
-    description:
-      "Um encontro dedicado à leitura, à escrita e à formação de leitores na Serra de Martins (RN).",
-    type: "website",
-    locale: "pt_BR",
-  },
+  metadataBase: new URL(siteUrl),
+  title: { default: nomeSite, template: "%s · FLIM" },
+  applicationName: "FLIM",
+  keywords: [
+    "Festival Literário de Martins",
+    "FLIM",
+    "Martins RN",
+    "festival literário",
+    "Bráulio Bessa",
+    "Socorro Acioli",
+    "literatura potiguar",
+  ],
+};
+
+export const viewport: Viewport = {
+  themeColor: "#104990",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

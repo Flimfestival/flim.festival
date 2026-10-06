@@ -137,6 +137,24 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .eixos h3 { margin-bottom: .35em; }
 .eixos p { margin: 0; color: var(--muted); }
 
+/* Convidados em destaque: cartões com as iniciais em uma cor da marca */
+.destaques { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.convidado { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-align: center; }
+.convidado-foto { position: relative; aspect-ratio: 4 / 5; background: var(--cream); }
+.convidado-texto { padding: 24px 24px 28px; }
+.monograma {
+  display: grid; place-items: center; width: 72px; height: 72px; margin: 32px auto 0; border-radius: 50%;
+  background: var(--blue); color: #fff; font-size: 1.4rem; font-weight: 800; letter-spacing: .02em;
+}
+.convidado:nth-child(2) .monograma { background: var(--red-button); }
+.convidado:nth-child(3) .monograma { background: var(--green-ink); }
+.convidado h3 { font-size: 1.35rem; margin-bottom: .15em; }
+.convidado p { margin: 0; }
+.convidado-papel { color: var(--muted); font-size: .95rem; }
+.convidado-atividade { margin-top: 14px !important; font-weight: 700; }
+.convidado-quando { margin-top: 4px !important; color: var(--muted); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.acoes-404 { margin-top: 32px; }
+
 /* Página de programação: um bloco por dia, com a agenda em linhas de horário */
 .dias-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: -16px auto 40px; }
 .dias-nav a {
@@ -170,7 +188,6 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .ficha div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; }
 .ficha dt { font-weight: 700; }
 .ficha dd { margin: 0; color: var(--muted); }
-.programacao-foto { max-width: 860px; margin: 40px auto 0; }
 
 .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: none; }
 .steps li { border-top: 3px solid var(--blue); padding-top: 24px; text-align: center; }
@@ -252,8 +269,17 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .selo-esgotado { background: #fdecea; color: #8a1600; }
 .grupo-atividades { border: 0; padding: 0; margin: 0 0 22px; min-width: 0; }
 .grupo-atividades > legend { padding: 0; margin-bottom: 10px; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-.lista-confirmacao { margin: 0 0 16px; padding-left: 20px; }
-.lista-confirmacao li { margin-bottom: 4px; }
+/* Comprovante exibido depois da inscrição */
+.comprovante-dados { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; margin: 20px 0; }
+.comprovante-dados dt { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.comprovante-dados dd { margin: 2px 0 0; font-weight: 700; }
+.comprovante h3 { margin: 8px 0 10px; }
+.comprovante-atividades { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
+.comprovante-atividades li { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; }
+.comprovante-atividades span { display: block; margin-top: 2px; font-size: .92rem; color: var(--muted); }
+.comprovante-orientacao { margin-bottom: 16px; padding: 14px 16px; border-radius: 12px; background: #eef3fa; }
+.confirmacao .comprovante-orientacao p { margin: 0; color: var(--ink); }
+.comprovante-orientacao p + p { margin-top: 6px; }
 .consentimento { font-size: .95rem; }
 
 .form-alerta {
@@ -267,10 +293,48 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .confirmacao p { color: var(--muted); }
 .confirmacao .actions { justify-content: flex-start; margin-top: 24px; }
 
+/* Painel da portaria: uso da comissão no celular, na entrada das atividades */
+.portaria { min-height: 100vh; background: var(--cream); }
+.portaria-topo { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--line); }
+.portaria-topo img { height: 36px; width: auto; }
+.portaria-topo span { font-weight: 800; color: var(--blue); }
+.portaria-topo form { margin-left: auto; }
+.portaria-conteudo { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+.portaria-login { max-width: 420px; margin: 32px auto 0; }
+.portaria-login h1 { font-size: 1.6rem; }
+.painel { display: flex; flex-direction: column; gap: 16px; }
+.painel-contadores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0; }
+.painel-contadores div { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; text-align: center; }
+.painel-contadores dt { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.painel-contadores dd { margin: 4px 0 0; font-size: 1.5rem; font-weight: 800; color: var(--blue); font-variant-numeric: tabular-nums; }
+.painel input[type="search"] { font-size: 1.1rem; min-height: 54px; }
+.painel-aviso { min-height: 1.5em; margin: 0; font-weight: 700; color: var(--green-ink); }
+.painel-rodape { margin: 0; text-align: center; }
+.resultados { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.resultado {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  background: #fff; border: 1px solid var(--line); border-left: 6px solid var(--line); border-radius: 12px; padding: 14px 16px;
+}
+.resultado-dados { flex: 1 1 240px; min-width: 0; }
+.resultado-nome { margin: 0; font-size: 1.1rem; font-weight: 800; }
+.resultado-info { margin: 2px 0 0; font-size: .92rem; color: var(--muted); }
+.resultado-situacao { margin: 6px 0 0; font-size: .92rem; font-weight: 700; }
+.resultado-inscrito { border-left-color: var(--green-ink); }
+.resultado-inscrito .resultado-situacao { color: var(--green-ink); }
+.resultado-presente { border-left-color: var(--blue); background: #eef3fa; }
+.resultado-presente .resultado-situacao { color: var(--blue); }
+.resultado-outra { border-left-color: var(--yellow); }
+.resultado-outra .resultado-situacao { color: #8a6100; }
+.resultado-ausente { border-left-color: #b81d00; }
+.resultado-ausente .resultado-nome { color: #b81d00; }
+
 /* Rodapé */
 .site-footer { background: var(--blue-dark); border-top: 1px solid rgba(255,255,255,.1); color: #c3d0e6; font-size: .9rem; padding: 24px 0; }
 .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
 .footer-inner p { margin: 0; }
+.footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 20px; margin: 6px 0; }
+.footer-nav a { color: #fff; text-decoration: none; font-weight: 600; padding: 6px 2px; }
+.footer-nav a:hover { text-decoration: underline; }
 .site-footer strong { color: #fff; }
 .footer-inner .creditos { width: 100%; margin-top: 10px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .1); font-size: .78rem; color: #9fb3d4; }
 .creditos a { color: #c3d0e6; }
@@ -279,6 +343,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 @media (max-width: 900px) {
   .section { padding: 72px 0; }
   .eixos { grid-template-columns: repeat(2, 1fr); }
+  .destaques { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+  .convidado-foto { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 760px) {
   .nav-toggle { display: flex; }
@@ -311,8 +377,20 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   .form-card { padding: 24px 18px; border-radius: 16px; }
   .campos, .opcoes { grid-template-columns: 1fr; }
   .confirmacao .actions .btn { width: 100%; }
+  .comprovante-dados { grid-template-columns: 1fr; }
   .actions .btn, .cta .btn { width: 100%; }
   .facts div { padding: 0 12px; }
+}
+@media (max-width: 520px) {
+  .resultado .btn { width: 100%; }
+  .painel-contadores dd { font-size: 1.25rem; }
+}
+/* Impressão ou PDF do comprovante: só o cartão, sem cabeçalho, rodapé e botões */
+@media print {
+  .skip-link, .site-header, .site-footer, .tiles, .inscricao-info, .confirmacao .actions { display: none !important; }
+  body, .inscricao { background: #fff !important; }
+  .inscricao { padding: 0 !important; }
+  .form-card { box-shadow: none !important; border: 1px solid #999 !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -4,12 +4,14 @@ import FormularioInscricao from "@/components/FormularioInscricao";
 import Pagina from "@/components/Pagina";
 import { evento } from "@/lib/evento";
 import { lerVagasRestantes } from "@/lib/vagas";
+import { metadadosPagina } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Inscrição · Festival Literário de Martins",
-  description:
+export const metadata: Metadata = metadadosPagina({
+  titulo: "Inscrição",
+  descricao:
     "Inscrição gratuita de estudantes no Festival Literário de Martins (RN): escolha as atividades e garanta a vaga.",
-};
+  caminho: "/inscricao",
+});
 
 export default async function PaginaInscricao() {
   const vagas = await lerVagasRestantes();

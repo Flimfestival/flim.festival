@@ -8,6 +8,9 @@ export const evento = {
   // (Google Forms, Typeform etc.), troque pelo link completo começando com https://
   linkFormulario: "/inscricao",
   data: "11 a 13 de dezembro",
+  // Datas no formato AAAA-MM-DD, usadas pelo Google para mostrar o evento nas buscas.
+  inicio: "2026-12-11",
+  fim: "2026-12-13",
   local: "Martins/RN",
-  emailContato: "contato@exemplo.com",
+  emailContato: "flim.martinsrn@gmail.com",
 };

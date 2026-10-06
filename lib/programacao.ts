@@ -233,3 +233,28 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     detalhe: "Premiação em 12 de dezembro, às 16h.",
   },
 ];
+
+// Convidados em destaque na página inicial e nos dados estruturados para buscadores.
+export const destaques = [
+  {
+    nome: "Bráulio Bessa",
+    papel: "Poeta",
+    atividade: "Palestra de abertura",
+    quando: "Sexta, 11 de dezembro, 17h30",
+    local: "Mirante do Canto",
+  },
+  {
+    nome: "Socorro Acioli",
+    papel: "Escritora",
+    atividade: "Palestra de encerramento dos painéis",
+    quando: "Sábado, 12 de dezembro, 17h30",
+    local: "Casa de Cultura",
+  },
+  {
+    nome: "Antônio Francisco",
+    papel: "Poeta",
+    atividade: "4º painel e Sarau Poético Cosme Lemos",
+    quando: "Sábado, 12 de dezembro, 15h45 e 20h",
+    local: "Casa de Cultura e Coreto",
+  },
+];
