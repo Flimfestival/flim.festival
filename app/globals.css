@@ -103,7 +103,10 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 .tiles-thin { height: 40px; }
 .hero { background: var(--bg); }
-.hero-inner { text-align: center; padding: 64px 24px 72px; display: flex; flex-direction: column; align-items: center; }
+.hero-inner { text-align: center; display: flex; flex-direction: column; align-items: center; }
+/* Espaço acima e abaixo da abertura. Dois seletores, para a margem lateral do .container
+   (que no celular redefine todo o padding) não zerar este espaço. */
+.hero .hero-inner { padding-block: 64px 72px; }
 .hero-logo { margin: 0 0 28px; }
 .hero-logo img { width: min(440px, 80vw); height: auto; }
 .lead { font-size: 1.2rem; color: var(--muted); max-width: 620px; margin: 0 auto; }
@@ -373,7 +376,9 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   }
   .nav.open { display: flex; }
   .nav a:not(.btn) { padding: 12px 0; border-bottom: 1px solid var(--line); }
-  .hero-inner { padding: 40px 16px 48px; }
+  .hero .hero-inner { padding-block: 36px 44px; }
+  .hero-logo { margin-bottom: 22px; }
+  .hero-logo img { width: min(300px, 72vw); }
   .cta { padding: 64px 0; }
   .tiles { height: 48px; }
   .tiles-thin { height: 32px; }
@@ -395,7 +400,10 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   .confirmacao .actions .btn { width: 100%; }
   .comprovante-dados { grid-template-columns: 1fr; }
   .actions .btn, .cta .btn { width: 100%; }
-  .facts div { padding: 0 12px; }
+  /* Data, local e entrada lado a lado em três colunas iguais; a data quebra em duas linhas. */
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; margin: 28px 0 26px; }
+  .facts div { padding: 0 8px; }
+  .facts dd { font-size: .98rem; text-wrap: balance; }
 }
 @media (max-width: 520px) {
   .resultado .btn { width: 100%; }
