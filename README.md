@@ -232,7 +232,7 @@ As fotos são recortadas e otimizadas automaticamente pelo Next.js.
 
 ## Portaria
 
-O endereço `/portaria` (por exemplo `https://flim-festival.vercel.app/portaria`) é o painel da
+O endereço `/portaria` (`https://www.festivalflim.com.br/portaria`) é o painel da
 comissão para a entrada das atividades. Não aparece no menu nem nos buscadores.
 
 1. Entre com a senha da comissão. A sessão vale por 12 horas naquele aparelho.
