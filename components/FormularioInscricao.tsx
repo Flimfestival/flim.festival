@@ -6,6 +6,9 @@ import { enviarInscricao } from "@/app/inscricao/actions";
 import { evento } from "@/lib/evento";
 import {
   anosDaEscola,
+  ATIVIDADE_ATIPICOS,
+  ATIVIDADES_MUNICIPIO,
+  AVISO_MUNICIPIO,
   categoriaRedacao,
   escolas,
   idade,
@@ -45,11 +48,13 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   const [dataNascimento, setDataNascimento] = useState("");
   // Atividades marcadas agora, para desativar as que acontecem no mesmo horário.
   const [marcadas, setMarcadas] = useState<string[]>([]);
+  const [atipico, setAtipico] = useState(false);
   // Depois de um envio com erro, o formulário volta com as atividades que foram enviadas.
   const [estadoVisto, setEstadoVisto] = useState(estado);
   if (estado !== estadoVisto) {
     setEstadoVisto(estado);
     setMarcadas(estado.status === "erro" ? estado.valores.atividades : []);
+    setAtipico(estado.status === "erro" ? estado.valores.atipico : false);
   }
   const alerta = useRef<HTMLDivElement>(null);
   const confirmacao = useRef<HTMLHeadingElement>(null);
@@ -245,6 +250,10 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               onChange={(evento) => {
                 const escola = evento.target.value;
                 setEscolaOpcao(escola);
+                // Estudantes de fora de Martins não podem ficar nas atividades só do município.
+                if (escola === OUTRA_ESCOLA) {
+                  setMarcadas((atuais) => atuais.filter((id) => !ATIVIDADES_MUNICIPIO.includes(id)));
+                }
                 // Se a nova escola não oferece o ano já escolhido, o ano volta a "Selecione".
                 if (anoEscolar && !anosDaEscola(escola).includes(anoEscolar)) setAnoEscolar("");
               }}
@@ -368,6 +377,28 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
             <MensagemErro campo="qualDeficiencia" erros={erros} />
           </div>
         )}
+        <label className="opcao campo-extra">
+          <input
+            type="checkbox"
+            name="atipico"
+            value="sim"
+            // Valor inicial (e não controlado): depois de um envio, o formulário volta a este valor,
+            // que acompanha o que foi enviado.
+            defaultChecked={atipico}
+            onChange={(evento) => {
+              setAtipico(evento.target.checked);
+              // Sem a marcação, a oficina exclusiva deixa de estar escolhida.
+              if (!evento.target.checked) {
+                setMarcadas((atuais) => atuais.filter((id) => id !== ATIVIDADE_ATIPICOS));
+              }
+            }}
+          />
+          <span>
+            O estudante é uma criança atípica (neurodivergente), por exemplo com autismo (TEA), TDAH
+            ou outra condição do neurodesenvolvimento.
+            <small>Libera a oficina de desenho criativo, exclusiva para crianças atípicas.</small>
+          </span>
+        </label>
       </fieldset>
 
       <fieldset className="form-grupo" aria-describedby={descricao("atividades", "dica-atividades")}>
@@ -386,7 +417,11 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                 const mesmoHorario = marcadas.includes(atividade.id)
                   ? []
                   : simultaneas(atividade.id).filter((id) => marcadas.includes(id));
-                const bloqueada = esgotada || foraDoAno || mesmoHorario.length > 0;
+                const soAtipicos = atividade.id === ATIVIDADE_ATIPICOS && !atipico;
+                const soMunicipio =
+                  escolaOpcao === OUTRA_ESCOLA && ATIVIDADES_MUNICIPIO.includes(atividade.id);
+                const bloqueada =
+                  esgotada || foraDoAno || soAtipicos || soMunicipio || mesmoHorario.length > 0;
                 return (
                   // A `key` muda quando a atividade fica indisponível, para ela voltar desmarcada.
                   <label
@@ -418,6 +453,13 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                       {restricoesPorAno[atividade.id] && (
                         <small className={foraDoAno ? "aviso-ano bloqueio" : "aviso-ano"}>
                           {restricoesPorAno[atividade.id].aviso}
+                        </small>
+                      )}
+                      {soMunicipio && <small className="aviso-ano bloqueio">{AVISO_MUNICIPIO}</small>}
+                      {soAtipicos && (
+                        <small className="aviso-ano bloqueio">
+                          Exclusiva para crianças atípicas: marque a opção “criança atípica”, na
+                          pergunta sobre deficiência.
                         </small>
                       )}
                       {mesmoHorario.length > 0 && (

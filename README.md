@@ -78,7 +78,14 @@ da atividade (deixe vazio para não ter limite). Vale na hora, sem publicar o si
 
 - Concurso de redação: do 4º ano do Ensino Fundamental ao 3º ano do Ensino Médio. A categoria
   (conto, crônica ou dissertação) aparece no formulário conforme o ano escolhido.
-- Concurso de desenho: do 1º ao 3º ano do Ensino Fundamental.
+- Oficina de desenho criativo: exclusiva para crianças atípicas. Só fica disponível depois de marcar
+  a caixa "criança atípica" no formulário.
+
+- Concurso de redação e oficinas: só para estudantes das escolas de Martins (as da lista do
+  formulário). Quem escolhe "Outra escola" pode se inscrever na abertura, nos painéis e na palestra,
+  mas não nessas atividades (`ATIVIDADES_MUNICIPIO` em `lib/inscricao.ts`).
+
+O concurso de desenho não aparece no formulário: as inscrições dele são feitas em papel.
 
 O formulário desativa o concurso que o ano escolhido não pode fazer, e o servidor confere de novo
 ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).

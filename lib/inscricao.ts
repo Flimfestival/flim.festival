@@ -98,11 +98,15 @@ export const restricoesPorAno: Record<string, { anos: string[]; aviso: string }>
     anos: anosEscolares.filter((ano) => ano.categoriaRedacao).map((ano) => ano.nome),
     aviso: "Para estudantes do 4º ano do Ensino Fundamental ao 3º ano do Ensino Médio.",
   },
-  "concurso-desenho": {
-    anos: anosEscolares.slice(0, 3).map((ano) => ano.nome),
-    aviso: "Para estudantes do 1º ao 3º ano do Ensino Fundamental.",
-  },
 };
+
+// Atividades só para estudantes das escolas de Martins (as da lista acima): quem escolhe
+// "Outra escola" não pode se inscrever nelas.
+export const ATIVIDADES_MUNICIPIO = ["concurso-redacao", "oficina-redacao", "oficina-poesia", "oficina-desenho"];
+export const AVISO_MUNICIPIO = "Só para estudantes das escolas de Martins. Escolha a escola na lista.";
+
+// Atividade exclusiva para crianças atípicas: só pode ser escolhida com a caixa "criança atípica" marcada.
+export const ATIVIDADE_ATIPICOS = "oficina-desenho";
 
 // Se o ano escolar ainda não foi escolhido, todas as atividades aparecem disponíveis.
 export function podeParticipar(atividade: string, anoEscolar: string) {
@@ -143,6 +147,8 @@ export type Valores = {
   responsavelNome: string;
   responsavelCpf: string;
   responsavelContato: string;
+  // Marcado quando o estudante é uma criança atípica; libera a oficina de desenho criativo.
+  atipico: boolean;
   consentimento: boolean;
 };
 
@@ -173,6 +179,7 @@ export function lerValores(formData: FormData): Valores {
     responsavelNome: texto("responsavelNome"),
     responsavelCpf: texto("responsavelCpf"),
     responsavelContato: texto("responsavelContato"),
+    atipico: formData.get("atipico") === "sim",
     consentimento: formData.get("consentimento") === "sim",
   };
 }
@@ -253,6 +260,15 @@ export function validar(valores: Valores): Erros {
       erros.atividades = fora
         .map((id) => `${tituloAtividade(id)}: ${restricoesPorAno[id].aviso.replace(/^P/, "p")}`)
         .join(" ");
+    }
+    const soMunicipio = valores.escolaOutra
+      ? valores.atividades.filter((id) => ATIVIDADES_MUNICIPIO.includes(id))
+      : [];
+    if (!erros.atividades && soMunicipio.length > 0) {
+      erros.atividades = `${soMunicipio.map(tituloAtividade).join("; ")}: ${AVISO_MUNICIPIO.replace(/^S/, "s")}`;
+    }
+    if (!erros.atividades && valores.atividades.includes(ATIVIDADE_ATIPICOS) && !valores.atipico) {
+      erros.atividades = `${tituloAtividade(ATIVIDADE_ATIPICOS)}: exclusiva para crianças atípicas. Marque a opção “criança atípica” ou desmarque a oficina.`;
     }
     const conflitos = horariosSimultaneos.filter(
       ([a, b]) => valores.atividades.includes(a) && valores.atividades.includes(b),

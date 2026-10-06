@@ -122,6 +122,10 @@ export default function Programacao() {
               <dd>{concursoDesenho.publico}</dd>
             </div>
             <div>
+              <dt>Inscrição</dt>
+              <dd>{concursoDesenho.inscricao}</dd>
+            </div>
+            <div>
               <dt>Premiação</dt>
               <dd>{concursoDesenho.premio}</dd>
             </div>

@@ -3,7 +3,7 @@
  * Texto fornecido pela organização. Ao mudar o texto, atualize também `TERMO_VERSAO`: cada inscrição
  * guarda a versão do termo que foi aceita e a data do aceite.
  */
-export const TERMO_VERSAO = "2026-10-06";
+export const TERMO_VERSAO = "2026-10-06.2";
 
 export const termo = {
   titulo: "Termo de Consentimento, Participação e Autorização de Uso de Imagem e Voz",
@@ -49,7 +49,13 @@ export const termo = {
       ],
     },
     {
-      titulo: "6. Declaração de consentimento",
+      titulo: "6. Veracidade das informações",
+      paragrafos: [
+        "O participante ou seu responsável legal declara que as informações prestadas na inscrição são verdadeiras. No Concurso de Redação, se for constatado que o participante premiado prestou informações falsas, ele perderá o direito ao prêmio, que será entregue ao próximo classificado, e assim sucessivamente.",
+      ],
+    },
+    {
+      titulo: "7. Declaração de consentimento",
       paragrafos: ["Ao marcar a opção abaixo e concluir a inscrição, declaro que:"],
     },
   ],

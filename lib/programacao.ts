@@ -140,8 +140,10 @@ export const oficinas: {
   nota: "As oficinas acontecem ao mesmo tempo que os painéis da Casa de Cultura.",
 };
 
+// O concurso de desenho não tem inscrição pelo site: as inscrições são feitas em papel.
 export const concursoDesenho = {
   publico: "Estudantes do 1º ao 3º ano do Ensino Fundamental.",
+  inscricao: "Feita em papel, não pelo site.",
   premio: "Kit Faber-Castell. O desenho vencedor vai para a capa de um livro, e outros 20 desenhos selecionados, para as páginas internas.",
   exposicao: "Na Feira Literária Fátima Baliza, na Casa de Cultura.",
   quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 16h.",
@@ -238,13 +240,6 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     grupo: "Domingo, 13 de dezembro · Colégio Estadual Almino Afonso",
     titulo: "Concurso de redação",
     quando: "9h",
-  },
-  {
-    id: "concurso-desenho",
-    grupo: "Concurso de desenho",
-    titulo: "Concurso de desenho",
-    quando: "Nas escolas, em data combinada com a organização",
-    detalhe: "Premiação em 12 de dezembro, às 16h.",
   },
 ];
 
