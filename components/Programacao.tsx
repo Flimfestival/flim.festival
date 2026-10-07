@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import Link from "next/link";
 import { categoriasRedacao, concursoDesenho, dias, oficinas } from "@/lib/programacao";
 
 // As oficinas acontecem no sábado (12/12), ao mesmo tempo que os painéis: aparecem logo depois desse dia.
@@ -104,6 +105,10 @@ export default function Programacao() {
                       ))}
                     </tbody>
                   </table>
+                  <p className="edital-link">
+                    Inscrições até 7 de novembro. Regras, prêmios e datas no{" "}
+                    <Link href="/edital">edital do concurso de redação</Link>.
+                  </p>
                 </div>
               )}
             </article>

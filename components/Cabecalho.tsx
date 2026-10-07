@@ -9,6 +9,7 @@ import LinkInscricao from "./LinkInscricao";
 const links = [
   { href: "/#sobre", label: "O festival" },
   { href: "/programacao", label: "Programação" },
+  { href: "/edital", label: "Edital" },
   { href: "/#participar", label: "Como participar" },
   { href: "/#duvidas", label: "Dúvidas" },
 ];

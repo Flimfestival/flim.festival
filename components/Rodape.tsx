@@ -5,6 +5,7 @@ import { creditos } from "@/lib/fotos";
 const links = [
   { href: "/", label: "Início" },
   { href: "/programacao", label: "Programação" },
+  { href: "/edital", label: "Edital do concurso" },
   { href: "/inscricao", label: "Inscrição" },
   { href: "/#duvidas", label: "Dúvidas" },
 ];

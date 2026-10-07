@@ -225,7 +225,10 @@ atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 | `components/ComoParticipar.tsx`  | Passos da inscrição                           |
 | `components/Duvidas.tsx`         | Perguntas frequentes                          |
 | `components/ChamadaFinal.tsx`    | Chamada final para inscrição                  |
+| `components/Parceiros.tsx`       | Logos de patrocínio, incentivo e realização (acima do rodapé) |
 | `components/Rodape.tsx`          | Rodapé                                        |
+| `app/edital/page.tsx`            | Página do edital do concurso de redação       |
+| `lib/edital.ts`                  | Texto do edital, transcrito do PDF assinado   |
 | `app/inscricao/page.tsx`         | Página de inscrição                           |
 | `components/FormularioInscricao.tsx` | Formulário de inscrição                   |
 | `lib/inscricao.ts`               | Anos escolares e regras do formulário         |
@@ -246,6 +249,12 @@ As fotos ficam em `public/fotos/` e são cadastradas em `lib/fotos.ts`, junto co
 | `criancas-lendo.jpg`  | O festival   | Unsplash |
 
 Para trocar uma foto, substitua o arquivo mantendo o mesmo nome e atualize o crédito em `lib/fotos.ts`.
+
+As logos de patrocínio (Faculdade Evolução), incentivo (Programa Cultural Câmara Cascudo e Secretaria
+de Estado da Cultura do RN) e realização (F7 Produções) ficam em `public/parceiros/` e aparecem numa
+faixa clara acima do rodapé, em todas as páginas (`components/Parceiros.tsx`). Os originais estão em
+`public/assets/`; as logos da F7 e da Câmara Cascudo vieram brancas e foram escurecidas para o fundo
+claro.
 As fotos são recortadas e otimizadas automaticamente pelo Next.js.
 
 ## Portaria

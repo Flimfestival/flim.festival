@@ -163,7 +163,11 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
           </p>
           {inscricao.atividades.includes("abertura") && <p>Na abertura, leve 2 kg de alimentos.</p>}
           {inscricao.atividades.includes("concurso-redacao") && categoria && (
-            <p>Concurso de redação: categoria {categoria}.</p>
+            <p>
+              Concurso de redação: categoria {categoria}. O cortejo das 8h, saindo da Igreja do Rosário,
+              é obrigatório. Leve caneta azul ou preta de corpo transparente. Regras no edital:
+              www.festivalflim.com.br/edital.
+            </p>
           )}
           <p>Termo de consentimento, participação e uso de imagem e voz: aceito.</p>
         </div>

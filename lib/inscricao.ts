@@ -15,9 +15,9 @@ export const anosEscolares: { nome: string; categoriaRedacao?: string }[] = [
   { nome: "7º ano do Ensino Fundamental", categoriaRedacao: "Crônica" },
   { nome: "8º ano do Ensino Fundamental", categoriaRedacao: "Crônica" },
   { nome: "9º ano do Ensino Fundamental", categoriaRedacao: "Crônica" },
-  { nome: "1ª série do Nível Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
-  { nome: "2ª série do Nível Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
-  { nome: "3ª série do Nível Médio", categoriaRedacao: "Dissertação argumentativa (modelo ENEM)" },
+  { nome: "1ª série do Nível Médio", categoriaRedacao: "Texto dissertativo-argumentativo" },
+  { nome: "2ª série do Nível Médio", categoriaRedacao: "Texto dissertativo-argumentativo" },
+  { nome: "3ª série do Nível Médio", categoriaRedacao: "Texto dissertativo-argumentativo" },
 ];
 
 const fundamental = anosEscolares.filter((ano) => ano.nome.includes("Fundamental")).map((ano) => ano.nome);

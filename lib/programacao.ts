@@ -110,10 +110,18 @@ export const dias: Dia[] = [
       {
         horario: "8h",
         titulo: "Cortejo com fanfarra",
-        detalhes: ["Saída da Igreja do Rosário até o Colégio Estadual Almino Afonso."],
+        detalhes: [
+          "Saída da Igreja do Rosário até o Colégio Estadual Almino Afonso.",
+          "Obrigatório para quem participa do concurso de redação.",
+        ],
       },
       { horario: "8h30", titulo: "Fala do professor Paulo Henrique" },
-      { horario: "9h", titulo: "Concurso de redação", comInscricao: true },
+      {
+        horario: "9h",
+        titulo: "Concurso de redação",
+        detalhes: ["Tema: “Memórias do Meu Lugar”. Produção dos textos das 9h às 13h."],
+        comInscricao: true,
+      },
     ],
   },
 ];
@@ -121,7 +129,7 @@ export const dias: Dia[] = [
 export const categoriasRedacao = [
   { participantes: "4º e 5º ano", genero: "Conto" },
   { participantes: "6º ao 9º ano", genero: "Crônica" },
-  { participantes: "1ª à 3ª série do Nível Médio", genero: "Dissertação argumentativa (modelo ENEM)" },
+  { participantes: "1ª à 3ª série do Nível Médio", genero: "Texto dissertativo-argumentativo" },
 ];
 
 export const oficinas: {
