@@ -196,6 +196,32 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .ficha dt { font-weight: 700; }
 .ficha dd { margin: 0; color: var(--muted); }
 
+/* Página do edital: resumo e texto completo, em cartões como os da programação */
+.edital-resumo .ficha div { grid-template-columns: 140px minmax(0, 1fr); }
+.edital-resumo .secao-acao { margin-top: 28px; }
+.edital-texto > p, .edital-texto section p { margin: 0 0 10px; line-height: 1.65; }
+.edital-texto h3 { margin: 32px 0 12px; font-size: 1.1rem; color: var(--blue); }
+.edital-texto .edital-subitem { padding-left: 20px; }
+.edital-texto ul { margin: 0 0 12px; padding-left: 40px; line-height: 1.6; }
+.edital-texto .tabela-rolagem { margin-top: 8px; }
+.edital-texto .tabela td:last-child { white-space: nowrap; }
+.edital-assinaturas { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line); text-align: center; }
+.edital-assinaturas p { margin: 0 0 14px; }
+.edital-nota { color: var(--muted); font-size: .9rem; }
+.edital-contato { text-align: center; margin: 8px auto 0; }
+.edital-link { margin: 14px 0 0; font-size: .95rem; color: var(--muted); }
+/* No celular, o resumo vira uma coluna e as tabelas do edital viram listas, com o rótulo antes de cada valor. */
+@media (max-width: 640px) {
+  .edital-resumo .ficha div { grid-template-columns: 1fr; gap: 2px; }
+  .edital-texto .tabela thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .edital-texto .tabela tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .edital-texto .tabela td { display: block; padding: 2px 0; border: 0; }
+  .edital-texto .tabela td:last-child { white-space: normal; }
+  .edital-texto .tabela td:first-child { font-weight: 700; }
+  .edital-texto .tabela td + td::before { content: attr(data-rotulo) ": "; font-weight: 700; color: var(--muted); }
+  .edital-texto .tabela td:empty { display: none; }
+}
+
 .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: none; }
 .steps li { border-top: 3px solid var(--blue); padding-top: 24px; text-align: center; }
 .steps span { display: block; font-size: 2.5rem; font-weight: 800; color: var(--red-button); letter-spacing: -.03em; line-height: 1; margin-bottom: 16px; }
@@ -350,6 +376,14 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .resultado-ausente .resultado-nome { color: #b81d00; }
 
 /* Rodapé */
+/* Faixa de logos de patrocínio, incentivo e realização, acima do rodapé */
+.parceiros { background: #fff; border-top: 1px solid var(--line); padding: 36px 0 40px; }
+.parceiros-inner { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 28px 72px; }
+.parceiros-grupo { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 100%; }
+.parceiros-grupo > p { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.parceiros-logos { display: flex; align-items: center; justify-content: center; gap: 24px; min-height: 76px; max-width: 100%; }
+.parceiros-logos img { max-width: 100%; height: auto; }
+
 .site-footer { background: var(--blue-dark); border-top: 1px solid rgba(255,255,255,.1); color: #c3d0e6; font-size: .9rem; padding: 24px 0; }
 .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
 .footer-inner p { margin: 0; }
@@ -413,7 +447,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 /* Impressão ou PDF do comprovante: só o cartão, sem cabeçalho, rodapé e botões */
 @media print {
-  .skip-link, .site-header, .site-footer, .tiles, .inscricao-info, .confirmacao .actions { display: none !important; }
+  .skip-link, .site-header, .parceiros, .site-footer, .tiles, .inscricao-info, .confirmacao .actions { display: none !important; }
   body, .inscricao { background: #fff !important; }
   .inscricao { padding: 0 !important; }
   .form-card { box-shadow: none !important; border: 1px solid #999 !important; }

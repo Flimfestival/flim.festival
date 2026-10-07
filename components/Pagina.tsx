@@ -1,7 +1,8 @@
 import Cabecalho from "./Cabecalho";
+import Parceiros from "./Parceiros";
 import Rodape from "./Rodape";
 
-// Estrutura comum a todas as páginas: atalho de acessibilidade, cabeçalho, conteúdo e rodapé.
+// Estrutura comum a todas as páginas: atalho de acessibilidade, cabeçalho, conteúdo, logos e rodapé.
 export default function Pagina({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -10,6 +11,7 @@ export default function Pagina({ children }: { children: React.ReactNode }) {
       </a>
       <Cabecalho />
       <main id="conteudo">{children}</main>
+      <Parceiros />
       <Rodape />
     </>
   );
