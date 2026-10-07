@@ -11,7 +11,7 @@ import { metadadosPagina } from "@/lib/site";
 
 export const metadata: Metadata = metadadosPagina({
   descricao:
-    "Festival Literário de Martins (RN), de 11 a 13 de dezembro: palestras com Bráulio Bessa e Socorro Acioli, painéis, sarau, oficinas e concursos. Inscrição gratuita para estudantes.",
+    "Festival Literário de Martins (RN), de 11 a 13 de dezembro: palestras com Bráulio Bessa e Socorro Acioli, painéis, sarau, oficinas e concursos. Inscrição gratuita para estudantes e visitantes.",
   caminho: "/",
 });
 

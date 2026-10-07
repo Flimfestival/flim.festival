@@ -9,8 +9,9 @@ import { clienteSupabase } from "@/lib/supabase";
 export type Estudante = {
   id: string;
   nome: string;
-  escola: string;
-  anoEscolar: string;
+  // Visitantes não têm escola nem ano escolar.
+  escola: string | null;
+  anoEscolar: string | null;
   dataNascimento: string;
   atividades: string[];
 };
@@ -77,8 +78,8 @@ export async function carregarAtividade(atividade: string): Promise<DadosAtivida
       todasAsLinhas<{
         id: string;
         nome: string;
-        escola: string;
-        ano_escolar: string;
+        escola: string | null;
+        ano_escolar: string | null;
         data_nascimento: string;
         atividades: string[];
       }>((de, ate) =>

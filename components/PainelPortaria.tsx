@@ -168,7 +168,7 @@ export default function PainelPortaria({
       </dl>
 
       <div className="campo">
-        <label htmlFor="busca">Nome do estudante</label>
+        <label htmlFor="busca">Nome do participante</label>
         <input
           ref={campoBusca}
           id="busca"
@@ -203,7 +203,8 @@ export default function PainelPortaria({
               <div className="resultado-dados">
                 <p className="resultado-nome">{estudante.nome}</p>
                 <p className="resultado-info">
-                  {estudante.escola} · {estudante.anoEscolar} · nascimento {formatarData(estudante.dataNascimento)}
+                  {estudante.escola ? `${estudante.escola} · ${estudante.anoEscolar}` : "Visitante"} · nascimento{" "}
+                  {formatarData(estudante.dataNascimento)}
                 </p>
                 <p className="resultado-situacao">
                   {!nestaAtividade

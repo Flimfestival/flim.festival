@@ -1,5 +1,5 @@
 /*
- * Campos e regras do formulário de inscrição de estudantes.
+ * Campos e regras do formulário de inscrição de estudantes e visitantes.
  * Usado pela página /inscricao (no navegador) e pela ação que grava os dados (no servidor).
  */
 import { atividadesInscricao, horariosSimultaneos } from "./programacao";
@@ -105,6 +105,12 @@ export const restricoesPorAno: Record<string, { anos: string[]; aviso: string }>
 export const ATIVIDADES_MUNICIPIO = ["concurso-redacao", "oficina-redacao", "oficina-poesia", "oficina-desenho"];
 export const AVISO_MUNICIPIO = "Só para estudantes das escolas de Martins. Escolha a escola na lista.";
 
+// Quem se inscreve: estudante (com escola e ano escolar) ou visitante (pais, professores, moradores,
+// turistas), sem escola. Visitantes não podem escolher as atividades só do município, que são todas
+// exclusivas para estudantes (a coluna `so_estudantes` da tabela `atividades` repete a regra no banco).
+export type Perfil = "estudante" | "visitante";
+export const AVISO_VISITANTE = "Só para estudantes das escolas de Martins.";
+
 // Atividade exclusiva para crianças atípicas: só pode ser escolhida com a caixa "criança atípica" marcada.
 export const ATIVIDADE_ATIPICOS = "oficina-desenho";
 
@@ -119,6 +125,7 @@ export function tituloAtividade(id: string) {
 }
 
 export type Campo =
+  | "perfil"
   | "nome"
   | "dataNascimento"
   | "email"
@@ -133,10 +140,12 @@ export type Campo =
   | "consentimento";
 
 export type Valores = {
+  // Vazio enquanto a pessoa não escolhe entre estudante e visitante.
+  perfil: Perfil | "";
   nome: string;
   dataNascimento: string;
   email: string;
-  // Nome gravado no banco: o escolhido na lista ou o digitado em "Outra escola".
+  // Nome gravado no banco: o escolhido na lista ou o digitado em "Outra escola". Vazio para visitantes.
   escola: string;
   escolaOutra: boolean;
   anoEscolar: string;
@@ -165,21 +174,25 @@ export type EstadoInscricao =
 
 export function lerValores(formData: FormData): Valores {
   const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
-  const escolaOutra = texto("escola") === OUTRA_ESCOLA;
+  const perfil = texto("perfil");
+  // Visitantes não têm escola, ano escolar nem a marcação de criança atípica (só serve à oficina).
+  const visitante = perfil === "visitante";
+  const escolaOutra = !visitante && texto("escola") === OUTRA_ESCOLA;
   return {
+    perfil: perfil === "estudante" || perfil === "visitante" ? perfil : "",
     nome: texto("nome"),
     dataNascimento: texto("dataNascimento"),
     email: texto("email"),
-    escola: escolaOutra ? texto("escolaOutra") : texto("escola"),
+    escola: visitante ? "" : escolaOutra ? texto("escolaOutra") : texto("escola"),
     escolaOutra,
-    anoEscolar: texto("anoEscolar"),
+    anoEscolar: visitante ? "" : texto("anoEscolar"),
     deficiencia: texto("deficiencia"),
     qualDeficiencia: texto("qualDeficiencia"),
     atividades: formData.getAll("atividades").map(String),
     responsavelNome: texto("responsavelNome"),
     responsavelCpf: texto("responsavelCpf"),
     responsavelContato: texto("responsavelContato"),
-    atipico: formData.get("atipico") === "sim",
+    atipico: !visitante && formData.get("atipico") === "sim",
     consentimento: formData.get("consentimento") === "sim",
   };
 }
@@ -218,8 +231,12 @@ export function validar(valores: Valores): Erros {
     }
   }
 
+  if (!valores.perfil) {
+    erros.perfil = "Escolha se a inscrição é de estudante ou de visitante.";
+  }
+  const visitante = valores.perfil === "visitante";
   if (valores.nome.length < 3 || valores.nome.length > 120) {
-    erros.nome = "Informe o nome completo do estudante.";
+    erros.nome = "Informe o nome completo.";
   }
   const anos = idade(valores.dataNascimento);
   if (anos === null || anos < 3 || anos > 100) {
@@ -231,20 +248,23 @@ export function validar(valores: Valores): Erros {
   ) {
     erros.email = "Informe um e-mail válido, como nome@exemplo.com, ou deixe em branco.";
   }
-  if (valores.escolaOutra) {
-    if (valores.escola.length < 2 || valores.escola.length > 160) {
-      erros.escola = "Digite o nome da escola.";
+  // Escola e ano escolar só existem na inscrição de estudante.
+  if (!visitante) {
+    if (valores.escolaOutra) {
+      if (valores.escola.length < 2 || valores.escola.length > 160) {
+        erros.escola = "Digite o nome da escola.";
+      }
+    } else if (!escolas.some((escola) => escola.nome === valores.escola)) {
+      erros.escola = "Escolha a escola.";
     }
-  } else if (!escolas.some((escola) => escola.nome === valores.escola)) {
-    erros.escola = "Escolha a escola.";
-  }
-  if (!anosEscolares.some((ano) => ano.nome === valores.anoEscolar)) {
-    erros.anoEscolar = "Escolha o ano escolar.";
-  } else if (!erros.escola && !anosDaEscola(valores.escola).includes(valores.anoEscolar)) {
-    erros.anoEscolar = `Esta escola não oferece o ${valores.anoEscolar}. Confira a escola e o ano escolar.`;
+    if (!anosEscolares.some((ano) => ano.nome === valores.anoEscolar)) {
+      erros.anoEscolar = "Escolha o ano escolar.";
+    } else if (!erros.escola && !anosDaEscola(valores.escola).includes(valores.anoEscolar)) {
+      erros.anoEscolar = `Esta escola não oferece o ${valores.anoEscolar}. Confira a escola e o ano escolar.`;
+    }
   }
   if (valores.deficiencia !== "sim" && valores.deficiencia !== "nao") {
-    erros.deficiencia = "Responda se o estudante possui alguma deficiência.";
+    erros.deficiencia = "Responda se o participante possui alguma deficiência.";
   }
   if (valores.qualDeficiencia.length > 500) {
     erros.qualDeficiencia = "Use no máximo 500 caracteres.";
@@ -261,11 +281,13 @@ export function validar(valores: Valores): Erros {
         .map((id) => `${tituloAtividade(id)}: ${restricoesPorAno[id].aviso.replace(/^P/, "p")}`)
         .join(" ");
     }
-    const soMunicipio = valores.escolaOutra
-      ? valores.atividades.filter((id) => ATIVIDADES_MUNICIPIO.includes(id))
-      : [];
+    const soMunicipio =
+      visitante || valores.escolaOutra
+        ? valores.atividades.filter((id) => ATIVIDADES_MUNICIPIO.includes(id))
+        : [];
     if (!erros.atividades && soMunicipio.length > 0) {
-      erros.atividades = `${soMunicipio.map(tituloAtividade).join("; ")}: ${AVISO_MUNICIPIO.replace(/^S/, "s")}`;
+      const aviso = visitante ? AVISO_VISITANTE : AVISO_MUNICIPIO;
+      erros.atividades = `${soMunicipio.map(tituloAtividade).join("; ")}: ${aviso.replace(/^S/, "s")}`;
     }
     if (!erros.atividades && valores.atividades.includes(ATIVIDADE_ATIPICOS) && !valores.atipico) {
       erros.atividades = `${tituloAtividade(ATIVIDADE_ATIPICOS)}: exclusiva para crianças atípicas. Marque a opção “criança atípica” ou desmarque a oficina.`;

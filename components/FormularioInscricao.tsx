@@ -9,6 +9,7 @@ import {
   ATIVIDADE_ATIPICOS,
   ATIVIDADES_MUNICIPIO,
   AVISO_MUNICIPIO,
+  AVISO_VISITANTE,
   categoriaRedacao,
   escolas,
   idade,
@@ -19,6 +20,7 @@ import {
   type Campo,
   type Erros,
   type EstadoInscricao,
+  type Perfil,
   type VagasRestantes,
 } from "@/lib/inscricao";
 import { atividadesInscricao, simultaneas } from "@/lib/programacao";
@@ -32,6 +34,19 @@ const grupos = [...new Set(atividadesInscricao.map((atividade) => atividade.grup
   atividades: atividadesInscricao.filter((atividade) => atividade.grupo === grupo),
 }));
 
+const opcoesPerfil: { valor: Perfil; rotulo: string; detalhe: string }[] = [
+  {
+    valor: "estudante",
+    rotulo: "Estudante",
+    detalhe: "Do Ensino Fundamental ou do Nível Médio, de Martins ou de outra cidade.",
+  },
+  {
+    valor: "visitante",
+    rotulo: "Visitante",
+    detalhe: "Familiares, professores, moradores e turistas. Inscrição na abertura, nos painéis e na palestra.",
+  },
+];
+
 export default function FormularioInscricao({ vagas }: { vagas: VagasRestantes | null }) {
   // Trocar a `key` recria o formulário do zero para uma nova inscrição.
   const [rodada, setRodada] = useState(0);
@@ -42,6 +57,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   const [estado, acao, enviando] = useActionState(enviarInscricao, estadoInicial);
   const valores = estado.status === "erro" ? estado.valores : undefined;
   const erros: Erros = estado.status === "erro" ? estado.erros : {};
+  const [perfil, setPerfil] = useState<Perfil | "">("");
   const [anoEscolar, setAnoEscolar] = useState("");
   const [deficiencia, setDeficiencia] = useState("");
   const [escolaOpcao, setEscolaOpcao] = useState("");
@@ -55,6 +71,12 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
     setEstadoVisto(estado);
     setMarcadas(estado.status === "erro" ? estado.valores.atividades : []);
     setAtipico(estado.status === "erro" ? estado.valores.atipico : false);
+    // Os campos voltam com os valores enviados; numa inscrição de visitante, sem escola e ano.
+    if (estado.status === "erro") {
+      setPerfil(estado.valores.perfil);
+      setEscolaOpcao(estado.valores.escolaOutra ? OUTRA_ESCOLA : estado.valores.escola);
+      setAnoEscolar(estado.valores.anoEscolar);
+    }
   }
   const alerta = useRef<HTMLDivElement>(null);
   const confirmacao = useRef<HTMLHeadingElement>(null);
@@ -67,6 +89,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
 
   if (estado.status === "enviada") {
     const inscricao = estado.valores;
+    const visitanteInscrito = inscricao.perfil === "visitante";
     const escolhidas = atividadesInscricao.filter((atividade) => inscricao.atividades.includes(atividade.id));
     const categoria = categoriaRedacao(inscricao.anoEscolar);
     return (
@@ -85,8 +108,8 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               <p>Já tinha inscrição em: {estado.repetidas.map(tituloAtividade).join("; ")}.</p>
             )}
             <p>
-              Os dados de ano escolar e e-mail são os da primeira inscrição. Se esta inscrição não é
-              deste estudante, escreva para {evento.emailContato}.
+              Os dados da primeira inscrição foram mantidos. Se ela não é desta pessoa, escreva para{" "}
+              {evento.emailContato}.
             </p>
           </div>
         ) : (
@@ -96,21 +119,25 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         )}
         <dl className="comprovante-dados">
           <div>
-            <dt>Estudante</dt>
+            <dt>{visitanteInscrito ? "Visitante" : "Estudante"}</dt>
             <dd>{inscricao.nome}</dd>
           </div>
           <div>
             <dt>Nascimento</dt>
             <dd>{inscricao.dataNascimento.split("-").reverse().join("/")}</dd>
           </div>
-          <div>
-            <dt>Escola</dt>
-            <dd>{inscricao.escola}</dd>
-          </div>
-          <div>
-            <dt>Ano escolar</dt>
-            <dd>{inscricao.anoEscolar}</dd>
-          </div>
+          {!visitanteInscrito && (
+            <>
+              <div>
+                <dt>Escola</dt>
+                <dd>{inscricao.escola}</dd>
+              </div>
+              <div>
+                <dt>Ano escolar</dt>
+                <dd>{inscricao.anoEscolar}</dd>
+              </div>
+            </>
+          )}
           {inscricao.responsavelNome && (
             <div>
               <dt>Responsável legal</dt>
@@ -131,7 +158,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         </ul>
         <div className="comprovante-orientacao">
           <p>
-            <strong>Na entrada de cada atividade, diga o nome completo do estudante à comissão.</strong> Não
+            <strong>Na entrada de cada atividade, diga o nome completo do participante à comissão.</strong> Não
             é preciso imprimir este comprovante, mas vale guardar.
           </p>
           {inscricao.atividades.includes("abertura") && <p>Na abertura, leve 2 kg de alimentos.</p>}
@@ -166,7 +193,10 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   const esgotadasAgora = estado.status === "erro" ? (estado.esgotadas ?? []) : [];
   const descricao = (campo: Campo, dica?: string) =>
     [dica, erros[campo] ? `erro-${campo}` : undefined].filter(Boolean).join(" ") || undefined;
-  const categoria = categoriaRedacao(anoEscolar);
+  const visitante = perfil === "visitante";
+  // Visitantes não têm ano escolar (o escolhido antes de trocar para visitante não vale).
+  const anoAtual = visitante ? "" : anoEscolar;
+  const categoria = categoriaRedacao(anoAtual);
   const anosParticipante = idade(dataNascimento || valores?.dataNascimento || "");
   const menorDeIdade = anosParticipante !== null && anosParticipante < 18;
   const escolaEscolhida = escolas.find((escola) => escola.nome === escolaOpcao);
@@ -181,8 +211,37 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
       )}
       <p className="dica">Todos os campos são obrigatórios, exceto os marcados como opcionais.</p>
 
+      <fieldset className="form-grupo" aria-describedby={descricao("perfil")}>
+        <legend>Quem está se inscrevendo?</legend>
+        <div className="opcoes">
+          {opcoesPerfil.map((opcao) => (
+            <label key={opcao.valor} className="opcao">
+              <input
+                type="radio"
+                name="perfil"
+                value={opcao.valor}
+                required
+                defaultChecked={valores?.perfil === opcao.valor}
+                onChange={() => {
+                  setPerfil(opcao.valor);
+                  // Visitantes não podem ficar nas atividades exclusivas para estudantes.
+                  if (opcao.valor === "visitante") {
+                    setMarcadas((atuais) => atuais.filter((id) => !ATIVIDADES_MUNICIPIO.includes(id)));
+                  }
+                }}
+              />
+              <span>
+                <strong>{opcao.rotulo}</strong>
+                <small>{opcao.detalhe}</small>
+              </span>
+            </label>
+          ))}
+        </div>
+        <MensagemErro campo="perfil" erros={erros} />
+      </fieldset>
+
       <fieldset className="form-grupo">
-        <legend>Dados do estudante</legend>
+        <legend>Dados do {visitante ? "visitante" : perfil === "estudante" ? "estudante" : "participante"}</legend>
         <div className="campos">
           <div className="campo campo-largo">
             <label htmlFor="nome">Nome completo</label>
@@ -235,7 +294,9 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         </div>
       </fieldset>
 
-      <fieldset className="form-grupo">
+      {/* Para visitantes, os dados escolares somem e, desativados, não são enviados nem exigidos.
+          Ficam montados para voltar como estavam se a pessoa trocar de novo para estudante. */}
+      <fieldset className="form-grupo" disabled={visitante} hidden={visitante}>
         <legend>Dados escolares</legend>
         <div className="campos">
           <div className="campo campo-largo">
@@ -362,7 +423,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         {deficiencia === "sim" && (
           <div className="campo campo-extra">
             <label htmlFor="qualDeficiencia">
-              Qual? Conte também se o estudante precisa de algum apoio para participar.{" "}
+              Qual? Conte também se o participante precisa de algum apoio para participar.{" "}
               <span className="opcional">(opcional)</span>
             </label>
             <textarea
@@ -377,34 +438,37 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
             <MensagemErro campo="qualDeficiencia" erros={erros} />
           </div>
         )}
-        <label className="opcao campo-extra">
-          <input
-            type="checkbox"
-            name="atipico"
-            value="sim"
-            // Valor inicial (e não controlado): depois de um envio, o formulário volta a este valor,
-            // que acompanha o que foi enviado.
-            defaultChecked={atipico}
-            onChange={(evento) => {
-              setAtipico(evento.target.checked);
-              // Sem a marcação, a oficina exclusiva deixa de estar escolhida.
-              if (!evento.target.checked) {
-                setMarcadas((atuais) => atuais.filter((id) => id !== ATIVIDADE_ATIPICOS));
-              }
-            }}
-          />
-          <span>
-            O estudante é uma criança atípica (neurodivergente), por exemplo com autismo (TEA), TDAH
-            ou outra condição do neurodesenvolvimento.
-            <small>Libera a oficina de desenho criativo, exclusiva para crianças atípicas.</small>
-          </span>
-        </label>
+        {/* A marcação só serve para a oficina de desenho criativo, que é só para estudantes. */}
+        {!visitante && (
+          <label className="opcao campo-extra">
+            <input
+              type="checkbox"
+              name="atipico"
+              value="sim"
+              // Valor inicial (e não controlado): depois de um envio, o formulário volta a este valor,
+              // que acompanha o que foi enviado.
+              defaultChecked={atipico}
+              onChange={(evento) => {
+                setAtipico(evento.target.checked);
+                // Sem a marcação, a oficina exclusiva deixa de estar escolhida.
+                if (!evento.target.checked) {
+                  setMarcadas((atuais) => atuais.filter((id) => id !== ATIVIDADE_ATIPICOS));
+                }
+              }}
+            />
+            <span>
+              O estudante é uma criança atípica (neurodivergente), por exemplo com autismo (TEA), TDAH
+              ou outra condição do neurodesenvolvimento.
+              <small>Libera a oficina de desenho criativo, exclusiva para crianças atípicas.</small>
+            </span>
+          </label>
+        )}
       </fieldset>
 
       <fieldset className="form-grupo" aria-describedby={descricao("atividades", "dica-atividades")}>
         <legend>Atividades</legend>
         <p id="dica-atividades" className="dica">
-          Marque as atividades de que o estudante quer participar. Algumas têm vagas limitadas.
+          Marque as atividades desejadas. Algumas têm vagas limitadas.
         </p>
         {grupos.map((grupo) => (
           <fieldset key={grupo.titulo} className="grupo-atividades">
@@ -413,13 +477,14 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
               {grupo.atividades.map((atividade) => {
                 const restantes = vagas?.[atividade.id];
                 const esgotada = restantes === 0 || esgotadasAgora.includes(atividade.id);
-                const foraDoAno = !podeParticipar(atividade.id, anoEscolar);
+                const foraDoAno = !podeParticipar(atividade.id, anoAtual);
                 const mesmoHorario = marcadas.includes(atividade.id)
                   ? []
                   : simultaneas(atividade.id).filter((id) => marcadas.includes(id));
-                const soAtipicos = atividade.id === ATIVIDADE_ATIPICOS && !atipico;
                 const soMunicipio =
-                  escolaOpcao === OUTRA_ESCOLA && ATIVIDADES_MUNICIPIO.includes(atividade.id);
+                  (visitante || escolaOpcao === OUTRA_ESCOLA) && ATIVIDADES_MUNICIPIO.includes(atividade.id);
+                // Quando a atividade já está bloqueada por ser só do município, basta esse aviso.
+                const soAtipicos = !soMunicipio && atividade.id === ATIVIDADE_ATIPICOS && !atipico;
                 const bloqueada =
                   esgotada || foraDoAno || soAtipicos || soMunicipio || mesmoHorario.length > 0;
                 return (
@@ -455,7 +520,11 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                           {restricoesPorAno[atividade.id].aviso}
                         </small>
                       )}
-                      {soMunicipio && <small className="aviso-ano bloqueio">{AVISO_MUNICIPIO}</small>}
+                      {soMunicipio && (
+                        <small className="aviso-ano bloqueio">
+                          {visitante ? AVISO_VISITANTE : AVISO_MUNICIPIO}
+                        </small>
+                      )}
                       {soAtipicos && (
                         <small className="aviso-ano bloqueio">
                           Exclusiva para crianças atípicas: marque a opção “criança atípica”, na

@@ -37,12 +37,20 @@ atividades que aparecem no formulário de inscrição ficam em `lib/programacao.
 
 ## Inscrições
 
-A página `/inscricao` é o formulário de inscrição de estudantes. Cada inscrição é gravada em um
-banco de dados no [Supabase](https://supabase.com), que também controla as vagas de cada atividade.
+A página `/inscricao` é o formulário de inscrição de estudantes e visitantes. Cada inscrição é
+gravada em um banco de dados no [Supabase](https://supabase.com), que também controla as vagas de
+cada atividade.
 
-O formulário pede: nome completo, data de nascimento, e-mail (opcional), escola, ano escolar, se o
-estudante possui alguma deficiência (com um campo opcional para detalhar o apoio necessário), as
-atividades escolhidas e o aceite do termo de consentimento.
+O formulário pede: se a inscrição é de estudante ou de visitante, nome completo, data de nascimento,
+e-mail (opcional), escola e ano escolar (só estudantes), se o participante possui alguma deficiência
+(com um campo opcional para detalhar o apoio necessário), as atividades escolhidas e o aceite do
+termo de consentimento.
+
+**Visitantes** (familiares, professores, moradores, turistas) não informam escola nem ano escolar e
+podem se inscrever na abertura, nos painéis e na palestra. O concurso de redação e as oficinas são
+exclusivos para estudantes: o formulário desativa essas atividades para visitantes, o servidor
+confere de novo e o banco também recusa (coluna `so_estudantes` da tabela `atividades`). Visitantes
+ocupam as mesmas vagas que os estudantes.
 
 ### Termo de consentimento
 
@@ -83,8 +91,8 @@ da atividade (deixe vazio para não ter limite). Vale na hora, sem publicar o si
   a caixa "criança atípica" no formulário.
 
 - Concurso de redação e oficinas: só para estudantes das escolas de Martins (as da lista do
-  formulário). Quem escolhe "Outra escola" pode se inscrever na abertura, nos painéis e na palestra,
-  mas não nessas atividades (`ATIVIDADES_MUNICIPIO` em `lib/inscricao.ts`).
+  formulário). Quem escolhe "Outra escola" e os visitantes podem se inscrever na abertura, nos
+  painéis e na palestra, mas não nessas atividades (`ATIVIDADES_MUNICIPIO` em `lib/inscricao.ts`).
 
 O concurso de desenho não aparece no formulário: as inscrições dele são feitas em papel.
 
@@ -93,10 +101,11 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
 
 ### Atividades no mesmo horário
 
-No sábado, 12/12, as oficinas começam junto com os painéis: oficina de redação e 1º painel, oficina
-de poesia e 3º painel, oficina de desenho criativo e 4º painel. O estudante escolhe só uma de cada
-par: ao marcar uma, o formulário desativa a outra. O banco confere de novo, inclusive quando o
-estudante volta depois para acrescentar uma atividade. Os pares ficam em `lib/programacao.ts`
+No sábado, 12/12, as oficinas começam junto com os painéis: oficina de redação e painel Literatura e
+identidade, oficina de poesia e painel Escreva, leia... eternize-se, oficina de desenho criativo e
+painel Povo, natureza e poesia. O estudante escolhe só uma de cada par: ao marcar uma, o formulário
+desativa a outra. O banco confere de novo, inclusive quando o estudante volta depois para acrescentar
+uma atividade. Os pares ficam em `lib/programacao.ts`
 (`horariosSimultaneos`) e na tabela `atividades_simultaneas` do Supabase; ao mudar, mude nos dois.
 
 ### Ligar o formulário ao Supabase (uma vez só)
@@ -122,6 +131,8 @@ estudante volta depois para acrescentar uma atividade. Os pares ficam em `lib/pr
    9. `20261006160000_limite_de_envios.sql`: limite de tentativas por conexão (veja "Segurança").
    10. `20261006170000_remover_concurso_desenho.sql`: tira o concurso de desenho da lista (inscrição em papel).
    11. `20261006180000_vagas_oficinas.sql`: 25 vagas em cada oficina.
+   12. `20261007120000_visitantes.sql`: inscrição de visitantes, sem escola nem ano escolar.
+   13. `20261007130000_nomes_dos_paineis.sql`: painéis chamados pelo nome, sem o número.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
@@ -154,17 +165,19 @@ consulta, com colunas em português e horário de Brasília:
 
 | Visão                 | O que mostra                                                          |
 | --------------------- | --------------------------------------------------------------------- |
-| `painel_inscricoes`   | Uma linha por estudante, com idade, escola, ano e atividades pelo nome |
-| `lista_por_atividade` | Uma linha por estudante em cada atividade, com a hora da entrada; filtre a coluna "Atividade" para a lista de presença |
+| `painel_inscricoes`   | Uma linha por inscrição, com idade, escola, ano e atividades pelo nome; visitantes aparecem com "Visitante" na escola |
+| `lista_por_atividade` | Uma linha por inscrito em cada atividade, com a hora da entrada; filtre a coluna "Atividade" para a lista de presença |
 | `resumo_vagas`        | Vagas, inscritos, vagas restantes, ocupação e presentes de cada atividade |
-| `resumo_escolas`      | Quantos estudantes cada escola inscreveu                             |
+| `resumo_escolas`      | Inscritos por escola; os visitantes aparecem juntos, na linha "Visitantes" |
 
 Dá para filtrar, ordenar e exportar para CSV, que abre no Excel ou no Google Planilhas. A tabela
 `inscricoes` guarda os dados originais; a coluna `atividades` tem os códigos (por exemplo `painel-1`).
 
-Cada estudante tem uma inscrição só. É considerado o mesmo estudante apenas quando coincidem, ao
+Cada pessoa tem uma inscrição só. É considerado o mesmo estudante apenas quando coincidem, ao
 mesmo tempo, o nome completo (ignorando só acentos, maiúsculas e pontuação), a data de nascimento e a
-escola. Nomes parecidos nunca são juntados. Se o mesmo estudante se inscrever de novo:
+escola; o mesmo visitante, quando coincidem o nome completo e a data de nascimento. Nomes parecidos
+nunca são juntados, e um estudante e um visitante com o mesmo nome e data são inscrições separadas.
+Se a mesma pessoa se inscrever de novo:
 
 - as atividades novas são acrescentadas à inscrição que já existe, com a conferência de vagas;
 - as atividades repetidas são ignoradas, com um aviso;
@@ -193,7 +206,7 @@ atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 - Os anos escolares e as regras de validação ficam em `lib/inscricao.ts`, o formulário em
   `components/FormularioInscricao.tsx` e a gravação em `app/inscricao/actions.ts`.
 - Um campo novo também precisa de uma coluna nova na tabela e de um parâmetro novo na função
-  `registrar_inscricao`: crie outro arquivo em `supabase/migrations/` e rode no SQL Editor.
+  `inscrever_estudante`: crie outro arquivo em `supabase/migrations/` e rode no SQL Editor.
 
 ## Onde fica cada parte
 
@@ -241,8 +254,9 @@ O endereço `/portaria` (`https://www.festivalflim.com.br/portaria`) é o painel
 comissão para a entrada das atividades. Não aparece no menu nem nos buscadores.
 
 1. Entre com a senha da comissão. A sessão vale por 12 horas naquele aparelho.
-2. Escolha a atividade e digite parte do nome do estudante (acentos e maiúsculas não importam).
-3. Cada resultado mostra escola, ano escolar e data de nascimento, para diferenciar nomes iguais:
+2. Escolha a atividade e digite parte do nome do participante (acentos e maiúsculas não importam).
+3. Cada resultado mostra escola, ano escolar (ou "Visitante") e data de nascimento, para diferenciar
+   nomes iguais:
    - **verde**: inscrição nesta atividade, com o botão **Registrar entrada**;
    - **azul**: entrada já registrada, com a hora e a opção **Desfazer**;
    - **amarelo**: inscrição em outra atividade;

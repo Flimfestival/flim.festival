@@ -61,7 +61,7 @@ export async function enviarInscricao(
       status: "erro",
       mensagem: "Há atividades no mesmo horário. Nada foi alterado.",
       erros: {
-        atividades: `Acontecem no mesmo horário: ${pares}. Este estudante já tem inscrição em uma delas ou marcou as duas; escolha uma atividade de cada horário.`,
+        atividades: `Acontecem no mesmo horário: ${pares}. Já existe inscrição em uma delas ou as duas foram marcadas; escolha uma atividade de cada horário.`,
       },
       valores,
     };
@@ -70,7 +70,7 @@ export async function enviarInscricao(
   if (resultado.situacao === "nada_novo") {
     return {
       status: "erro",
-      mensagem: "Este estudante já tem inscrição nas atividades escolhidas. Nada foi alterado.",
+      mensagem: "Esta pessoa já tem inscrição nas atividades escolhidas. Nada foi alterado.",
       erros: {
         atividades: `Inscrição já existente em: ${nomes(resultado.repetidas)}. Para se inscrever em outra atividade, marque só as novas. Dúvidas: ${evento.emailContato}.`,
       },
@@ -118,10 +118,12 @@ type Resultado = {
 async function salvar(valores: Valores): Promise<Resultado> {
   const anos = idade(valores.dataNascimento);
   const menor = anos !== null && anos < 18;
+  const visitante = valores.perfil === "visitante";
   const parametros = {
     p_nome: valores.nome,
-    p_escola: valores.escola,
-    p_ano_escolar: valores.anoEscolar,
+    // Visitantes não têm escola nem ano escolar.
+    p_escola: visitante ? null : valores.escola,
+    p_ano_escolar: visitante ? null : valores.anoEscolar,
     p_data_nascimento: valores.dataNascimento,
     p_email: valores.email || null,
     p_possui_deficiencia: valores.deficiencia === "sim",
@@ -133,6 +135,9 @@ async function salvar(valores: Valores): Promise<Resultado> {
     p_responsavel_cpf: menor ? valores.responsavelCpf.replace(/\D/g, "") : null,
     p_responsavel_contato: menor ? valores.responsavelContato : null,
     p_termo_versao: TERMO_VERSAO,
+    // Sem o perfil, o banco assume "estudante". Só o visitante o envia, então a inscrição de estudante
+    // funciona também num banco que ainda não recebeu 20261007120000_visitantes.sql.
+    ...(visitante ? { p_perfil: "visitante" } : {}),
   };
 
   const supabase = clienteSupabase();
@@ -162,9 +167,10 @@ async function salvar(valores: Valores): Promise<Resultado> {
     inscricao: data.nome
       ? {
           ...valores,
+          perfil: data.perfil === "visitante" ? "visitante" : "estudante",
           nome: String(data.nome),
-          escola: String(data.escola),
-          anoEscolar: String(data.ano_escolar),
+          escola: data.escola ? String(data.escola) : "",
+          anoEscolar: data.ano_escolar ? String(data.ano_escolar) : "",
           dataNascimento: String(data.data_nascimento),
           atividades: lista(data.atividades),
           responsavelNome: data.responsavel_nome ? String(data.responsavel_nome) : "",

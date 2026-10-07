@@ -2,7 +2,10 @@ import LinkInscricao from "./LinkInscricao";
 
 const passos = [
   { titulo: "Acesse o formulário", texto: "Clique em “Inscreva-se” para abrir o formulário de inscrição." },
-  { titulo: "Preencha os dados", texto: "Informe os dados do estudante e escolha as atividades." },
+  {
+    titulo: "Preencha os dados",
+    texto: "Diga se é estudante ou visitante, informe os dados e escolha as atividades.",
+  },
   { titulo: "Receba a confirmação", texto: "Ao enviar, a confirmação aparece na tela com as atividades escolhidas." },
 ];
 

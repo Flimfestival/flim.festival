@@ -9,7 +9,7 @@ import { metadadosPagina } from "@/lib/site";
 export const metadata: Metadata = metadadosPagina({
   titulo: "Inscrição",
   descricao:
-    "Inscrição gratuita de estudantes no Festival Literário de Martins (RN): escolha as atividades e garanta a vaga.",
+    "Inscrição gratuita de estudantes e visitantes no Festival Literário de Martins (RN): escolha as atividades e garanta a vaga.",
   caminho: "/inscricao",
 });
 
@@ -25,8 +25,8 @@ export default async function PaginaInscricao() {
             <p className="eyebrow eyebrow-blue">Inscrição</p>
             <h1>Faça a inscrição no FLIM</h1>
             <p className="intro">
-              A participação é gratuita. Preencha os dados do estudante e escolha as atividades. As
-              vagas são limitadas e preenchidas por ordem de inscrição.
+              A participação é gratuita, para estudantes e visitantes. Preencha os dados e escolha as
+              atividades. As vagas são limitadas e preenchidas por ordem de inscrição.
             </p>
             <dl className="facts">
               <div>

@@ -24,7 +24,7 @@ const perguntas = [
   {
     pergunta: "Quem pode participar?",
     resposta:
-      "Estudantes, professores, bibliotecários, escritores, famílias e toda a comunidade de Martins e região.",
+      "Estudantes e visitantes: famílias, professores, bibliotecários, escritores e toda a comunidade de Martins e região. Visitantes se inscrevem na abertura, nos painéis e na palestra; o concurso de redação e as oficinas são só para estudantes das escolas de Martins.",
   },
 ];
 
