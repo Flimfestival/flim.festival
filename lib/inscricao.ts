@@ -101,12 +101,13 @@ export const restricoesPorAno: Record<string, { anos: string[]; aviso: string }>
 };
 
 // Atividades só para estudantes das escolas de Martins (as da lista acima): quem escolhe
-// "Outra escola" não pode se inscrever nelas.
-export const ATIVIDADES_MUNICIPIO = ["concurso-redacao", "oficina-redacao", "oficina-poesia", "oficina-desenho"];
+// "Outra escola" não pode se inscrever nelas. Hoje é só o concurso de redação; painéis, palestras e
+// oficinas são abertos a todos.
+export const ATIVIDADES_MUNICIPIO = ["concurso-redacao"];
 export const AVISO_MUNICIPIO = "Só para estudantes das escolas de Martins. Escolha a escola na lista.";
 
 // Quem se inscreve: estudante (com escola e ano escolar) ou visitante (pais, professores, moradores,
-// turistas), sem escola. Visitantes não podem escolher as atividades só do município, que são todas
+// turistas), sem escola. Visitantes não podem escolher as atividades só do município, que são
 // exclusivas para estudantes (a coluna `so_estudantes` da tabela `atividades` repete a regra no banco).
 export type Perfil = "estudante" | "visitante";
 export const AVISO_VISITANTE = "Só para estudantes das escolas de Martins.";
@@ -175,7 +176,7 @@ export type EstadoInscricao =
 export function lerValores(formData: FormData): Valores {
   const texto = (campo: string) => String(formData.get(campo) ?? "").trim();
   const perfil = texto("perfil");
-  // Visitantes não têm escola, ano escolar nem a marcação de criança atípica (só serve à oficina).
+  // Visitantes não têm escola nem ano escolar.
   const visitante = perfil === "visitante";
   const escolaOutra = !visitante && texto("escola") === OUTRA_ESCOLA;
   return {
@@ -192,7 +193,7 @@ export function lerValores(formData: FormData): Valores {
     responsavelNome: texto("responsavelNome"),
     responsavelCpf: texto("responsavelCpf"),
     responsavelContato: texto("responsavelContato"),
-    atipico: !visitante && formData.get("atipico") === "sim",
+    atipico: formData.get("atipico") === "sim",
     consentimento: formData.get("consentimento") === "sim",
   };
 }

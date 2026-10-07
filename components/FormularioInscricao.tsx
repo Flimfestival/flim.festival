@@ -44,7 +44,7 @@ const opcoesPerfil: { valor: Perfil; rotulo: string; detalhe: string }[] = [
   {
     valor: "visitante",
     rotulo: "Visitante",
-    detalhe: "Familiares, professores, moradores e turistas. Inscrição na abertura, nos painéis e na palestra.",
+    detalhe: "Familiares, professores, moradores e turistas. Só o concurso de redação é exclusivo para estudantes.",
   },
 ];
 
@@ -445,31 +445,28 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
             <MensagemErro campo="qualDeficiencia" erros={erros} />
           </div>
         )}
-        {/* A marcação só serve para a oficina de desenho criativo, que é só para estudantes. */}
-        {!visitante && (
-          <label className="opcao campo-extra">
-            <input
-              type="checkbox"
-              name="atipico"
-              value="sim"
-              // Valor inicial (e não controlado): depois de um envio, o formulário volta a este valor,
-              // que acompanha o que foi enviado.
-              defaultChecked={atipico}
-              onChange={(evento) => {
-                setAtipico(evento.target.checked);
-                // Sem a marcação, a oficina exclusiva deixa de estar escolhida.
-                if (!evento.target.checked) {
-                  setMarcadas((atuais) => atuais.filter((id) => id !== ATIVIDADE_ATIPICOS));
-                }
-              }}
-            />
-            <span>
-              O estudante é uma criança atípica (neurodivergente), por exemplo com autismo (TEA), TDAH
-              ou outra condição do neurodesenvolvimento.
-              <small>Libera a oficina de desenho criativo, exclusiva para crianças atípicas.</small>
-            </span>
-          </label>
-        )}
+        <label className="opcao campo-extra">
+          <input
+            type="checkbox"
+            name="atipico"
+            value="sim"
+            // Valor inicial (e não controlado): depois de um envio, o formulário volta a este valor,
+            // que acompanha o que foi enviado.
+            defaultChecked={atipico}
+            onChange={(evento) => {
+              setAtipico(evento.target.checked);
+              // Sem a marcação, a oficina exclusiva deixa de estar escolhida.
+              if (!evento.target.checked) {
+                setMarcadas((atuais) => atuais.filter((id) => id !== ATIVIDADE_ATIPICOS));
+              }
+            }}
+          />
+          <span>
+            O participante é uma criança atípica (neurodivergente), por exemplo com autismo (TEA), TDAH
+            ou outra condição do neurodesenvolvimento.
+            <small>Libera a oficina de desenho criativo, exclusiva para crianças atípicas.</small>
+          </span>
+        </label>
       </fieldset>
 
       <fieldset className="form-grupo" aria-describedby={descricao("atividades", "dica-atividades")}>
@@ -482,6 +479,9 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
             <legend>{grupo.titulo}</legend>
             <div className="opcoes opcoes-atividades">
               {grupo.atividades.map((atividade) => {
+                // Atividade que ainda não existe no banco (migration não rodada) não aparece: a
+                // inscrição nela seria recusada. Sem o banco (vagas null), todas aparecem.
+                if (vagas && !(atividade.id in vagas)) return null;
                 const restantes = vagas?.[atividade.id];
                 const esgotada = restantes === 0 || esgotadasAgora.includes(atividade.id);
                 const foraDoAno = !podeParticipar(atividade.id, anoAtual);

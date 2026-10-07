@@ -47,10 +47,9 @@ e-mail (opcional), escola e ano escolar (só estudantes), se o participante poss
 termo de consentimento.
 
 **Visitantes** (familiares, professores, moradores, turistas) não informam escola nem ano escolar e
-podem se inscrever na abertura, nos painéis e na palestra. O concurso de redação e as oficinas são
-exclusivos para estudantes: o formulário desativa essas atividades para visitantes, o servidor
-confere de novo e o banco também recusa (coluna `so_estudantes` da tabela `atividades`). Visitantes
-ocupam as mesmas vagas que os estudantes.
+podem se inscrever em tudo, menos no concurso de redação, que é exclusivo para estudantes: o
+formulário desativa o concurso para visitantes, o servidor confere de novo e o banco também recusa
+(coluna `so_estudantes` da tabela `atividades`). Visitantes ocupam as mesmas vagas que os estudantes.
 
 ### Comprovante
 
@@ -86,7 +85,7 @@ completo, numa caixa com rolagem, antes da caixinha de aceite. O texto fica em `
 | --------------------------------- | ---------- |
 | Abertura (11/12, Mirante do Canto) | 600       |
 | Cada um dos 4 painéis (12/12)     | 110        |
-| Cada uma das 3 oficinas (12/12)   | 25         |
+| Cada uma das 4 oficinas (12/12)   | 25         |
 | Demais atividades                 | Sem limite |
 
 Os números seguem o cronograma da organização; as atividades sem número no cronograma ficam sem
@@ -105,9 +104,11 @@ da atividade (deixe vazio para não ter limite). Vale na hora, sem publicar o si
 - Oficina de desenho criativo: exclusiva para crianças atípicas. Só fica disponível depois de marcar
   a caixa "criança atípica" no formulário.
 
-- Concurso de redação e oficinas: só para estudantes das escolas de Martins (as da lista do
-  formulário). Quem escolhe "Outra escola" e os visitantes podem se inscrever na abertura, nos
-  painéis e na palestra, mas não nessas atividades (`ATIVIDADES_MUNICIPIO` em `lib/inscricao.ts`).
+- Concurso de redação: só para estudantes das escolas de Martins (as da lista do formulário). Quem
+  escolhe "Outra escola" e os visitantes podem se inscrever em todo o resto (`ATIVIDADES_MUNICIPIO`
+  em `lib/inscricao.ts`). Painéis, palestras e oficinas são abertos a todos.
+- Oficina de estratégias de leitura e contação de histórias (BALE, da UERN): aberta, com o aviso de
+  que é voltada a professores e mediadores.
 
 O concurso de desenho não aparece no formulário: as inscrições dele são feitas em papel.
 
@@ -116,11 +117,11 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
 
 ### Atividades no mesmo horário
 
-No sábado, 12/12, as oficinas começam junto com os painéis: oficina de redação e painel Literatura e
-identidade, oficina de poesia e painel Escreva, leia... eternize-se, oficina de desenho criativo e
-painel Povo, natureza e poesia. O estudante escolhe só uma de cada par: ao marcar uma, o formulário
-desativa a outra. O banco confere de novo, inclusive quando o estudante volta depois para acrescentar
-uma atividade. Os pares ficam em `lib/programacao.ts`
+No sábado, 12/12, as oficinas acontecem junto com os painéis: oficina de redação (9h) e oficina de
+estratégias de leitura (10h30) com o painel Literatura e identidade, oficina de poesia e painel
+Escreva, leia... eternize-se, oficina de desenho criativo e painel Povo, natureza e poesia. Cada
+pessoa escolhe só uma de cada par: ao marcar uma, o formulário desativa a outra. O banco confere de
+novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os pares ficam em `lib/programacao.ts`
 (`horariosSimultaneos`) e na tabela `atividades_simultaneas` do Supabase; ao mudar, mude nos dois.
 
 ### Ligar o formulário ao Supabase (uma vez só)
@@ -148,6 +149,8 @@ uma atividade. Os pares ficam em `lib/programacao.ts`
    11. `20261006180000_vagas_oficinas.sql`: 25 vagas em cada oficina.
    12. `20261007120000_visitantes.sql`: inscrição de visitantes, sem escola nem ano escolar.
    13. `20261007130000_nomes_dos_paineis.sql`: painéis chamados pelo nome, sem o número.
+   14. `20261007140000_oficinas_abertas.sql`: oficinas abertas a visitantes e a outras escolas e
+       oficina de estratégias de leitura (BALE).
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes

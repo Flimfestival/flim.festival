@@ -174,10 +174,11 @@ export type AtividadeInscricao = {
 };
 
 // Atividades que acontecem no mesmo horário (sábado, 12/12): as oficinas no Colégio Estadual Almino
-// Afonso começam junto com os painéis da Casa de Cultura. O estudante pode escolher só uma de cada par.
+// Afonso começam junto com os painéis da Casa de Cultura. Cada pessoa escolhe só uma de cada par.
 // A mesma lista existe no banco (tabela `atividades_simultaneas`); ao mudar aqui, mude lá também.
 export const horariosSimultaneos: [string, string][] = [
   ["oficina-redacao", "painel-1"],
+  ["oficina-leitura", "painel-1"],
   ["oficina-poesia", "painel-3"],
   ["oficina-desenho", "painel-4"],
 ];
@@ -233,9 +234,16 @@ export const atividadesInscricao: AtividadeInscricao[] = [
   {
     id: "oficina-redacao",
     grupo: "Sábado, 12 de dezembro · Oficinas no Colégio Estadual Almino Afonso",
-    titulo: "Oficina de redação: Dissertar, da ideia ao texto",
+    titulo: "Oficina Dissertar: da ideia ao texto",
     quando: "9h",
     detalhe: "Professor Lucas Vinícius",
+  },
+  {
+    id: "oficina-leitura",
+    grupo: "Sábado, 12 de dezembro · Oficinas no Colégio Estadual Almino Afonso",
+    titulo: "Oficina de estratégias de leitura e contação de histórias",
+    quando: "10h30",
+    detalhe: "BALE (UERN) · para professores e mediadores",
   },
   {
     id: "oficina-poesia",
