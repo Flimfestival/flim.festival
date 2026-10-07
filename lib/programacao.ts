@@ -265,7 +265,7 @@ export const destaques: {
   {
     nome: "Bráulio Bessa",
     papel: "Poeta",
-    bio: "Poeta, cordelista e palestrante de Alto Santo (CE). Ganhou o país declamando cordel no programa de Fátima Bernardes, na TV Globo, criou o projeto Nação Nordestina e é autor de livros como Poesia que transforma e Recomece.",
+    bio: "Cordelista de Alto Santo (CE) que levou a poesia nordestina a todo o Brasil pela TV Globo.",
     atividade: "Palestra de abertura",
     tema: temaBraulio,
     quando: "Sexta, 11 de dezembro, 17h30",
@@ -274,7 +274,7 @@ export const destaques: {
   {
     nome: "Socorro Acioli",
     papel: "Escritora",
-    bio: "Escritora e jornalista de Fortaleza (CE). Autora dos romances A cabeça do santo e Oração para desaparecer, recebeu o Prêmio Jabuti com o livro infantil Ela tem olhos de céu.",
+    bio: "Jornalista de Fortaleza (CE), autora de A cabeça do santo e vencedora do Prêmio Jabuti.",
     atividade: "Palestra de encerramento",
     quando: "Sábado, 12 de dezembro, 17h30",
     local: "Casa de Cultura",
@@ -282,7 +282,7 @@ export const destaques: {
   {
     nome: "Antônio Francisco",
     papel: "Poeta",
-    bio: "Poeta, cordelista e xilogravurista de Mossoró (RN). É um dos grandes nomes do cordel brasileiro e ocupa, na Academia Brasileira de Literatura de Cordel, a cadeira que foi de Patativa do Assaré.",
+    bio: "Cordelista de Mossoró (RN), ocupa a cadeira de Patativa do Assaré na Academia Brasileira de Literatura de Cordel.",
     atividade: "Sarau Poético Cosme Lemos e painel “Povo, natureza e poesia”",
     quando: "Sábado, 12 de dezembro: painel às 15h45 e sarau às 20h",
     local: "Casa de Cultura e Coreto",
