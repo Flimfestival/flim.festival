@@ -156,7 +156,9 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .convidado h3 { font-size: 1.35rem; margin-bottom: .15em; }
 .convidado p { margin: 0; }
 .convidado-papel { color: var(--muted); font-size: .95rem; }
-.convidado-atividade { margin-top: 14px !important; font-weight: 700; }
+.convidado-bio { margin-top: 12px !important; font-size: .95rem; line-height: 1.55; text-wrap: pretty; }
+.convidado-atividade { margin-top: 16px !important; padding-top: 16px; border-top: 1px solid var(--line); font-weight: 700; }
+.convidado-tema { margin-top: 2px !important; color: var(--blue); font-weight: 600; }
 .convidado-quando { margin-top: 4px !important; color: var(--muted); font-size: .95rem; font-variant-numeric: tabular-nums; }
 .acoes-404 { margin-top: 32px; }
 

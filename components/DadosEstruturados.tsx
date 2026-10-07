@@ -40,6 +40,7 @@ export default function DadosEstruturados() {
     performer: destaques.map((convidado) => ({
       "@type": "Person",
       name: convidado.nome,
+      description: convidado.bio,
       ...(fotosConvidados[convidado.nome] && {
         image: `${siteUrl}${fotosConvidados[convidado.nome].foto.src}`,
       }),

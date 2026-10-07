@@ -45,7 +45,9 @@ export default function Destaques() {
                 <div className="convidado-texto">
                   <h3>{convidado.nome}</h3>
                   <p className="convidado-papel">{convidado.papel}</p>
+                  <p className="convidado-bio">{convidado.bio}</p>
                   <p className="convidado-atividade">{convidado.atividade}</p>
+                  {convidado.tema && <p className="convidado-tema">“{convidado.tema}”</p>}
                   <p className="convidado-quando">
                     {convidado.quando}
                     <br />

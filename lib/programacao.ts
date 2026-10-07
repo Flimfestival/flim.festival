@@ -4,6 +4,9 @@
  * `dias` e `oficinas` alimentam a página /programacao; `atividadesInscricao` são as opções do formulário.
  */
 
+// Temas das palestras, repetidos na agenda e nos destaques. O de Socorro Acioli será informado pela organização.
+const temaBraulio = "Poesia que transforma";
+
 export type ItemAgenda = {
   horario: string;
   titulo: string;
@@ -31,7 +34,12 @@ export const dias: Dia[] = [
       { horario: "16h", titulo: "Início da programação de abertura" },
       { horario: "17h", titulo: "Teatro Lusíadas", detalhes: ["Inês de Castro: A Rainha Morta."] },
       { horario: "17h15", titulo: "Apresentação musical", detalhes: ["Banda de Música Nair Austero Soares."] },
-      { horario: "17h30", titulo: "Palestra com Bráulio Bessa", comInscricao: true },
+      {
+        horario: "17h30",
+        titulo: "Palestra com Bráulio Bessa",
+        detalhes: [`Tema: ${temaBraulio}.`],
+        comInscricao: true,
+      },
     ],
     notas: ["Inscrição gratuita para 600 pessoas. Contribuição: 2 kg de alimentos."],
   },
@@ -44,28 +52,28 @@ export const dias: Dia[] = [
       { horario: "9h", titulo: "Escola de Música Eliseu Ventania (EMEV)", detalhes: ["Apresentação de 15 minutos."] },
       {
         horario: "9h30",
-        titulo: "1º painel: Literatura e identidade",
+        titulo: "Painel: Literatura e identidade",
         detalhes: ["Academia de Letras de Martins (ALAM)."],
         comInscricao: true,
       },
       { horario: "11h10", titulo: "Apresentação cultural", detalhes: ["Luiz Gonzaga (CEPAF), 15 minutos."] },
       {
         horario: "11h30",
-        titulo: "2º painel: Educação, oportunidade e evolução",
+        titulo: "Painel: Educação, oportunidade e evolução",
         detalhes: ["Genisa Raulino."],
         comInscricao: true,
       },
       { horario: "14h", titulo: "Apresentação musical", detalhes: ["Clícia, violino."] },
       {
         horario: "14h15",
-        titulo: "3º painel: Escreva, leia... eternize-se",
+        titulo: "Painel: Escreva, leia... eternize-se",
         detalhes: ["Marilene Paiva."],
         comInscricao: true,
       },
       { horario: "15h30", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
       {
         horario: "15h45",
-        titulo: "4º painel: Povo, natureza e poesia",
+        titulo: "Painel: Povo, natureza e poesia",
         detalhes: ["Poeta Antônio Francisco."],
         comInscricao: true,
       },
@@ -183,28 +191,28 @@ export const atividadesInscricao: AtividadeInscricao[] = [
   {
     id: "painel-1",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
-    titulo: "1º painel: Literatura e identidade",
+    titulo: "Painel: Literatura e identidade",
     quando: "9h30",
     detalhe: "Academia de Letras de Martins (ALAM)",
   },
   {
     id: "painel-2",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
-    titulo: "2º painel: Educação, oportunidade e evolução",
+    titulo: "Painel: Educação, oportunidade e evolução",
     quando: "11h30",
     detalhe: "Genisa Raulino",
   },
   {
     id: "painel-3",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
-    titulo: "3º painel: Escreva, leia... eternize-se",
+    titulo: "Painel: Escreva, leia... eternize-se",
     quando: "14h15",
     detalhe: "Marilene Paiva",
   },
   {
     id: "painel-4",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
-    titulo: "4º painel: Povo, natureza e poesia",
+    titulo: "Painel: Povo, natureza e poesia",
     quando: "15h45",
     detalhe: "Poeta Antônio Francisco",
   },
@@ -244,26 +252,39 @@ export const atividadesInscricao: AtividadeInscricao[] = [
 ];
 
 // Convidados em destaque na página inicial e nos dados estruturados para buscadores.
-export const destaques = [
+// `bio`: mini biografia do cartão. `tema`: tema da palestra, quando houver.
+export const destaques: {
+  nome: string;
+  papel: string;
+  bio: string;
+  atividade: string;
+  tema?: string;
+  quando: string;
+  local: string;
+}[] = [
   {
     nome: "Bráulio Bessa",
     papel: "Poeta",
+    bio: "Poeta, cordelista e palestrante de Alto Santo (CE). Ganhou o país declamando cordel no programa de Fátima Bernardes, na TV Globo, criou o projeto Nação Nordestina e é autor de livros como Poesia que transforma e Recomece.",
     atividade: "Palestra de abertura",
+    tema: temaBraulio,
     quando: "Sexta, 11 de dezembro, 17h30",
     local: "Mirante do Canto",
   },
   {
     nome: "Socorro Acioli",
     papel: "Escritora",
-    atividade: "Palestra de encerramento dos painéis",
+    bio: "Escritora e jornalista de Fortaleza (CE). Autora dos romances A cabeça do santo e Oração para desaparecer, recebeu o Prêmio Jabuti com o livro infantil Ela tem olhos de céu.",
+    atividade: "Palestra de encerramento",
     quando: "Sábado, 12 de dezembro, 17h30",
     local: "Casa de Cultura",
   },
   {
     nome: "Antônio Francisco",
     papel: "Poeta",
-    atividade: "4º painel e Sarau Poético Cosme Lemos",
-    quando: "Sábado, 12 de dezembro, 15h45 e 20h",
+    bio: "Poeta, cordelista e xilogravurista de Mossoró (RN). É um dos grandes nomes do cordel brasileiro e ocupa, na Academia Brasileira de Literatura de Cordel, a cadeira que foi de Patativa do Assaré.",
+    atividade: "Sarau Poético Cosme Lemos e painel “Povo, natureza e poesia”",
+    quando: "Sábado, 12 de dezembro: painel às 15h45 e sarau às 20h",
     local: "Casa de Cultura e Coreto",
   },
 ];
