@@ -4,8 +4,9 @@
  * `dias` e `oficinas` alimentam a página /programacao; `atividadesInscricao` são as opções do formulário.
  */
 
-// Temas das palestras, repetidos na agenda e nos destaques. O de Socorro Acioli será informado pela organização.
+// Temas das palestras, repetidos na agenda e nos destaques.
 const temaBraulio = "Poesia que transforma";
+const temaSocorro = "A história que só você pode contar";
 
 export type ItemAgenda = {
   horario: string;
@@ -85,7 +86,7 @@ export const dias: Dia[] = [
       {
         horario: "17h30",
         titulo: "Palestra com Socorro Acioli",
-        detalhes: ["Encerramento da programação na Casa de Cultura."],
+        detalhes: [`Tema: ${temaSocorro}.`, "Encerramento da programação na Casa de Cultura."],
         comInscricao: true,
       },
       {
@@ -171,6 +172,9 @@ export type AtividadeInscricao = {
   titulo: string;
   quando: string;
   detalhe?: string;
+  // Último instante para se inscrever, com o fuso de Martins. Depois dele, a atividade fica fechada no
+  // formulário e o servidor recusa a inscrição.
+  inscricoesAte?: string;
 };
 
 // Atividades que acontecem no mesmo horário (sábado, 12/12): as oficinas no Colégio Estadual Almino
@@ -264,6 +268,8 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     grupo: "Domingo, 13 de dezembro · Colégio Estadual Almino Afonso",
     titulo: "Concurso de redação",
     quando: "9h",
+    // Prazo do edital (item 7.2): inscrições até 7 de novembro de 2026.
+    inscricoesAte: "2026-11-07T23:59:59-03:00",
   },
 ];
 
@@ -292,6 +298,7 @@ export const destaques: {
     papel: "Escritora",
     bio: "Jornalista de Fortaleza (CE), autora de A cabeça do santo e vencedora do Prêmio Jabuti.",
     atividade: "Palestra de encerramento",
+    tema: temaSocorro,
     quando: "Sábado, 12 de dezembro, 17h30",
     local: "Casa de Cultura",
   },

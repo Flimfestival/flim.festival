@@ -2,8 +2,10 @@
 
 import { evento } from "@/lib/evento";
 import {
+  atividadesEncerradas,
   idade,
   lerValores,
+  prazoDeInscricao,
   tituloAtividade,
   validar,
   type EstadoInscricao,
@@ -27,6 +29,22 @@ export async function enviarInscricao(
   const erros = validar(valores);
   if (Object.keys(erros).length > 0) {
     return { status: "erro", mensagem: "Confira os campos destacados abaixo.", erros, valores };
+  }
+
+  // Prazo de inscrição (o concurso de redação fecha em 7/11, conforme o edital), pelo relógio do servidor.
+  const encerradas = valores.atividades.filter((id) => atividadesEncerradas(new Date()).includes(id));
+  if (encerradas.length > 0) {
+    return {
+      status: "erro",
+      mensagem: "O prazo de inscrição de uma das atividades escolhidas terminou.",
+      erros: {
+        atividades: `Inscrições encerradas: ${encerradas
+          .map((id) => `${tituloAtividade(id)}, até ${prazoDeInscricao(id)}`)
+          .join("; ")}. Essa atividade foi desmarcada; confira as outras e envie de novo.`,
+      },
+      valores: { ...valores, atividades: valores.atividades.filter((id) => !encerradas.includes(id)) },
+      encerradas,
+    };
   }
 
   if (!(await dentroDoLimite("inscricao"))) {

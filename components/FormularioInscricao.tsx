@@ -15,6 +15,7 @@ import {
   escolas,
   idade,
   OUTRA_ESCOLA,
+  prazoDeInscricao,
   tituloAtividade,
   podeParticipar,
   restricoesPorAno,
@@ -48,13 +49,26 @@ const opcoesPerfil: { valor: Perfil; rotulo: string; detalhe: string }[] = [
   },
 ];
 
-export default function FormularioInscricao({ vagas }: { vagas: VagasRestantes | null }) {
+type Propriedades = {
+  vagas: VagasRestantes | null;
+  // Atividades com o prazo de inscrição encerrado, calculadas pelo servidor ao abrir a página.
+  encerradas: string[];
+};
+
+export default function FormularioInscricao({ vagas, encerradas }: Propriedades) {
   // Trocar a `key` recria o formulário do zero para uma nova inscrição.
   const [rodada, setRodada] = useState(0);
-  return <Formulario key={rodada} vagas={vagas} aoRecomecar={() => setRodada((r) => r + 1)} />;
+  return (
+    <Formulario
+      key={rodada}
+      vagas={vagas}
+      encerradas={encerradas}
+      aoRecomecar={() => setRodada((r) => r + 1)}
+    />
+  );
 }
 
-function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRecomecar: () => void }) {
+function Formulario({ vagas, encerradas, aoRecomecar }: Propriedades & { aoRecomecar: () => void }) {
   const [estado, acao, enviando] = useActionState(enviarInscricao, estadoInicial);
   const valores = estado.status === "erro" ? estado.valores : undefined;
   const erros: Erros = estado.status === "erro" ? estado.erros : {};
@@ -198,6 +212,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
   }
 
   const esgotadasAgora = estado.status === "erro" ? (estado.esgotadas ?? []) : [];
+  const encerradasAgora = [...encerradas, ...(estado.status === "erro" ? (estado.encerradas ?? []) : [])];
   const descricao = (campo: Campo, dica?: string) =>
     [dica, erros[campo] ? `erro-${campo}` : undefined].filter(Boolean).join(" ") || undefined;
   const visitante = perfil === "visitante";
@@ -484,16 +499,20 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                 if (vagas && !(atividade.id in vagas)) return null;
                 const restantes = vagas?.[atividade.id];
                 const esgotada = restantes === 0 || esgotadasAgora.includes(atividade.id);
+                const encerrada = encerradasAgora.includes(atividade.id);
                 const foraDoAno = !podeParticipar(atividade.id, anoAtual);
                 const mesmoHorario = marcadas.includes(atividade.id)
                   ? []
                   : simultaneas(atividade.id).filter((id) => marcadas.includes(id));
+                // Com o prazo encerrado, basta o aviso de encerramento.
                 const soMunicipio =
-                  (visitante || escolaOpcao === OUTRA_ESCOLA) && ATIVIDADES_MUNICIPIO.includes(atividade.id);
+                  !encerrada &&
+                  (visitante || escolaOpcao === OUTRA_ESCOLA) &&
+                  ATIVIDADES_MUNICIPIO.includes(atividade.id);
                 // Quando a atividade já está bloqueada por ser só do município, basta esse aviso.
                 const soAtipicos = !soMunicipio && atividade.id === ATIVIDADE_ATIPICOS && !atipico;
                 const bloqueada =
-                  esgotada || foraDoAno || soAtipicos || soMunicipio || mesmoHorario.length > 0;
+                  encerrada || esgotada || foraDoAno || soAtipicos || soMunicipio || mesmoHorario.length > 0;
                 return (
                   // A `key` muda quando a atividade fica indisponível, para ela voltar desmarcada.
                   <label
@@ -519,8 +538,13 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
                         {atividade.quando}
                         {atividade.detalhe && ` · ${atividade.detalhe}`}
                       </small>
-                      {atividade.id === "concurso-redacao" && categoria && (
+                      {atividade.id === "concurso-redacao" && categoria && !encerrada && (
                         <small className="categoria">Categoria: {categoria}</small>
+                      )}
+                      {encerrada && (
+                        <small className="aviso-ano bloqueio">
+                          Inscrições encerradas em {prazoDeInscricao(atividade.id)}.
+                        </small>
                       )}
                       {restricoesPorAno[atividade.id] && (
                         <small className={foraDoAno ? "aviso-ano bloqueio" : "aviso-ano"}>

@@ -121,6 +121,22 @@ export function podeParticipar(atividade: string, anoEscolar: string) {
   return !restricao || !anoEscolar || restricao.anos.includes(anoEscolar);
 }
 
+// Atividades com o prazo de inscrição encerrado no momento informado (`inscricoesAte` em lib/programacao.ts).
+export function atividadesEncerradas(agora: Date) {
+  return atividadesInscricao
+    .filter((atividade) => atividade.inscricoesAte && agora.getTime() > Date.parse(atividade.inscricoesAte))
+    .map((atividade) => atividade.id);
+}
+
+// Último dia de inscrição, por extenso ("7 de novembro"), para os avisos.
+export function prazoDeInscricao(id: string) {
+  const ate = atividadesInscricao.find((atividade) => atividade.id === id)?.inscricoesAte;
+  if (!ate) return undefined;
+  return new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long", timeZone: "America/Fortaleza" }).format(
+    new Date(ate),
+  );
+}
+
 export function tituloAtividade(id: string) {
   return atividadesInscricao.find((atividade) => atividade.id === id)?.titulo ?? id;
 }
@@ -169,7 +185,8 @@ export type VagasRestantes = Record<string, number | null>;
 
 export type EstadoInscricao =
   | { status: "inicial" }
-  | { status: "erro"; mensagem: string; erros: Erros; valores: Valores; esgotadas?: string[] }
+  // `encerradas`: atividades cujo prazo terminou entre a abertura da página e o envio.
+  | { status: "erro"; mensagem: string; erros: Erros; valores: Valores; esgotadas?: string[]; encerradas?: string[] }
   // `acrescentadas`: atividades somadas a uma inscrição que já existia; `repetidas`: já estavam nela.
   | { status: "enviada"; valores: Valores; acrescentadas: string[]; repetidas: string[] };
 

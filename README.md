@@ -109,6 +109,10 @@ da atividade (deixe vazio para não ter limite). Vale na hora, sem publicar o si
   em `lib/inscricao.ts`). Painéis, palestras e oficinas são abertos a todos.
 - Oficina de estratégias de leitura e contação de histórias (BALE, da UERN): aberta, com o aviso de
   que é voltada a professores e mediadores.
+- Prazo: as inscrições no concurso de redação terminam em 7 de novembro de 2026, às 23h59 (item 7.2
+  do edital). Depois disso, o formulário mostra "Inscrições encerradas" e o servidor recusa o
+  concurso; as outras atividades continuam abertas. O prazo fica em `lib/programacao.ts`
+  (`inscricoesAte`) e pode ser usado em outras atividades.
 
 O concurso de desenho não aparece no formulário: as inscrições dele são feitas em papel.
 

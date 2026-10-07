@@ -3,6 +3,7 @@ import Link from "next/link";
 import FormularioInscricao from "@/components/FormularioInscricao";
 import Pagina from "@/components/Pagina";
 import { evento } from "@/lib/evento";
+import { atividadesEncerradas } from "@/lib/inscricao";
 import { lerVagasRestantes } from "@/lib/vagas";
 import { metadadosPagina } from "@/lib/site";
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = metadadosPagina({
 
 export default async function PaginaInscricao() {
   const vagas = await lerVagasRestantes();
+  // Calculado a cada visita (a página já é dinâmica por causa das vagas).
+  const encerradas = atividadesEncerradas(new Date());
 
   return (
     <Pagina>
@@ -47,7 +50,7 @@ export default async function PaginaInscricao() {
               Escreva para <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>.
             </p>
           </div>
-          <FormularioInscricao vagas={vagas} />
+          <FormularioInscricao vagas={vagas} encerradas={encerradas} />
         </div>
       </section>
     </Pagina>
