@@ -30,7 +30,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={manrope.variable}>
+    // `data-scroll-behavior`: a rolagem suave do site (globals.css) vale só dentro da página; ao trocar de
+    // página, o Next.js desliga a animação e a nova página abre no topo, não na posição da anterior.
+    <html lang="pt-BR" className={manrope.variable} data-scroll-behavior="smooth">
       {/* Extensões do navegador (ex.: ColorZilla) adicionam atributos ao <body> antes do React
           carregar; isto ignora só essas diferenças de atributo, não o conteúdo da página. */}
       <body suppressHydrationWarning>{children}</body>

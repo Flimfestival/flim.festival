@@ -32,10 +32,23 @@ const cabecalhosDeSeguranca = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
 ];
 
+// Documentos em PDF (public/documentos/): a política de conteúdo das páginas pode impedir o leitor de
+// PDF do navegador de abrir o arquivo, então eles só mantêm a proteção contra molduras. Como vale o
+// último cabeçalho, esta regra substitui a anterior nesses arquivos.
+const cabecalhosDosDocumentos = [{ key: "Content-Security-Policy", value: "frame-ancestors 'none'" }];
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: cabecalhosDeSeguranca }];
+    return [
+      { source: "/:path*", headers: cabecalhosDeSeguranca },
+      { source: "/documentos/:arquivo*", headers: cabecalhosDosDocumentos },
+    ];
+  },
+  async redirects() {
+    // Endereço curto do edital, citado no comprovante de inscrição. Temporário (307), para poder
+    // apontar para outra versão do PDF no futuro.
+    return [{ source: "/edital", destination: "/documentos/edital-concurso-de-redacao.pdf", permanent: false }];
   },
 };
 

@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { enviarInscricao } from "@/app/inscricao/actions";
+import BaixarComprovante from "@/components/BaixarComprovante";
 import { evento } from "@/lib/evento";
 import {
   anosDaEscola,
@@ -159,14 +160,18 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
         <div className="comprovante-orientacao">
           <p>
             <strong>Na entrada de cada atividade, diga o nome completo do participante à comissão.</strong> Não
-            é preciso imprimir este comprovante, mas vale guardar.
+            é preciso imprimir este comprovante, mas vale guardar: use o botão “Baixar comprovante” ou tire um
+            print desta tela.
           </p>
           {inscricao.atividades.includes("abertura") && <p>Na abertura, leve 2 kg de alimentos.</p>}
           {inscricao.atividades.includes("concurso-redacao") && categoria && (
             <p>
               Concurso de redação: categoria {categoria}. O cortejo das 8h, saindo da Igreja do Rosário,
-              é obrigatório. Leve caneta azul ou preta de corpo transparente. Regras no edital:
-              www.festivalflim.com.br/edital.
+              é obrigatório. Leve caneta azul ou preta de corpo transparente. Regras no{" "}
+              <a href={evento.edital} target="_blank" rel="noopener">
+                edital do concurso
+              </a>
+              .
             </p>
           )}
           <p>Termo de consentimento, participação e uso de imagem e voz: aceito.</p>
@@ -180,9 +185,7 @@ function Formulario({ vagas, aoRecomecar }: { vagas: VagasRestantes | null; aoRe
           Dúvidas: <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>
         </p>
         <div className="actions">
-          <button type="button" className="btn btn-primary" onClick={() => window.print()}>
-            Salvar ou imprimir
-          </button>
+          <BaixarComprovante inscricao={inscricao} />
           <button type="button" className="btn btn-outline" onClick={aoRecomecar}>
             Fazer outra inscrição
           </button>

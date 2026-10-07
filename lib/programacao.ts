@@ -53,7 +53,7 @@ export const dias: Dia[] = [
       {
         horario: "9h30",
         titulo: "Painel: Literatura e identidade",
-        detalhes: ["Academia de Letras de Martins (ALAM)."],
+        detalhes: ["Academia de Letras e Artes de Martins (ALAM)."],
         comInscricao: true,
       },
       { horario: "11h10", titulo: "Apresentação cultural", detalhes: ["Luiz Gonzaga (CEPAF), 15 minutos."] },
@@ -63,7 +63,7 @@ export const dias: Dia[] = [
         detalhes: ["Genisa Raulino."],
         comInscricao: true,
       },
-      { horario: "14h", titulo: "Apresentação musical", detalhes: ["Clícia, violino."] },
+      { horario: "14h", titulo: "Apresentação musical", detalhes: ["Clícia, violino, 15 minutos."] },
       {
         horario: "14h15",
         titulo: "Painel: Escreva, leia... eternize-se",
@@ -143,7 +143,7 @@ export const oficinas: {
   local: "Colégio Estadual Almino Afonso",
   data: "Sábado, 12 de dezembro",
   itens: [
-    { horario: "9h", titulo: "Redação: Dissertar, da ideia ao texto", responsaveis: "Professor Lucas Vinícius" },
+    { horario: "9h", titulo: "Dissertar: da ideia ao texto", responsaveis: "Professor Lucas Vinícius" },
     {
       horario: "10h30",
       titulo: "Estratégias de leitura e contação de histórias",
@@ -201,7 +201,7 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
     titulo: "Painel: Literatura e identidade",
     quando: "9h30",
-    detalhe: "Academia de Letras de Martins (ALAM)",
+    detalhe: "Academia de Letras e Artes de Martins (ALAM)",
   },
   {
     id: "painel-2",

@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { evento } from "@/lib/evento";
 import LinkInscricao from "./LinkInscricao";
 
 const links = [
   { href: "/#sobre", label: "O festival" },
   { href: "/programacao", label: "Programação" },
-  { href: "/edital", label: "Edital" },
+  // O edital é um PDF: abre em outra aba, sem tirar a pessoa da página em que está.
+  { href: evento.edital, label: "Edital", pdf: true },
   { href: "/#participar", label: "Como participar" },
   { href: "/#duvidas", label: "Dúvidas" },
 ];
@@ -61,16 +63,29 @@ export default function Cabecalho() {
           </button>
         </div>
         <nav id="menu" className={aberto ? "nav open" : "nav"}>
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={fechar}
-              aria-current={link.href === caminho ? "page" : undefined}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) =>
+            link.pdf ? (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                onClick={fechar}
+                aria-label={`${link.label} do concurso de redação (PDF, abre em nova aba)`}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={fechar}
+                aria-current={link.href === caminho ? "page" : undefined}
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
           <LinkInscricao className="btn btn-primary btn-small" onClick={fechar}>
             Inscreva-se
           </LinkInscricao>

@@ -52,6 +52,21 @@ exclusivos para estudantes: o formulário desativa essas atividades para visitan
 confere de novo e o banco também recusa (coluna `so_estudantes` da tabela `atividades`). Visitantes
 ocupam as mesmas vagas que os estudantes.
 
+### Comprovante
+
+Depois de enviar, a pessoa vê o comprovante na tela e o botão **Baixar comprovante**, que salva uma
+imagem PNG com os dados da inscrição e as atividades (`lib/comprovante-imagem.ts`). No iPhone, o botão
+abre o menu de compartilhar, que tem "Salvar imagem". O comprovante não depende da impressão, que não
+funciona nos navegadores de aplicativos (Instagram, Facebook); nesses, a tela também orienta a tirar
+um print.
+
+### Edital do concurso de redação
+
+O edital assinado fica em `public/documentos/edital-concurso-de-redacao.pdf` e abre pelo item
+**Edital** do menu, pelo rodapé e pela programação. O endereço curto `/edital` leva ao mesmo arquivo.
+Para publicar uma nova versão, substitua o PDF mantendo o nome. O endereço do arquivo fica em
+`lib/evento.ts` (`edital`).
+
 ### Termo de consentimento
 
 O formulário mostra o **Termo de Consentimento, Participação e Autorização de Uso de Imagem e Voz**
@@ -227,8 +242,8 @@ atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 | `components/ChamadaFinal.tsx`    | Chamada final para inscrição                  |
 | `components/Parceiros.tsx`       | Logos de patrocínio, incentivo e realização (acima do rodapé) |
 | `components/Rodape.tsx`          | Rodapé                                        |
-| `app/edital/page.tsx`            | Página do edital do concurso de redação       |
-| `lib/edital.ts`                  | Texto do edital, transcrito do PDF assinado   |
+| `public/documentos/`             | Edital do concurso de redação (PDF assinado)  |
+| `lib/comprovante-imagem.ts`      | Comprovante de inscrição em imagem (PNG)      |
 | `app/inscricao/page.tsx`         | Página de inscrição                           |
 | `components/FormularioInscricao.tsx` | Formulário de inscrição                   |
 | `lib/inscricao.ts`               | Anos escolares e regras do formulário         |

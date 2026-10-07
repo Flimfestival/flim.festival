@@ -5,7 +5,6 @@ import { creditos } from "@/lib/fotos";
 const links = [
   { href: "/", label: "Início" },
   { href: "/programacao", label: "Programação" },
-  { href: "/edital", label: "Edital do concurso" },
   { href: "/inscricao", label: "Inscrição" },
   { href: "/#duvidas", label: "Dúvidas" },
 ];
@@ -23,6 +22,9 @@ export default function Rodape() {
               {link.label}
             </Link>
           ))}
+          <a href={evento.edital} target="_blank" rel="noopener">
+            Edital do concurso (PDF)
+          </a>
           <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>
         </nav>
         <p>© {new Date().getFullYear()} Festival Literário de Martins.</p>
