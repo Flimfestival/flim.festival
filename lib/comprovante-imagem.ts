@@ -65,7 +65,7 @@ export function dadosDoComprovante(inscricao: Valores): DadosComprovante {
 export function nomeDoArquivo(nome: string) {
   const simples = nome
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")

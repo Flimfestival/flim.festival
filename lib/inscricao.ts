@@ -338,6 +338,18 @@ export function validar(valores: Valores): Erros {
   return erros;
 }
 
+// Nome sem acentos, maiúsculas, pontuação e espaços repetidos, como a função normalizar_nome do banco:
+// "  João  P. Lima" vira "joao p lima". Usado para achar a inscrição de quem busca o comprovante.
+export function normalizarNome(nome: string) {
+  return nome
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // Confere os dois dígitos verificadores do CPF (aceita com ou sem pontos e traço).
 export function cpfValido(cpf: string) {
   const digitos = cpf.replace(/\D/g, "");

@@ -49,6 +49,10 @@ export default async function PaginaInscricao() {
               Confira os horários na <Link href="/programacao">programação completa</Link>. Dúvidas?
               Escreva para <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>.
             </p>
+            <p className="intro">
+              Já se inscreveu e não salvou o comprovante?{" "}
+              <Link href="/comprovante">Baixe o comprovante de novo</Link>.
+            </p>
           </div>
           <FormularioInscricao vagas={vagas} encerradas={encerradas} />
         </div>

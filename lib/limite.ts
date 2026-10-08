@@ -13,6 +13,9 @@ const limites = {
   inscricao: { limite: 45, janelaSegundos: 10 * 60 },
   // 10 tentativas de senha a cada 15 minutos por conexão, no painel da portaria.
   portaria: { limite: 10, janelaSegundos: 15 * 60 },
+  // 30 buscas de comprovante a cada 10 minutos por conexão: dá para uma turma, mas impede tentativas
+  // em massa de nomes e datas de nascimento.
+  consulta: { limite: 30, janelaSegundos: 10 * 60 },
 };
 
 export async function dentroDoLimite(tipo: keyof typeof limites) {

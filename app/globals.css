@@ -221,6 +221,10 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .participar .eyebrow { color: var(--yellow); }
 .participar .steps li { border-top: 0; background: #fff; border-radius: 16px; padding: 28px 26px; }
 .participar-acao { margin-top: 40px; text-align: center; }
+.participar-comprovante { margin: 18px 0 0; color: #dbe6f5; }
+.participar-comprovante a { color: #fff; font-weight: 700; }
+/* Página /comprovante: mais de uma inscrição encontrada aparece em cartões separados */
+.comprovante + .comprovante { margin-top: 24px; }
 
 .faq { max-width: 760px; margin: 0 auto; }
 .faq details { background: #fff; border-radius: 14px; border: 1px solid var(--line); margin-bottom: 12px; }
@@ -352,8 +356,6 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .resultado-inscrito .resultado-situacao { color: var(--green-ink); }
 .resultado-presente { border-left-color: var(--blue); background: #eef3fa; }
 .resultado-presente .resultado-situacao { color: var(--blue); }
-.resultado-outra { border-left-color: var(--yellow); }
-.resultado-outra .resultado-situacao { color: #8a6100; }
 .resultado-ausente { border-left-color: #b81d00; }
 .resultado-ausente .resultado-nome { color: #b81d00; }
 

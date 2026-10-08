@@ -22,6 +22,11 @@ const perguntas = [
       "Sim. Cada estudante precisa de uma inscrição própria, com o nome da escola e o ano escolar. A escola ou o responsável pode preencher o formulário pelo estudante.",
   },
   {
+    pergunta: "Perdi o comprovante. Como baixo de novo?",
+    resposta:
+      "Na página Comprovante (www.festivalflim.com.br/comprovante), informe o nome completo e a data de nascimento do participante, como foram preenchidos na inscrição. Para menores de 18 anos, informe também o CPF do responsável legal.",
+  },
+  {
     pergunta: "Quem pode participar?",
     resposta:
       "Estudantes e visitantes: famílias, professores, bibliotecários, escritores e toda a comunidade de Martins e região. Abertura, painéis, palestra e oficinas são abertos a todos; só o concurso de redação é exclusivo para estudantes das escolas de Martins.",

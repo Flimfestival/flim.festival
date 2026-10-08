@@ -13,7 +13,7 @@ type Opcao = { id: string; titulo: string; rotulo: string };
 
 // Busca sem diferenciar acentos, maiúsculas e espaços repetidos ("joao" encontra "João").
 const normalizar = (texto: string) =>
-  texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+  texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 
 const formatarHora = (iso: string) =>
   new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", timeZone: "America/Fortaleza" });
@@ -52,29 +52,24 @@ export default function PainelPortaria({
     return () => clearInterval(intervalo);
   }, [atividade, carregar]);
 
-  const titulos = useMemo(() => new Map(atividades.map((opcao) => [opcao.id, opcao.titulo])), [atividades]);
-
   const indice = useMemo(
     () => (dados?.estudantes ?? []).map((estudante) => ({ estudante, chave: normalizar(estudante.nome) })),
     [dados],
   );
 
   const termo = normalizar(busca);
+  // A lista já vem só com os inscritos da atividade escolhida.
   const resultados = useMemo(() => {
     if (termo.length < 2) return [];
     const partes = termo.split(" ");
     return indice
       .filter(({ chave }) => partes.every((parte) => chave.includes(parte)))
       .map(({ estudante }) => estudante)
-      .sort(
-        (a, b) =>
-          Number(b.atividades.includes(atividade)) - Number(a.atividades.includes(atividade)) ||
-          a.nome.localeCompare(b.nome, "pt-BR"),
-      )
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
       .slice(0, 30);
-  }, [indice, termo, atividade]);
+  }, [indice, termo]);
 
-  const inscritos = dados?.estudantes.filter((estudante) => estudante.atividades.includes(atividade)).length ?? 0;
+  const inscritos = dados?.estudantes.length ?? 0;
   const presentes = dados ? Object.keys(dados.presencas).length : 0;
 
   function trocarAtividade(id: string) {
@@ -188,16 +183,15 @@ export default function PainelPortaria({
 
       {termo.length >= 2 && dados && resultados.length === 0 && (
         <div className="resultado resultado-ausente">
-          <p className="resultado-nome">Nenhum inscrito com esse nome.</p>
+          <p className="resultado-nome">Ninguém com esse nome está inscrito nesta atividade.</p>
           <p className="resultado-info">{avisoVagas}</p>
         </div>
       )}
 
       <ul className="resultados">
         {resultados.map((estudante) => {
-          const nestaAtividade = estudante.atividades.includes(atividade);
           const entrada = dados?.presencas[estudante.id];
-          const situacao = !nestaAtividade ? "resultado-outra" : entrada ? "resultado-presente" : "resultado-inscrito";
+          const situacao = entrada ? "resultado-presente" : "resultado-inscrito";
           return (
             <li key={estudante.id} className={`resultado ${situacao}`}>
               <div className="resultado-dados">
@@ -207,14 +201,10 @@ export default function PainelPortaria({
                   {formatarData(estudante.dataNascimento)}
                 </p>
                 <p className="resultado-situacao">
-                  {!nestaAtividade
-                    ? `Inscrição em outra atividade: ${estudante.atividades.map((id) => titulos.get(id) ?? id).join("; ")}`
-                    : entrada
-                      ? `Entrada registrada às ${formatarHora(entrada)}`
-                      : "Inscrição nesta atividade"}
+                  {entrada ? `Entrada registrada às ${formatarHora(entrada)}` : "Inscrição nesta atividade"}
                 </p>
               </div>
-              {nestaAtividade && !entrada && (
+              {!entrada && (
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -224,7 +214,7 @@ export default function PainelPortaria({
                   {salvando === estudante.id ? "Registrando…" : "Registrar entrada"}
                 </button>
               )}
-              {nestaAtividade && entrada && (
+              {entrada && (
                 <button
                   type="button"
                   className="btn btn-outline"

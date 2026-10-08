@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LinkInscricao from "./LinkInscricao";
 
 const passos = [
@@ -28,6 +29,9 @@ export default function ComoParticipar() {
         </ol>
         <div className="participar-acao">
           <LinkInscricao className="btn btn-light">Ir para o formulário</LinkInscricao>
+          <p className="participar-comprovante">
+            Já se inscreveu? <Link href="/comprovante">Baixe o comprovante de novo</Link>.
+          </p>
         </div>
       </div>
     </section>

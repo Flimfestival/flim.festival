@@ -13,10 +13,10 @@ export type Estudante = {
   escola: string | null;
   anoEscolar: string | null;
   dataNascimento: string;
-  atividades: string[];
 };
 
 export type DadosAtividade = {
+  // Só quem está inscrito na atividade escolhida.
   estudantes: Estudante[];
   // Hora da entrada (ISO) de quem já entrou na atividade, pelo id da inscrição.
   presencas: Record<string, string>;
@@ -81,11 +81,11 @@ export async function carregarAtividade(atividade: string): Promise<DadosAtivida
         escola: string | null;
         ano_escolar: string | null;
         data_nascimento: string;
-        atividades: string[];
       }>((de, ate) =>
         supabase
           .from("inscricoes")
-          .select("id, nome, escola, ano_escolar, data_nascimento, atividades")
+          .select("id, nome, escola, ano_escolar, data_nascimento")
+          .contains("atividades", [atividade])
           .order("nome")
           .range(de, ate),
       ),
@@ -107,7 +107,6 @@ export async function carregarAtividade(atividade: string): Promise<DadosAtivida
         escola: linha.escola,
         anoEscolar: linha.ano_escolar,
         dataNascimento: linha.data_nascimento,
-        atividades: linha.atividades,
       })),
       presencas: Object.fromEntries(presencas.map((linha) => [linha.inscricao_id, linha.registrada_em])),
       vagasRestantes:

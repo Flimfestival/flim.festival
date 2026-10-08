@@ -59,6 +59,15 @@ abre o menu de compartilhar, que tem "Salvar imagem". O comprovante não depende
 funciona nos navegadores de aplicativos (Instagram, Facebook); nesses, a tela também orienta a tirar
 um print.
 
+### Baixar o comprovante de novo
+
+A página `/comprovante` (link na página de inscrição, em "Como participar", nas Dúvidas e no rodapé)
+busca a inscrição pelo nome completo e pela data de nascimento, como foram preenchidos; acentos,
+maiúsculas e pontuação não importam. Para menores de 18 anos, pede também o CPF do responsável legal,
+para que só a família consiga ver a ficha. Mostra o mesmo comprovante do fim da inscrição, com o botão
+**Baixar comprovante**, e nunca mostra e-mail, CPF ou deficiência. São no máximo 30 buscas a cada 10
+minutos por conexão (`lib/limite.ts`).
+
 ### Edital do concurso de redação
 
 O edital assinado fica em `public/documentos/edital-concurso-de-redacao.pdf` e abre pelo item
@@ -286,13 +295,13 @@ comissão para a entrada das atividades. Não aparece no menu nem nos buscadores
 
 1. Entre com a senha da comissão. A sessão vale por 12 horas naquele aparelho.
 2. Escolha a atividade e digite parte do nome do participante (acentos e maiúsculas não importam).
+   A busca mostra só quem está inscrito na atividade escolhida.
 3. Cada resultado mostra escola, ano escolar (ou "Visitante") e data de nascimento, para diferenciar
    nomes iguais:
    - **verde**: inscrição nesta atividade, com o botão **Registrar entrada**;
    - **azul**: entrada já registrada, com a hora e a opção **Desfazer**;
-   - **amarelo**: inscrição em outra atividade;
-   - **vermelho**: nenhum inscrito com esse nome. O painel informa se ainda há vagas, para o estudante
-     se inscrever pelo site.
+   - **vermelho**: ninguém com esse nome inscrito nesta atividade. O painel informa se ainda há vagas,
+     para a pessoa se inscrever pelo site.
 4. Os contadores mostram inscritos, presentes e vagas restantes, e se atualizam a cada minuto.
 
 Uma mesma entrada nunca é registrada duas vezes, nem com dois celulares ao mesmo tempo.
