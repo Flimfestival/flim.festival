@@ -425,8 +425,9 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   .confirmacao .actions .btn { width: 100%; }
   .comprovante-dados { grid-template-columns: 1fr; }
   .actions .btn, .cta .btn { width: 100%; }
-  /* Data, local e entrada lado a lado em três colunas iguais; a data quebra em duas linhas. */
-  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; margin: 28px 0 26px; }
+  /* Data, local e entrada lado a lado, uma coluna igual para cada item (três no início e na inscrição,
+     dois no lançamento de livros); a data quebra em duas linhas. */
+  .facts { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; margin: 28px 0 26px; }
   .facts div { padding: 0 8px; }
   .facts dd { font-size: .98rem; text-wrap: balance; }
 }
