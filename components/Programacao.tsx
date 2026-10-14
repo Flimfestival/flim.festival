@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import Link from "next/link";
 import { evento } from "@/lib/evento";
 import { categoriasRedacao, concursoDesenho, dias, oficinas } from "@/lib/programacao";
 
@@ -85,6 +86,13 @@ export default function Programacao() {
                     <p key={nota}>{nota}</p>
                   ))}
                 </div>
+              )}
+              {dia.id === "dia-12" && (
+                <p className="dia-chamada">
+                  <strong>Lançamento de livros:</strong> autores podem inscrever suas obras para o momento de
+                  lançamento, na Casa de Cultura.{" "}
+                  <Link href="/lancamento-de-livros">Inscreva seu livro</Link>.
+                </p>
               )}
               {dia.id === "dia-13" && (
                 <div className="tabela-rolagem">

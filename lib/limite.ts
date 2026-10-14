@@ -16,6 +16,8 @@ const limites = {
   // 30 buscas de comprovante a cada 10 minutos por conexão: dá para uma turma, mas impede tentativas
   // em massa de nomes e datas de nascimento.
   consulta: { limite: 30, janelaSegundos: 10 * 60 },
+  // 10 livros inscritos para o lançamento a cada 10 minutos por conexão.
+  lancamento: { limite: 10, janelaSegundos: 10 * 60 },
 };
 
 export async function dentroDoLimite(tipo: keyof typeof limites) {

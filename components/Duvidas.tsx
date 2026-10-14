@@ -22,6 +22,11 @@ const perguntas = [
       "Sim. Cada estudante precisa de uma inscrição própria, com o nome da escola e o ano escolar. A escola ou o responsável pode preencher o formulário pelo estudante.",
   },
   {
+    pergunta: "Sou autor. Posso lançar meu livro no FLIM?",
+    resposta:
+      "Sim. Inscreva a obra na página Lançamento de livros (www.festivalflim.com.br/lancamento-de-livros). Os lançamentos acontecem no dia 12 de dezembro, na Casa de Cultura de Martins, e a organização entra em contato para confirmar a participação e alinhar horário e formato.",
+  },
+  {
     pergunta: "Perdi o comprovante. Como baixo de novo?",
     resposta:
       "Na página Comprovante (www.festivalflim.com.br/comprovante), informe o nome completo e a data de nascimento do participante, como foram preenchidos na inscrição. Para menores de 18 anos, informe também o CPF do responsável legal.",

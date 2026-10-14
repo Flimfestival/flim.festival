@@ -12,6 +12,7 @@ const links = [
   { href: "/programacao", label: "Programação" },
   // O edital é um PDF: abre em outra aba, sem tirar a pessoa da página em que está.
   { href: evento.edital, label: "Edital", pdf: true },
+  { href: "/lancamento-de-livros", label: "Lançamento de livros" },
   { href: "/#participar", label: "Como participar" },
   { href: "/#duvidas", label: "Dúvidas" },
 ];

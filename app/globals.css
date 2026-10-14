@@ -203,6 +203,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 
 /* Link para o edital do concurso de redação, na programação */
 .edital-link { margin: 14px 0 0; font-size: .95rem; color: var(--muted); }
+/* Chamada para o lançamento de livros, no sábado da programação */
+.dia-chamada { margin: 16px 0 0; font-size: .95rem; }
 
 .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: none; }
 .steps li { border-top: 3px solid var(--blue); padding-top: 24px; text-align: center; }
@@ -379,13 +381,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .creditos a { color: #c3d0e6; }
 
 /* Responsivo */
-@media (max-width: 900px) {
-  .section { padding: 72px 0; }
-  .eixos { grid-template-columns: repeat(2, 1fr); }
-  .destaques { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
-  .convidado-foto { aspect-ratio: 4 / 3; }
-}
-@media (max-width: 760px) {
+/* Com seis itens, o menu completo só cabe acima de 1.100 px; abaixo disso, vira o menu recolhido. */
+@media (max-width: 1100px) {
   .nav-toggle { display: flex; }
   .header-cta { display: inline-flex; padding: 8px 14px; }
   .nav .btn { display: none; }
@@ -396,6 +393,14 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   }
   .nav.open { display: flex; }
   .nav a:not(.btn) { padding: 12px 0; border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 900px) {
+  .section { padding: 72px 0; }
+  .eixos { grid-template-columns: repeat(2, 1fr); }
+  .destaques { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
+  .convidado-foto { aspect-ratio: 4 / 3; }
+}
+@media (max-width: 760px) {
   .hero .hero-inner { padding-block: 36px 44px; }
   .hero-logo { margin-bottom: 22px; }
   .hero-logo img { width: min(300px, 72vw); }

@@ -59,6 +59,19 @@ abre o menu de compartilhar, que tem "Salvar imagem". O comprovante não depende
 funciona nos navegadores de aplicativos (Instagram, Facebook); nesses, a tela também orienta a tirar
 um print.
 
+### Lançamento de livros
+
+A página `/lancamento-de-livros` (no menu, no rodapé, na programação do sábado e nas Dúvidas)
+recebe a inscrição de obras para o lançamento de livros de 12 de dezembro, na Casa de Cultura. Pede
+nome do autor, cidade e UF, e-mail, WhatsApp, título, breve apresentação do livro, minibiografia e a
+autorização de uso dos dados. Depois do envio, mostra "Inscrição recebida!" e avisa que a organização
+entrará em contato. O mesmo e-mail com o mesmo título não é gravado duas vezes, e cada conexão envia no
+máximo 10 livros a cada 10 minutos.
+
+Os envios ficam na tabela `lancamentos_livros`; a visão **`painel_lancamentos`** mostra um livro por
+linha, com colunas em português (exporte para CSV para planilhas). Textos e campos ficam em
+`lib/lancamento.ts`.
+
 ### Baixar o comprovante de novo
 
 A página `/comprovante` (link na página de inscrição, em "Como participar", nas Dúvidas e no rodapé)
@@ -164,6 +177,7 @@ novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os 
    13. `20261007130000_nomes_dos_paineis.sql`: painéis chamados pelo nome, sem o número.
    14. `20261007140000_oficinas_abertas.sql`: oficinas abertas a visitantes e a outras escolas e
        oficina de estratégias de leitura (BALE).
+   15. `20261014120000_lancamento_de_livros.sql`: inscrições para o lançamento de livros.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
