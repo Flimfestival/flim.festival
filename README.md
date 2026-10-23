@@ -325,6 +325,20 @@ Sem internet no local, use a visão `lista_por_atividade` impressa como reserva.
 Environment Variables**), com pelo menos 12 caracteres; sem ela o painel fica desativado. Trocar a
 senha encerra todas as sessões abertas. Troque depois do festival.
 
+## Pixel da Meta (campanhas)
+
+O site tem o pixel da Meta (Facebook e Instagram), id `2313866966115918`, em `lib/pixel.ts`, para medir
+as campanhas de divulgação. Cuidados, por causa da LGPD e dos dados de crianças:
+
+- O pixel **só carrega depois que a pessoa toca em "Aceitar"** no aviso de cookies; com "Recusar",
+  nada é carregado. O link **Cookies** do rodapé reabre o aviso para mudar a escolha.
+- A configuração automática do pixel fica desligada (`autoConfig`): ele não lê botões nem campos.
+  **Mantenha desligada a "Correspondência avançada automática"** no Gerenciador de Eventos da Meta.
+- Fica fora da portaria.
+- Eventos enviados, sem nenhum dado pessoal: `PageView` em cada página, `CompleteRegistration` em
+  toda inscrição concluída e `Lead` (com `content_name` "Concurso de redação") quando a inscrição
+  inclui o concurso. Use o `Lead` como conversão da campanha do concurso.
+
 ## SEO e compartilhamento
 
 - Cada página tem título, descrição e endereço canônico próprios (`lib/site.ts`).

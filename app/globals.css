@@ -196,6 +196,21 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .ficha dt { font-weight: 700; }
 .ficha dd { margin: 0; color: var(--muted); }
 
+/* Aviso de cookies (pixel da Meta), preso ao pé da tela até a pessoa escolher */
+.aviso-cookies {
+  position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 60; max-width: 720px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px; padding: 14px 16px; background: #fff;
+  border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 10px 30px rgba(20, 33, 61, .18);
+}
+.aviso-cookies p { margin: 0; font-size: .9rem; line-height: 1.45; }
+.aviso-cookies-acoes { display: flex; gap: 8px; flex: none; }
+.link-cookies { background: none; border: 0; padding: 6px 2px; font: inherit; color: #fff; font-weight: 600; cursor: pointer; }
+.link-cookies:hover { text-decoration: underline; }
+@media (max-width: 520px) {
+  .aviso-cookies { flex-direction: column; align-items: stretch; left: 8px; right: 8px; bottom: 8px; }
+  .aviso-cookies-acoes .btn { flex: 1; }
+}
+
 /* Comprovante em imagem, mostrado no iPhone quando o menu de compartilhar não funciona */
 .comprovante-imagem { flex-basis: 100%; margin: 8px 0 0; text-align: center; }
 .comprovante-imagem img { width: min(100%, 360px); height: auto; border: 1px solid var(--line); border-radius: 12px; }
@@ -437,7 +452,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 /* Impressão ou PDF do comprovante: só o cartão, sem cabeçalho, rodapé e botões */
 @media print {
-  .skip-link, .site-header, .parceiros, .site-footer, .tiles, .inscricao-info, .confirmacao .actions { display: none !important; }
+  .skip-link, .site-header, .parceiros, .site-footer, .tiles, .inscricao-info, .confirmacao .actions, .aviso-cookies { display: none !important; }
   body, .inscricao { background: #fff !important; }
   .inscricao { padding: 0 !important; }
   .form-card { box-shadow: none !important; border: 1px solid #999 !important; }

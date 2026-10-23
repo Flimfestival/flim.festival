@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
+import PixelMeta from "@/components/PixelMeta";
 import { nomeSite, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -35,7 +36,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="pt-BR" className={manrope.variable} data-scroll-behavior="smooth">
       {/* Extensões do navegador (ex.: ColorZilla) adicionam atributos ao <body> antes do React
           carregar; isto ignora só essas diferenças de atributo, não o conteúdo da página. */}
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+        <PixelMeta />
+      </body>
     </html>
   );
 }

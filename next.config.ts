@@ -2,17 +2,18 @@ import type { NextConfig } from "next";
 
 const desenvolvimento = process.env.NODE_ENV === "development";
 
-// Política de conteúdo: o site só carrega scripts, estilos, imagens e fontes de si mesmo.
+// Política de conteúdo: o site só carrega scripts, estilos, imagens e fontes de si mesmo, mais o pixel
+// da Meta (connect.facebook.net e www.facebook.com), que só é carregado depois do aceite dos cookies.
 // O Next.js usa scripts e estilos embutidos na página, por isso o 'unsafe-inline'.
 // No modo de desenvolvimento, também precisa de 'unsafe-eval'. A troca automática para HTTPS só vale
 // na Vercel: no computador o site roda em http://localhost, e o Safari quebraria a página.
 const politicaDeConteudo = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${desenvolvimento ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://connect.facebook.net${desenvolvimento ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' blob: data:",
+  "img-src 'self' blob: data: https://www.facebook.com",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.facebook.com https://connect.facebook.net",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { enviarInscricao } from "@/app/inscricao/actions";
 import Comprovante from "@/components/Comprovante";
 import { evento } from "@/lib/evento";
+import { registrarInscricao } from "@/lib/pixel";
 import {
   anosDaEscola,
   ATIVIDADE_ATIPICOS,
@@ -99,7 +100,12 @@ function Formulario({ vagas, encerradas, aoRecomecar }: Propriedades & { aoRecom
   // Leva o foco ao aviso de erro ou à confirmação, para quem usa teclado ou leitor de tela.
   useEffect(() => {
     if (estado.status === "erro") alerta.current?.focus();
-    if (estado.status === "enviada") confirmacao.current?.focus();
+    if (estado.status === "enviada") {
+      confirmacao.current?.focus();
+      // Avisa o pixel da Meta (se a pessoa aceitou os cookies) só que houve uma inscrição, sem dados.
+      const novas = estado.acrescentadas.length > 0 ? estado.acrescentadas : estado.valores.atividades;
+      registrarInscricao(novas.includes("concurso-redacao"));
+    }
   }, [estado]);
 
   if (estado.status === "enviada") {

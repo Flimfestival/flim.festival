@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BotaoCookies } from "@/components/PixelMeta";
 import { evento } from "@/lib/evento";
 import { creditos } from "@/lib/fotos";
 
@@ -28,6 +29,7 @@ export default function Rodape() {
             Edital do concurso (PDF)
           </a>
           <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>
+          <BotaoCookies />
         </nav>
         <p>© {new Date().getFullYear()} Festival Literário de Martins.</p>
         <p className="creditos">
