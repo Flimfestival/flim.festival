@@ -90,6 +90,13 @@ export default function Programacao() {
               )}
               {dia.id === "dia-12" && (
                 <p className="dia-chamada">
+                  <strong>Mesa redonda “{mesaRedonda.titulo}”:</strong> também neste dia, na Casa de
+                  Cultura, com 110 vagas e horário a definir. <a href="#mesa-redonda">Veja os detalhes</a> ou{" "}
+                  <Link href="/inscricao">inscreva-se</Link>.
+                </p>
+              )}
+              {dia.id === "dia-12" && (
+                <p className="dia-chamada">
                   <strong>Lançamento de livros:</strong> autores podem inscrever suas obras para o momento de
                   lançamento, na Casa de Cultura.{" "}
                   <Link href="/lancamento-de-livros">Inscreva seu livro</Link>.
