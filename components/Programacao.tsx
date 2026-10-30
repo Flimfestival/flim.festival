@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { evento } from "@/lib/evento";
-import { categoriasRedacao, concursoDesenho, dias, oficinas } from "@/lib/programacao";
+import { categoriasRedacao, concursoDesenho, dias, mesaRedonda, oficinas } from "@/lib/programacao";
 
 // As oficinas acontecem no sábado (12/12), ao mesmo tempo que os painéis: aparecem logo depois desse dia.
 const DIA_DAS_OFICINAS = "dia-12";
@@ -53,6 +53,7 @@ export default function Programacao() {
               {dia.id === DIA_DAS_OFICINAS && <a href="#oficinas">Oficinas</a>}
             </Fragment>
           ))}
+          <a href="#mesa-redonda">Mesa redonda</a>
           <a href="#concurso-desenho">Concurso de desenho</a>
         </nav>
 
@@ -126,6 +127,43 @@ export default function Programacao() {
             {dia.id === DIA_DAS_OFICINAS && <Oficinas />}
           </Fragment>
         ))}
+
+        <article id="mesa-redonda" className="dia">
+          <header className="dia-cabecalho">
+            <p className="dia-data">Mesa redonda · {mesaRedonda.quando}</p>
+            <h2>{mesaRedonda.titulo}</h2>
+            <p className="dia-local">{mesaRedonda.subtitulo}</p>
+          </header>
+          <p className="dia-resumo">{mesaRedonda.resumo}</p>
+          <dl className="ficha">
+            <div>
+              <dt>Mediação</dt>
+              <dd>{mesaRedonda.mediacao}</dd>
+            </div>
+            <div>
+              <dt>Debatedoras</dt>
+              <dd>
+                {mesaRedonda.debatedoras.map((debatedora) => (
+                  <span key={debatedora} className="ficha-linha">
+                    {debatedora}
+                  </span>
+                ))}
+              </dd>
+            </div>
+            <div>
+              <dt>Organização</dt>
+              <dd>{mesaRedonda.organizacao}</dd>
+            </div>
+            <div>
+              <dt>Duração</dt>
+              <dd>{mesaRedonda.duracao}</dd>
+            </div>
+            <div>
+              <dt>Quando</dt>
+              <dd>{mesaRedonda.quando}. Mais informações em breve.</dd>
+            </div>
+          </dl>
+        </article>
 
         <article id="concurso-desenho" className="dia">
           <header className="dia-cabecalho">

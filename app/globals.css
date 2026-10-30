@@ -195,6 +195,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .ficha div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; }
 .ficha dt { font-weight: 700; }
 .ficha dd { margin: 0; color: var(--muted); }
+.ficha-linha { display: block; }
+.dia-resumo { margin: 0 0 24px; line-height: 1.65; }
 
 /* Aviso de cookies (pixel da Meta), preso ao pé da tela até a pessoa escolher */
 .aviso-cookies {

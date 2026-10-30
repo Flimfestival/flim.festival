@@ -166,6 +166,25 @@ export const concursoDesenho = {
   quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 16h.",
 };
 
+// Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN). Data, horário, local e
+// inscrição ainda a definir: quando forem definidos, atualize `quando` (e, se tiver inscrição, crie a
+// atividade em `atividadesInscricao` e no banco).
+export const mesaRedonda = {
+  titulo: "Mulheres Lendo Mulheres",
+  subtitulo: "Leituras, afetos e redes de autoria feminina no Rio Grande do Norte",
+  resumo:
+    "Poetas, romancistas e mediadoras de leitura do Rio Grande do Norte conversam sobre clubes de leitura dedicados à literatura escrita por mulheres, a partir da experiência do Clube de Leitura Mulheres Lendo Mulheres e do Mulherio das Letras, Regional Zila Mamede. Em pauta: a invisibilidade histórica das autoras potiguares e brasileiras, a circulação de livros fora dos grandes centros e a formação de novos leitores e novas escritoras.",
+  mediacao: "Ângela Paiva, professora e ex-reitora da Universidade Federal do Rio Grande do Norte (UFRN).",
+  debatedoras: [
+    "Amélia Freire, poeta.",
+    "Carla Alves, professora, produtora cultural e mediadora do Clube de Leitura Mulheres Lendo Mulheres.",
+    "Ana Cláudia Trigueiro, romancista e psicóloga.",
+  ],
+  organizacao: "Mulherio das Letras, Regional Zila Mamede (RN), e Clube de Leitura Mulheres Lendo Mulheres.",
+  duracao: "60 minutos, com perguntas do público.",
+  quando: "Data, horário e local a definir",
+};
+
 export type AtividadeInscricao = {
   id: string;
   grupo: string;
