@@ -130,7 +130,7 @@ export default function Programacao() {
 
         <article id="mesa-redonda" className="dia">
           <header className="dia-cabecalho">
-            <p className="dia-data">Mesa redonda · {mesaRedonda.quando}</p>
+            <p className="dia-data">Mesa redonda · Sábado, 12 de dezembro · Casa de Cultura</p>
             <h2>{mesaRedonda.titulo}</h2>
             <p className="dia-local">{mesaRedonda.subtitulo}</p>
           </header>
@@ -160,7 +160,13 @@ export default function Programacao() {
             </div>
             <div>
               <dt>Quando</dt>
-              <dd>{mesaRedonda.quando}. Mais informações em breve.</dd>
+              <dd>{mesaRedonda.quando}.</dd>
+            </div>
+            <div>
+              <dt>Inscrição</dt>
+              <dd>
+                {mesaRedonda.vagas} <Link href="/inscricao">Inscreva-se</Link>.
+              </dd>
             </div>
           </dl>
         </article>

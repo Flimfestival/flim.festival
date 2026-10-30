@@ -107,6 +107,7 @@ completo, numa caixa com rolagem, antes da caixinha de aceite. O texto fica em `
 | --------------------------------- | ---------- |
 | Abertura (11/12, Mirante do Canto) | 600       |
 | Cada um dos 4 painéis (12/12)     | 110        |
+| Mesa redonda (12/12)              | 110        |
 | Cada uma das 4 oficinas (12/12)   | 25         |
 | Demais atividades                 | Sem limite |
 
@@ -178,6 +179,7 @@ novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os 
    14. `20261007140000_oficinas_abertas.sql`: oficinas abertas a visitantes e a outras escolas e
        oficina de estratégias de leitura (BALE).
    15. `20261014120000_lancamento_de_livros.sql`: inscrições para o lançamento de livros.
+   16. `20261030120000_mesa_redonda.sql`: mesa redonda "Mulheres Lendo Mulheres", com 110 vagas.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes

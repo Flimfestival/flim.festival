@@ -166,9 +166,9 @@ export const concursoDesenho = {
   quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 16h.",
 };
 
-// Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN). Data, horário, local e
-// inscrição ainda a definir: quando forem definidos, atualize `quando` (e, se tiver inscrição, crie a
-// atividade em `atividadesInscricao` e no banco).
+// Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN): sábado, 12/12, na Casa de
+// Cultura, com 110 vagas (atividade "mesa-redonda" do formulário). O horário ainda será definido: quando
+// for, atualize `quando` aqui e em `atividadesInscricao`, e a coluna `quando` no banco.
 export const mesaRedonda = {
   titulo: "Mulheres Lendo Mulheres",
   subtitulo: "Leituras, afetos e redes de autoria feminina no Rio Grande do Norte",
@@ -182,7 +182,8 @@ export const mesaRedonda = {
   ],
   organizacao: "Mulherio das Letras, Regional Zila Mamede (RN), e Clube de Leitura Mulheres Lendo Mulheres.",
   duracao: "60 minutos, com perguntas do público.",
-  quando: "Data, horário e local a definir",
+  quando: "Sábado, 12 de dezembro, na Casa de Cultura. Horário a definir",
+  vagas: "110 vagas, com inscrição pelo site, aberta a estudantes e visitantes.",
 };
 
 export type AtividadeInscricao = {
@@ -247,6 +248,13 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     titulo: "Painel: Povo, natureza e poesia",
     quando: "15h45",
     detalhe: "Poeta Antônio Francisco",
+  },
+  {
+    id: "mesa-redonda",
+    grupo: "Sábado, 12 de dezembro · Casa de Cultura",
+    titulo: "Mesa redonda: Mulheres Lendo Mulheres",
+    quando: "Horário a definir",
+    detalhe: "Mediação de Ângela Paiva",
   },
   {
     id: "palestra-socorro-acioli",
