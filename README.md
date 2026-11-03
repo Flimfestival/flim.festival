@@ -146,7 +146,8 @@ ao gravar. As regras ficam em `lib/inscricao.ts` (`restricoesPorAno`).
 
 No sábado, 12/12, as oficinas acontecem junto com os painéis: oficina de redação (9h) e oficina de
 estratégias de leitura (10h30) com o painel Literatura e identidade, oficina de poesia e painel
-Escreva, leia... eternize-se, oficina de desenho criativo e painel Povo, natureza e poesia. Cada
+Escreva, leia... eternize-se, oficina de desenho criativo e painel Povo, natureza e poesia, e a mesa
+redonda (15h15 às 16h15) com as oficinas de poesia e de desenho criativo. Cada
 pessoa escolhe só uma de cada par: ao marcar uma, o formulário desativa a outra. O banco confere de
 novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os pares ficam em `lib/programacao.ts`
 (`horariosSimultaneos`) e na tabela `atividades_simultaneas` do Supabase; ao mudar, mude nos dois.
@@ -180,6 +181,8 @@ novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os 
        oficina de estratégias de leitura (BALE).
    15. `20261014120000_lancamento_de_livros.sql`: inscrições para o lançamento de livros.
    16. `20261030120000_mesa_redonda.sql`: mesa redonda "Mulheres Lendo Mulheres", com 110 vagas.
+   17. `20261103120000_horarios_mesa_redonda.sql`: mesa às 15h15, painel Povo, natureza e poesia às
+       16h30 e as oficinas no mesmo horário da mesa.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes

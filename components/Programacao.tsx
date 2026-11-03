@@ -130,7 +130,7 @@ export default function Programacao() {
 
         <article id="mesa-redonda" className="dia">
           <header className="dia-cabecalho">
-            <p className="dia-data">Mesa redonda · Sábado, 12 de dezembro · Casa de Cultura</p>
+            <p className="dia-data">Mesa redonda · Sábado, 12 de dezembro, 15h15 · Casa de Cultura</p>
             <h2>{mesaRedonda.titulo}</h2>
             <p className="dia-local">{mesaRedonda.subtitulo}</p>
           </header>
@@ -157,6 +157,16 @@ export default function Programacao() {
             <div>
               <dt>Duração</dt>
               <dd>{mesaRedonda.duracao}</dd>
+            </div>
+            <div>
+              <dt>Roteiro</dt>
+              <dd>
+                {mesaRedonda.roteiro.map((etapa) => (
+                  <span key={etapa} className="ficha-linha">
+                    {etapa}
+                  </span>
+                ))}
+              </dd>
             </div>
             <div>
               <dt>Quando</dt>

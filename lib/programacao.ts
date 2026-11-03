@@ -72,22 +72,22 @@ export const dias: Dia[] = [
         comInscricao: true,
       },
       {
-        horario: "A definir",
+        horario: "15h15",
         titulo: "Mesa redonda: Mulheres Lendo Mulheres",
-        detalhes: ["Entre os painéis da tarde. Mediação de Ângela Paiva; mais detalhes abaixo."],
-        comInscricao: true,
-      },
-      { horario: "15h30", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
-      {
-        horario: "15h45",
-        titulo: "Painel: Povo, natureza e poesia",
-        detalhes: ["Poeta Antônio Francisco."],
+        detalhes: ["60 minutos. Mediação de Ângela Paiva; mais detalhes abaixo."],
         comInscricao: true,
       },
       {
         horario: "16h",
         titulo: "Premiação do concurso de desenho",
         detalhes: ["Na Feira Literária Fátima Baliza."],
+      },
+      { horario: "16h15", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
+      {
+        horario: "16h30",
+        titulo: "Painel: Povo, natureza e poesia",
+        detalhes: ["Poeta Antônio Francisco."],
+        comInscricao: true,
       },
       {
         horario: "17h30",
@@ -172,10 +172,8 @@ export const concursoDesenho = {
   quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 16h.",
 };
 
-// Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN): sábado, 12/12, na Casa de
-// Cultura, entre os painéis da tarde, com 110 vagas (atividade "mesa-redonda" do formulário). O horário
-// exato ainda será definido: quando for, atualize `quando` aqui, em `atividadesInscricao` e na agenda do
-// sábado (`dias`), e a coluna `quando` no banco.
+// Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN): sábado, 12/12, das 15h15 às
+// 16h15, na Casa de Cultura, entre os painéis da tarde, com 110 vagas (atividade "mesa-redonda").
 export const mesaRedonda = {
   titulo: "Mulheres Lendo Mulheres",
   subtitulo: "Leituras, afetos e redes de autoria feminina no Rio Grande do Norte",
@@ -189,7 +187,15 @@ export const mesaRedonda = {
   ],
   organizacao: "Mulherio das Letras, Regional Zila Mamede (RN), e Clube de Leitura Mulheres Lendo Mulheres.",
   duracao: "60 minutos, com perguntas do público.",
-  quando: "Sábado, 12 de dezembro, na Casa de Cultura, entre os painéis da tarde. Horário exato a definir",
+  quando: "Sábado, 12 de dezembro, das 15h15 às 16h15, na Casa de Cultura",
+  // Roteiro de 60 minutos, como na proposta.
+  roteiro: [
+    "15h15: abertura e apresentação, com a mediadora.",
+    "15h22: rodada inicial, com as três debatedoras.",
+    "15h40: diálogo sobre rede, autoria e território.",
+    "15h58: perguntas do público.",
+    "16h10: encerramento.",
+  ],
   vagas: "110 vagas, com inscrição pelo site, aberta a estudantes e visitantes.",
 };
 
@@ -212,6 +218,8 @@ export const horariosSimultaneos: [string, string][] = [
   ["oficina-leitura", "painel-1"],
   ["oficina-poesia", "painel-3"],
   ["oficina-desenho", "painel-4"],
+  ["oficina-poesia", "mesa-redonda"],
+  ["oficina-desenho", "mesa-redonda"],
 ];
 
 // Atividades que acontecem no mesmo horário que a atividade informada.
@@ -253,14 +261,14 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     id: "mesa-redonda",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
     titulo: "Mesa redonda: Mulheres Lendo Mulheres",
-    quando: "Tarde, entre os painéis (horário a definir)",
+    quando: "15h15",
     detalhe: "Mediação de Ângela Paiva",
   },
   {
     id: "painel-4",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
     titulo: "Painel: Povo, natureza e poesia",
-    quando: "15h45",
+    quando: "16h30",
     detalhe: "Poeta Antônio Francisco",
   },
   {
@@ -341,7 +349,7 @@ export const destaques: {
     papel: "Poeta",
     bio: "Cordelista de Mossoró (RN), ocupa a cadeira de Patativa do Assaré na Academia Brasileira de Literatura de Cordel.",
     atividade: "Sarau Poético Cosme Lemos e painel “Povo, natureza e poesia”",
-    quando: "Sábado, 12 de dezembro: painel às 15h45 e sarau às 20h",
+    quando: "Sábado, 12 de dezembro: painel às 16h30 e sarau às 20h",
     local: "Casa de Cultura e Coreto",
   },
 ];
