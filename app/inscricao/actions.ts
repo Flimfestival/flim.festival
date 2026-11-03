@@ -31,7 +31,7 @@ export async function enviarInscricao(
     return { status: "erro", mensagem: "Confira os campos destacados abaixo.", erros, valores };
   }
 
-  // Prazo de inscrição (o concurso de redação fecha em 7/11, conforme o edital), pelo relógio do servidor.
+  // Prazo de inscrição (o concurso de redação fecha em 21/11, prazo prorrogado), pelo relógio do servidor.
   const encerradas = valores.atividades.filter((id) => atividadesEncerradas(new Date()).includes(id));
   if (encerradas.length > 0) {
     return {

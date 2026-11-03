@@ -115,7 +115,7 @@ export default function Programacao() {
                     </tbody>
                   </table>
                   <p className="edital-link">
-                    Inscrições até 7 de novembro. Regras, prêmios e datas no{" "}
+                    Inscrições prorrogadas até 21 de novembro. Regras, prêmios e datas no{" "}
                     <a href={evento.edital} target="_blank" rel="noopener">
                       edital do concurso de redação (PDF)
                     </a>

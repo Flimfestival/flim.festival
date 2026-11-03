@@ -310,8 +310,8 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     grupo: "Domingo, 13 de dezembro · Colégio Estadual Almino Afonso",
     titulo: "Concurso de redação",
     quando: "9h",
-    // Prazo do edital (item 7.2): inscrições até 7 de novembro de 2026.
-    inscricoesAte: "2026-11-07T23:59:59-03:00",
+    // Prazo prorrogado pela organização: inscrições até 21 de novembro de 2026 (o edital, item 7.2, previa 7/11).
+    inscricoesAte: "2026-11-21T23:59:59-03:00",
   },
 ];
 
