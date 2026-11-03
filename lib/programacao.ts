@@ -71,6 +71,12 @@ export const dias: Dia[] = [
         detalhes: ["Marilene Paiva."],
         comInscricao: true,
       },
+      {
+        horario: "A definir",
+        titulo: "Mesa redonda: Mulheres Lendo Mulheres",
+        detalhes: ["Entre os painéis da tarde. Mediação de Ângela Paiva; mais detalhes abaixo."],
+        comInscricao: true,
+      },
       { horario: "15h30", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
       {
         horario: "15h45",
@@ -167,8 +173,9 @@ export const concursoDesenho = {
 };
 
 // Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN): sábado, 12/12, na Casa de
-// Cultura, com 110 vagas (atividade "mesa-redonda" do formulário). O horário ainda será definido: quando
-// for, atualize `quando` aqui e em `atividadesInscricao`, e a coluna `quando` no banco.
+// Cultura, entre os painéis da tarde, com 110 vagas (atividade "mesa-redonda" do formulário). O horário
+// exato ainda será definido: quando for, atualize `quando` aqui, em `atividadesInscricao` e na agenda do
+// sábado (`dias`), e a coluna `quando` no banco.
 export const mesaRedonda = {
   titulo: "Mulheres Lendo Mulheres",
   subtitulo: "Leituras, afetos e redes de autoria feminina no Rio Grande do Norte",
@@ -182,7 +189,7 @@ export const mesaRedonda = {
   ],
   organizacao: "Mulherio das Letras, Regional Zila Mamede (RN), e Clube de Leitura Mulheres Lendo Mulheres.",
   duracao: "60 minutos, com perguntas do público.",
-  quando: "Sábado, 12 de dezembro, na Casa de Cultura. Horário a definir",
+  quando: "Sábado, 12 de dezembro, na Casa de Cultura, entre os painéis da tarde. Horário exato a definir",
   vagas: "110 vagas, com inscrição pelo site, aberta a estudantes e visitantes.",
 };
 
@@ -243,18 +250,18 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     detalhe: "Marilene Paiva",
   },
   {
+    id: "mesa-redonda",
+    grupo: "Sábado, 12 de dezembro · Casa de Cultura",
+    titulo: "Mesa redonda: Mulheres Lendo Mulheres",
+    quando: "Tarde, entre os painéis (horário a definir)",
+    detalhe: "Mediação de Ângela Paiva",
+  },
+  {
     id: "painel-4",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
     titulo: "Painel: Povo, natureza e poesia",
     quando: "15h45",
     detalhe: "Poeta Antônio Francisco",
-  },
-  {
-    id: "mesa-redonda",
-    grupo: "Sábado, 12 de dezembro · Casa de Cultura",
-    titulo: "Mesa redonda: Mulheres Lendo Mulheres",
-    quando: "Horário a definir",
-    detalhe: "Mediação de Ângela Paiva",
   },
   {
     id: "palestra-socorro-acioli",
