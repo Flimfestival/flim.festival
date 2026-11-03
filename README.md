@@ -181,8 +181,8 @@ novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os 
        oficina de estratégias de leitura (BALE).
    15. `20261014120000_lancamento_de_livros.sql`: inscrições para o lançamento de livros.
    16. `20261030120000_mesa_redonda.sql`: mesa redonda "Mulheres Lendo Mulheres", com 110 vagas.
-   17. `20261103120000_horarios_mesa_redonda.sql`: mesa às 15h15, painel Povo, natureza e poesia às
-       16h30 e as oficinas no mesmo horário da mesa.
+   17. `20261103120000_horarios_mesa_redonda.sql`: painel Escreva, leia... eternize-se às 14h, mesa
+       às 15h15, painel Povo, natureza e poesia às 16h15 e as oficinas no mesmo horário da mesa.
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes

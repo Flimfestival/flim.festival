@@ -64,30 +64,30 @@ export const dias: Dia[] = [
         detalhes: ["Genisa Raulino."],
         comInscricao: true,
       },
-      { horario: "14h", titulo: "Apresentação musical", detalhes: ["Clícia, violino, 15 minutos."] },
+      { horario: "13h45", titulo: "Apresentação musical", detalhes: ["Clícia, violino, 15 minutos."] },
       {
-        horario: "14h15",
+        horario: "14h",
         titulo: "Painel: Escreva, leia... eternize-se",
         detalhes: ["Marilene Paiva."],
         comInscricao: true,
       },
+      { horario: "15h", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
       {
         horario: "15h15",
         titulo: "Mesa redonda: Mulheres Lendo Mulheres",
         detalhes: ["60 minutos. Mediação de Ângela Paiva; mais detalhes abaixo."],
         comInscricao: true,
       },
-      { horario: "16h15", titulo: "Apresentação cultural", detalhes: ["Xaxado, 15 minutos."] },
       {
-        horario: "16h30",
+        horario: "16h15",
         titulo: "Painel: Povo, natureza e poesia",
         detalhes: ["Poeta Antônio Francisco."],
         comInscricao: true,
       },
       {
-        horario: "16h45",
+        horario: "17h",
         titulo: "Premiação do concurso de desenho",
-        detalhes: ["Na Feira Literária Fátima Baliza, antes da palestra de Socorro Acioli."],
+        detalhes: ["Na Feira Literária Fátima Baliza."],
       },
       {
         horario: "17h30",
@@ -169,7 +169,7 @@ export const concursoDesenho = {
   inscricao: "Feita em papel, não pelo site.",
   premio: "Kit Faber-Castell. O desenho vencedor vai para a capa de um livro, e outros 20 desenhos selecionados, para as páginas internas.",
   exposicao: "Na Feira Literária Fátima Baliza, na Casa de Cultura.",
-  quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 16h45.",
+  quando: "Realização nas escolas, em data combinada com a organização. Premiação em 12 de dezembro, às 17h.",
 };
 
 // Mesa redonda proposta pelo Mulherio das Letras, Regional Zila Mamede (RN): sábado, 12/12, das 15h15 às
@@ -254,7 +254,7 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     id: "painel-3",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
     titulo: "Painel: Escreva, leia... eternize-se",
-    quando: "14h15",
+    quando: "14h",
     detalhe: "Marilene Paiva",
   },
   {
@@ -268,7 +268,7 @@ export const atividadesInscricao: AtividadeInscricao[] = [
     id: "painel-4",
     grupo: "Sábado, 12 de dezembro · Casa de Cultura",
     titulo: "Painel: Povo, natureza e poesia",
-    quando: "16h30",
+    quando: "16h15",
     detalhe: "Poeta Antônio Francisco",
   },
   {
@@ -349,7 +349,7 @@ export const destaques: {
     papel: "Poeta",
     bio: "Cordelista de Mossoró (RN), ocupa a cadeira de Patativa do Assaré na Academia Brasileira de Literatura de Cordel.",
     atividade: "Sarau Poético Cosme Lemos e painel “Povo, natureza e poesia”",
-    quando: "Sábado, 12 de dezembro: painel às 16h30 e sarau às 20h",
+    quando: "Sábado, 12 de dezembro: painel às 16h15 e sarau às 20h",
     local: "Casa de Cultura e Coreto",
   },
 ];
