@@ -100,7 +100,7 @@ export const dias: Dia[] = [
         titulo: "Sarau Poético Cosme Lemos",
         detalhes: ["Com o poeta Antônio Francisco e restaurante literário, no Coreto."],
       },
-      { horario: "Após o sarau", titulo: "Forró do Severo", detalhes: ["No Coreto."] },
+      { horario: "Após o sarau", titulo: "Trio Martinense", detalhes: ["No Coreto."] },
     ],
     notas: [
       "Público previsto: 110 pessoas por painel.",
