@@ -352,6 +352,11 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .portaria-topo span { font-weight: 800; color: var(--blue); }
 .portaria-topo form { margin-left: auto; }
 .portaria-conteudo { max-width: 720px; margin: 0 auto; padding: 20px 16px 48px; }
+.portaria-abas { display: flex; gap: 6px; padding: 8px 16px; background: #fff; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.portaria-abas a { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; font-weight: 700; color: var(--blue); text-decoration: none; }
+.portaria-abas a:hover { background: var(--cream); }
+.portaria-abas a[aria-current="page"] { background: var(--blue); color: #fff; }
+.portaria-titulo { font-size: 1.6rem; margin: 0 0 6px; }
 .portaria-login { max-width: 420px; margin: 32px auto 0; }
 .portaria-login h1 { font-size: 1.6rem; }
 .painel { display: flex; flex-direction: column; gap: 16px; }
@@ -377,6 +382,18 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .resultado-presente .resultado-situacao { color: var(--blue); }
 .resultado-ausente { border-left-color: #b81d00; }
 .resultado-ausente .resultado-nome { color: #b81d00; }
+.painel-contadores-dois { grid-template-columns: repeat(2, 1fr); }
+/* Livros do lançamento, na aba da comissão */
+.lancamentos { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.lancamento { background: #fff; border: 1px solid var(--line); border-left: 6px solid var(--blue); border-radius: 12px; padding: 14px 16px; overflow-wrap: anywhere; }
+.lancamento-envio { margin: 0; font-size: .82rem; color: var(--muted); }
+.lancamento-titulo { margin: 4px 0 0; font-size: 1.15rem; font-weight: 800; }
+.lancamento-autor { margin: 2px 0 0; font-weight: 700; }
+.lancamento-contatos { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 4px; font-size: .95rem; }
+.lancamento-contatos a { color: var(--blue); font-weight: 700; }
+.lancamento details { border-top: 1px solid var(--line); padding: 8px 0 0; margin-top: 8px; }
+.lancamento summary { cursor: pointer; font-weight: 700; color: var(--blue); }
+.lancamento details p { margin: 6px 0 0; white-space: pre-line; }
 
 /* Rodapé */
 /* Faixa de logos de patrocínio, incentivo e realização, acima do rodapé */

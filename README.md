@@ -69,7 +69,8 @@ entrará em contato. O mesmo e-mail com o mesmo título não é gravado duas vez
 máximo 10 livros a cada 10 minutos.
 
 Os envios ficam na tabela `lancamentos_livros`; a visão **`painel_lancamentos`** mostra um livro por
-linha, com colunas em português (exporte para CSV para planilhas). Textos e campos ficam em
+linha, com colunas em português (exporte para CSV para planilhas). A comissão também vê os livros na
+aba **Lançamento de livros** da portaria (veja [Portaria](#portaria)). Textos e campos ficam em
 `lib/lancamento.ts`.
 
 ### Baixar o comprovante de novo
@@ -325,6 +326,10 @@ comissão para a entrada das atividades. Não aparece no menu nem nos buscadores
 
 Uma mesma entrada nunca é registrada duas vezes, nem com dois celulares ao mesmo tempo.
 Sem internet no local, use a visão `lista_por_atividade` impressa como reserva.
+
+A aba **Lançamento de livros** (`/portaria/lancamentos`) lista os livros inscritos pelo site, na ordem de
+envio: título, autor, cidade, WhatsApp e e-mail (que abrem a conversa ao toque), apresentação do livro e
+minibiografia. Só consulta, não altera nada. Para atualizar, recarregue a página.
 
 **Senha:** fica na variável `SENHA_PORTARIA` (no `.env.local` e na Vercel, em **Settings >
 Environment Variables**), com pelo menos 12 caracteres; sem ela o painel fica desativado. Trocar a
