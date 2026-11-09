@@ -2,10 +2,12 @@ import Image from "next/image";
 import camaraCascudo from "@/public/parceiros/camara-cascudo-secult.png";
 import f7 from "@/public/parceiros/f7-producoes.png";
 import faculdadeEvolucao from "@/public/parceiros/faculdade-evolucao.png";
+import sesc from "@/public/parceiros/sesc.png";
 
 /*
  * Faixa de logos acima do rodapé, em todas as páginas. As logos da F7 e da Câmara Cascudo vieram
  * brancas (para fundo escuro): as versões em public/parceiros/ foram escurecidas para o fundo claro.
+ * A do Sesc é o original sem a margem transparente.
  * `altura` é a altura exibida no computador, em pixels.
  */
 const grupos = [
@@ -14,8 +16,13 @@ const grupos = [
     logos: [{ imagem: faculdadeEvolucao, nome: "Faculdade Evolução", altura: 72 }],
   },
   {
-    titulo: "Incentivo",
+    titulo: "Apoio",
+    logos: [{ imagem: sesc, nome: "Sesc", altura: 52 }],
+  },
+  {
+    titulo: "Realização",
     logos: [
+      { imagem: f7, nome: "F7 Produções", altura: 64 },
       {
         imagem: camaraCascudo,
         nome: "Programa Cultural Câmara Cascudo e Secretaria de Estado da Cultura do Rio Grande do Norte",
@@ -23,15 +30,11 @@ const grupos = [
       },
     ],
   },
-  {
-    titulo: "Realização",
-    logos: [{ imagem: f7, nome: "F7 Produções", altura: 64 }],
-  },
 ];
 
 export default function Parceiros() {
   return (
-    <section className="parceiros" aria-label="Patrocínio, incentivo e realização">
+    <section className="parceiros" aria-label="Patrocínio, apoio e realização">
       <div className="container parceiros-inner">
         {grupos.map((grupo) => (
           <div key={grupo.titulo} className="parceiros-grupo">

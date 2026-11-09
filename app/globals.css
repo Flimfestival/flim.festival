@@ -384,7 +384,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .parceiros-inner { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 28px 72px; }
 .parceiros-grupo { display: flex; flex-direction: column; align-items: center; gap: 12px; max-width: 100%; }
 .parceiros-grupo > p { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.parceiros-logos { display: flex; align-items: center; justify-content: center; gap: 24px; min-height: 76px; max-width: 100%; }
+.parceiros-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; min-height: 76px; max-width: 100%; }
 .parceiros-logos img { max-width: 100%; height: auto; }
 
 .site-footer { background: var(--blue-dark); border-top: 1px solid rgba(255,255,255,.1); color: #c3d0e6; font-size: .9rem; padding: 24px 0; }

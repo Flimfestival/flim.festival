@@ -275,9 +275,9 @@ atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 | `components/ComoParticipar.tsx`  | Passos da inscrição                           |
 | `components/Duvidas.tsx`         | Perguntas frequentes                          |
 | `components/ChamadaFinal.tsx`    | Chamada final para inscrição                  |
-| `components/Parceiros.tsx`       | Logos de patrocínio, incentivo e realização (acima do rodapé) |
+| `components/Parceiros.tsx`       | Logos de patrocínio, apoio e realização (acima do rodapé)     |
 | `components/Rodape.tsx`          | Rodapé                                        |
-| `public/documentos/`             | Edital do concurso de redação (PDF assinado)  |
+| `public/documentos/`             | Edital do concurso de redação (PDF)           |
 | `lib/comprovante-imagem.ts`      | Comprovante de inscrição em imagem (PNG)      |
 | `app/inscricao/page.tsx`         | Página de inscrição                           |
 | `components/FormularioInscricao.tsx` | Formulário de inscrição                   |
@@ -300,11 +300,11 @@ As fotos ficam em `public/fotos/` e são cadastradas em `lib/fotos.ts`, junto co
 
 Para trocar uma foto, substitua o arquivo mantendo o mesmo nome e atualize o crédito em `lib/fotos.ts`.
 
-As logos de patrocínio (Faculdade Evolução), incentivo (Programa Cultural Câmara Cascudo e Secretaria
-de Estado da Cultura do RN) e realização (F7 Produções) ficam em `public/parceiros/` e aparecem numa
+As logos de patrocínio (Faculdade Evolução), apoio (Sesc) e realização (F7 Produções e Programa
+Cultural Câmara Cascudo, com a Secretaria de Estado da Cultura do RN) ficam em `public/parceiros/` e aparecem numa
 faixa clara acima do rodapé, em todas as páginas (`components/Parceiros.tsx`). Os originais estão em
 `public/assets/`; as logos da F7 e da Câmara Cascudo vieram brancas e foram escurecidas para o fundo
-claro.
+claro, e a do Sesc só teve a margem transparente recortada.
 As fotos são recortadas e otimizadas automaticamente pelo Next.js.
 
 ## Portaria
