@@ -84,10 +84,15 @@ minutos por conexão (`lib/limite.ts`).
 
 ### Edital do concurso de redação
 
-O edital assinado fica em `public/documentos/edital-concurso-de-redacao.pdf` e abre pelo item
+O edital fica em `public/documentos/edital-concurso-de-redacao.pdf` e abre pelo item
 **Edital** do menu, pelo rodapé e pela programação. O endereço curto `/edital` leva ao mesmo arquivo.
 Para publicar uma nova versão, substitua o PDF mantendo o nome. O endereço do arquivo fica em
 `lib/evento.ts` (`edital`).
+
+A retificação assinada que prorrogou as inscrições para 21 de novembro (itens 7.2 e 19) fica em
+`public/documentos/retificacao-edital-concurso-de-redacao.pdf`, com link na programação (junto do
+aviso de prorrogação) e no rodapé (`retificacaoEdital` em `lib/evento.ts`). O PDF é o original, sem
+alterações, para manter válidas as assinaturas digitais.
 
 ### Termo de consentimento
 
@@ -278,7 +283,7 @@ atividades numa linha e apaga a outra em **Table Editor > inscricoes**.
 | `components/ChamadaFinal.tsx`    | Chamada final para inscrição                  |
 | `components/Parceiros.tsx`       | Logos de patrocínio, apoio e realização (acima do rodapé)     |
 | `components/Rodape.tsx`          | Rodapé                                        |
-| `public/documentos/`             | Edital do concurso de redação (PDF)           |
+| `public/documentos/`             | Edital e retificação do concurso (PDFs)       |
 | `lib/comprovante-imagem.ts`      | Comprovante de inscrição em imagem (PNG)      |
 | `app/inscricao/page.tsx`         | Página de inscrição                           |
 | `components/FormularioInscricao.tsx` | Formulário de inscrição                   |

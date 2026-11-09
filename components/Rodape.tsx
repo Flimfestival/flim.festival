@@ -28,6 +28,9 @@ export default function Rodape() {
           <a href={evento.edital} target="_blank" rel="noopener">
             Edital do concurso (PDF)
           </a>
+          <a href={evento.retificacaoEdital} target="_blank" rel="noopener">
+            Retificação do edital (PDF)
+          </a>
           <a href={`mailto:${evento.emailContato}`}>{evento.emailContato}</a>
           <BotaoCookies />
         </nav>

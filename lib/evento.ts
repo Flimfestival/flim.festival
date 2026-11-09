@@ -13,6 +13,8 @@ export const evento = {
   fim: "2026-12-13",
   local: "Martins/RN",
   emailContato: "flim.martinsrn@gmail.com",
-  // Edital do concurso de redação (PDF assinado). O endereço curto /edital também leva a ele.
+  // Edital do concurso de redação (PDF, já com o prazo prorrogado). O endereço curto /edital também leva a ele.
   edital: "/documentos/edital-concurso-de-redacao.pdf",
+  // Retificação assinada que prorrogou as inscrições do concurso para 21/11 (itens 7.2 e 19 do edital).
+  retificacaoEdital: "/documentos/retificacao-edital-concurso-de-redacao.pdf",
 };
