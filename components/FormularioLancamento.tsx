@@ -10,17 +10,35 @@ import {
   type CampoLancamento,
   type ErrosLancamento,
   type EstadoLancamento,
+  type ValoresLancamento,
 } from "@/lib/lancamento";
 
 const estadoInicial: EstadoLancamento = { status: "inicial" };
 
 export default function FormularioLancamento() {
-  // Trocar a `key` recria o formulário vazio, para inscrever outro livro.
+  // Trocar a `key` recria o formulário para inscrever outro livro. Os dados do autor continuam
+  // preenchidos, para o mesmo e-mail contar como o mesmo autor; título e apresentação ficam em branco.
   const [rodada, setRodada] = useState(0);
-  return <Formulario key={rodada} aoRecomecar={() => setRodada((r) => r + 1)} />;
+  const [dadosDoAutor, setDadosDoAutor] = useState<ValoresLancamento>();
+  return (
+    <Formulario
+      key={rodada}
+      dadosDoAutor={dadosDoAutor}
+      aoRecomecar={(enviado) => {
+        setDadosDoAutor({ ...enviado, titulo: "", apresentacao: "", consentimento: false });
+        setRodada((r) => r + 1);
+      }}
+    />
+  );
 }
 
-function Formulario({ aoRecomecar }: { aoRecomecar: () => void }) {
+function Formulario({
+  dadosDoAutor,
+  aoRecomecar,
+}: {
+  dadosDoAutor?: ValoresLancamento;
+  aoRecomecar: (enviado: ValoresLancamento) => void;
+}) {
   const [estado, acao, enviando] = useActionState(enviarLancamento, estadoInicial);
   const alerta = useRef<HTMLDivElement>(null);
   const confirmacao = useRef<HTMLHeadingElement>(null);
@@ -59,7 +77,7 @@ function Formulario({ aoRecomecar }: { aoRecomecar: () => void }) {
           </div>
         </dl>
         <div className="actions">
-          <button type="button" className="btn btn-outline" onClick={aoRecomecar}>
+          <button type="button" className="btn btn-outline" onClick={() => aoRecomecar(enviado)}>
             Inscrever outro livro
           </button>
           <Link href="/" className="btn btn-outline">
@@ -70,7 +88,7 @@ function Formulario({ aoRecomecar }: { aoRecomecar: () => void }) {
     );
   }
 
-  const valores = estado.status === "erro" ? estado.valores : undefined;
+  const valores = estado.status === "erro" ? estado.valores : dadosDoAutor;
   const erros: ErrosLancamento = estado.status === "erro" ? estado.erros : {};
   const descricao = (campo: CampoLancamento, dica?: string) =>
     [dica, erros[campo] ? `erro-${campo}` : undefined].filter(Boolean).join(" ") || undefined;
@@ -82,7 +100,12 @@ function Formulario({ aoRecomecar }: { aoRecomecar: () => void }) {
           {estado.mensagem}
         </div>
       )}
-      <p className="dica">Todos os campos são obrigatórios.</p>
+      <p className="dica">
+        {dadosDoAutor && estado.status !== "erro"
+          ? "Os dados do autor foram mantidos. Preencha o título e a apresentação do novo livro. "
+          : ""}
+        Todos os campos são obrigatórios.
+      </p>
 
       <fieldset className="form-grupo">
         <legend>Autor</legend>
@@ -154,8 +177,11 @@ function Formulario({ aoRecomecar }: { aoRecomecar: () => void }) {
               maxLength={254}
               defaultValue={valores?.email}
               aria-invalid={Boolean(erros.email)}
-              aria-describedby={descricao("email")}
+              aria-describedby={descricao("email", "dica-email")}
             />
+            <p id="dica-email" className="dica">
+              Para inscrever mais de um livro, use sempre este mesmo e-mail.
+            </p>
             <MensagemErro campo="email" erros={erros} />
           </div>
           <div className="campo">

@@ -68,6 +68,13 @@ autorização de uso dos dados. Depois do envio, mostra "Inscrição recebida!" 
 entrará em contato. O mesmo e-mail com o mesmo título não é gravado duas vezes, e cada conexão envia no
 máximo 10 livros a cada 10 minutos.
 
+São **15 vagas para autores**, por ordem de inscrição, e cada autor tem **20 minutos** para lançar
+quantos livros quiser. Cada livro é uma inscrição, e o autor é identificado pelo **e-mail**: quem já
+inscreveu um livro pode incluir outros (com o mesmo e-mail) mesmo depois de preenchidas as vagas. O
+botão "Inscrever outro livro" já traz os dados do autor preenchidos. A página mostra quantas vagas
+restam; com as 15 preenchidas, um e-mail novo é recusado pelo banco (migração 18). Os números ficam em
+`lib/lancamento.ts` (`vagasAutores`, `minutosPorAutor`); o 15 também está na migração.
+
 Os envios ficam na tabela `lancamentos_livros`; a visão **`painel_lancamentos`** mostra um livro por
 linha, com colunas em português (exporte para CSV para planilhas). A comissão também vê os livros na
 aba **Lançamento de livros** da portaria (veja [Portaria](#portaria)). Textos e campos ficam em
@@ -189,6 +196,8 @@ novo, inclusive quando a pessoa volta depois para acrescentar uma atividade. Os 
    16. `20261030120000_mesa_redonda.sql`: mesa redonda "Mulheres Lendo Mulheres", com 110 vagas.
    17. `20261103120000_horarios_mesa_redonda.sql`: painel Escreva, leia... eternize-se às 14h, mesa
        às 15h15, painel Povo, natureza e poesia às 16h15 e as oficinas no mesmo horário da mesa.
+   18. `20261111120000_limite_autores_lancamento.sql`: no máximo 15 autores no lançamento de livros
+       (quem já está inscrito pode incluir mais livros).
 
    Se usar a CLI do Supabase, `supabase db push` faz os dois.
    Se você já tinha rodado uma versão anterior deste arquivo, rode antes
@@ -332,8 +341,9 @@ comissão para a entrada das atividades. Não aparece no menu nem nos buscadores
 Uma mesma entrada nunca é registrada duas vezes, nem com dois celulares ao mesmo tempo.
 Sem internet no local, use a visão `lista_por_atividade` impressa como reserva.
 
-A aba **Lançamento de livros** (`/portaria/lancamentos`) lista os livros inscritos pelo site, na ordem de
-envio: título, autor, cidade, WhatsApp e e-mail (que abrem a conversa ao toque), apresentação do livro e
+A aba **Lançamento de livros** (`/portaria/lancamentos`) lista os autores inscritos pelo site, na ordem
+de inscrição, com autores, vagas restantes e livros nos contadores. Cada autor mostra cidade, WhatsApp e
+e-mail (que abrem a conversa ao toque), os livros (toque no título para ler a apresentação) e a
 minibiografia. Só consulta, não altera nada. Para atualizar, recarregue a página.
 
 **Senha:** fica na variável `SENHA_PORTARIA` (no `.env.local` e na Vercel, em **Settings >

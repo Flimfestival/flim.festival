@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { evento } from "@/lib/evento";
+import { lancamento } from "@/lib/lancamento";
 import { categoriasRedacao, concursoDesenho, dias, mesaRedonda, oficinas } from "@/lib/programacao";
 
 // As oficinas acontecem no sábado (12/12), ao mesmo tempo que os painéis: aparecem logo depois desse dia.
@@ -91,7 +92,8 @@ export default function Programacao() {
               {dia.id === "dia-12" && (
                 <p className="dia-chamada">
                   <strong>Lançamento de livros:</strong> autores podem inscrever suas obras para o momento de
-                  lançamento, na Casa de Cultura.{" "}
+                  lançamento, na Casa de Cultura. São {lancamento.vagasAutores} vagas para autores, com{" "}
+                  {lancamento.minutosPorAutor} minutos para cada um lançar quantos livros quiser.{" "}
                   <Link href="/lancamento-de-livros">Inscreva seu livro</Link>.
                 </p>
               )}

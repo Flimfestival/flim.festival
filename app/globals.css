@@ -382,7 +382,6 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .resultado-presente .resultado-situacao { color: var(--blue); }
 .resultado-ausente { border-left-color: #b81d00; }
 .resultado-ausente .resultado-nome { color: #b81d00; }
-.painel-contadores-dois { grid-template-columns: repeat(2, 1fr); }
 /* Livros do lançamento, na aba da comissão */
 .lancamentos { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .lancamento { background: #fff; border: 1px solid var(--line); border-left: 6px solid var(--blue); border-radius: 12px; padding: 14px 16px; overflow-wrap: anywhere; }
@@ -391,9 +390,12 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .lancamento-autor { margin: 2px 0 0; font-weight: 700; }
 .lancamento-contatos { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 4px; font-size: .95rem; }
 .lancamento-contatos a { color: var(--blue); font-weight: 700; }
+.lancamento-livros { list-style: none; padding: 0; margin: 4px 0 0; }
+.lancamento-livros details summary { color: var(--ink); font-weight: 800; }
 .lancamento details { border-top: 1px solid var(--line); padding: 8px 0 0; margin-top: 8px; }
 .lancamento summary { cursor: pointer; font-weight: 700; color: var(--blue); }
 .lancamento details p { margin: 6px 0 0; white-space: pre-line; }
+.lancamento-vagas strong { color: var(--blue); }
 
 /* Rodapé */
 /* Faixa de logos de patrocínio, incentivo e realização, acima do rodapé */
@@ -459,8 +461,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   .confirmacao .actions .btn { width: 100%; }
   .comprovante-dados { grid-template-columns: 1fr; }
   .actions .btn, .cta .btn { width: 100%; }
-  /* Data, local e entrada lado a lado, uma coluna igual para cada item (três no início e na inscrição,
-     dois no lançamento de livros); a data quebra em duas linhas. */
+  /* Data, local e o terceiro item (entrada ou vagas) lado a lado, uma coluna igual para cada um;
+     a data quebra em duas linhas. */
   .facts { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; margin: 28px 0 26px; }
   .facts div { padding: 0 8px; }
   .facts dd { font-size: .98rem; text-wrap: balance; }

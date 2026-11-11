@@ -1,4 +1,5 @@
 import { evento } from "@/lib/evento";
+import { lancamento } from "@/lib/lancamento";
 
 const perguntas = [
   {
@@ -24,7 +25,7 @@ const perguntas = [
   {
     pergunta: "Sou autor. Posso lançar meu livro no FLIM?",
     resposta:
-      "Sim. Inscreva a obra na página Lançamento de livros (www.festivalflim.com.br/lancamento-de-livros). Os lançamentos acontecem no dia 12 de dezembro, na Casa de Cultura de Martins, e a organização entra em contato para confirmar a participação e alinhar horário e formato.",
+      `Sim. São ${lancamento.vagasAutores} vagas para autores, preenchidas por ordem de inscrição, e cada autor tem ${lancamento.minutosPorAutor} minutos para lançar quantos livros quiser. Inscreva cada obra na página Lançamento de livros (www.festivalflim.com.br/lancamento-de-livros), sempre com o mesmo e-mail. Os lançamentos acontecem no dia 12 de dezembro, na Casa de Cultura de Martins, e a organização entra em contato para confirmar a participação e alinhar horário e formato.`,
   },
   {
     pergunta: "Perdi o comprovante. Como baixo de novo?",

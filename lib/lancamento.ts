@@ -9,9 +9,19 @@ export const lancamento = {
     "Inscreva sua obra para participar do momento de lançamento de livros do FLIM, no dia 12 de dezembro de 2026, na Casa de Cultura de Martins.",
   data: "12 de dezembro",
   local: "Casa de Cultura de Martins",
+  // Limite de autores (identificados pelo e-mail). O banco confere na hora da inscrição, na migração
+  // 20261111120000_limite_autores_lancamento.sql: se mudar aqui, mude lá também.
+  vagasAutores: 15,
+  // Tempo de cada autor no lançamento, para quantos livros quiser.
+  minutosPorAutor: 20,
   confirmacao:
     "A organização entrará em contato para confirmar sua participação e alinhar horário e formato do lançamento.",
 };
+
+export const regrasLancamento = `São ${lancamento.vagasAutores} vagas para autores, preenchidas por ordem de inscrição. Cada autor tem ${lancamento.minutosPorAutor} minutos para o seu lançamento e pode lançar quantos livros quiser nesse tempo.`;
+
+// Código que o banco devolve quando as vagas de autores acabaram e o e-mail ainda não tem livro inscrito.
+export const ERRO_VAGAS_AUTORES = "FL001";
 
 export const UFS = [
   "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA",

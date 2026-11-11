@@ -1,7 +1,13 @@
 "use server";
 
 import { evento } from "@/lib/evento";
-import { lerValoresLancamento, validarLancamento, type EstadoLancamento } from "@/lib/lancamento";
+import {
+  ERRO_VAGAS_AUTORES,
+  lancamento,
+  lerValoresLancamento,
+  validarLancamento,
+  type EstadoLancamento,
+} from "@/lib/lancamento";
 import { dentroDoLimite } from "@/lib/limite";
 import { clienteSupabase } from "@/lib/supabase";
 
@@ -55,6 +61,15 @@ export async function enviarLancamento(
     minibiografia: valores.minibiografia,
     consentimento: valores.consentimento,
   });
+  // As vagas de autores acabaram e este e-mail ainda não tinha livro inscrito.
+  if (error?.code === ERRO_VAGAS_AUTORES) {
+    return {
+      status: "erro",
+      mensagem: `As ${lancamento.vagasAutores} vagas para autores já foram preenchidas. Se você já inscreveu um livro, use o mesmo e-mail da primeira inscrição para incluir outros.`,
+      erros: { email: "Este e-mail não está entre os autores inscritos." },
+      valores,
+    };
+  }
   // 23505: o mesmo e-mail já tinha enviado este título. Para quem envia, é a mesma inscrição recebida.
   if (error && error.code !== "23505") {
     console.error("Falha ao gravar o lançamento de livro:", error);
